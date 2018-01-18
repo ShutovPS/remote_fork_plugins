@@ -74,7 +74,11 @@ namespace RemoteFork.Plugins {
                 }
                 items.AddRange(command.GetItems(context, data));
             }
+            
+            return CreatePlaylist(items, context);
+        }
 
+        private static Playlist CreatePlaylist(List<Item> items, IPluginContext context) {
             var playlist = new Playlist();
 
             foreach (var item in items) {
@@ -91,8 +95,6 @@ namespace RemoteFork.Plugins {
 
             return playlist;
         }
-
-
 
         private static void ClearList() {
             SERIAL_MATCHES.Clear();
