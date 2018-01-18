@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     internal class GetSerialListCommand : ICommand {
@@ -13,7 +14,7 @@ namespace RemoteFork.Plugins {
                 {"Content-Type", "text/html; charset=UTF-8"}
             };
 
-            string response = context.GetHttpClient().GetRequest(string.Format(Seasonvar.SITE_URL, url), header);
+            string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, url), header);
 
             var matches = Regex.Matches(response,
                 "(<h2>[.\\s^&]*?<a href=\")((\\S*?)(\\/serial-(\\d+))(\\S*?))(\">[\\s>]*?Сериал)(.+?)(\\s*?(<span>|<\\/a>))",

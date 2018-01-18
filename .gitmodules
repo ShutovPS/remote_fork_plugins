@@ -1,4 +1,3 @@
-[submodule "remote_fork_plugins"]
-	path = remote_fork_plugins
-	url = git@github.com:ShutovPS/remote_fork_plugins.git
-	branch = master
+[submodule "RemoteFork.Utility"]
+	path = RemoteFork.Utility
+	url = git@github.com:ShutovPS/RemoteFork.Utility.git

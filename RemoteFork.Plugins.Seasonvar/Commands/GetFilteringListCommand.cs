@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     class GetFilteringListCommand : ICommand {
@@ -86,18 +87,18 @@ namespace RemoteFork.Plugins {
                     }
                     datastring.Append(WebUtility.UrlEncode(k.Key)).Append("=").Append(WebUtility.UrlEncode(k.Value));
                 }
-                string response = context.GetHttpClient()
+                string response = HTTPUtility
                     .PostRequest(string.Format(Seasonvar.SITE_URL, "/index.php"), datastring.ToString(), header)
                     .Replace("\n", " ");
-                context.ConsoleLog(string.Format(Seasonvar.SITE_URL, "/index.php") + " datastring=" + datastring);
+                //context.ConsoleLog(string.Format(Seasonvar.SITE_URL, "/index.php") + " datastring=" + datastring);
 
                 tempSerials = Regex.Matches(response,
                         "<a data-id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)<",
                         RegexOptions.Multiline)
                     .ToList();
 
-                context.ConsoleLog("tempSerials.Count=" + tempSerials.Count);
-
+                //context.ConsoleLog("tempSerials.Count=" + tempSerials.Count);
+                //
                 if (tempSerials.Count > 0) {
                     Seasonvar.SERIAL_MATCHES.Add((lang + sort), tempSerials);
                 }

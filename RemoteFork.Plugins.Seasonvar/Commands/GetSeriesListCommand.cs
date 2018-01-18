@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     public class GetSeriesListCommand : ICommand {
@@ -12,10 +13,10 @@ namespace RemoteFork.Plugins {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
                 {"Content-Type", "text/html; charset=UTF-8"}
             };
-            context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL,
-                                   url.Replace("transСтандартный", "trans")));
+            //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL,
+            //                       url.Replace("transСтандартный", "trans")));
             string response =
-                context.GetHttpClient().GetRequest(string.Format(Seasonvar.SITE_URL,
+                HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL,
                     url.Replace("transСтандартный", "trans")), header);
 
             var matches = Regex.Matches(response,

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     public class SearchSearialsCommand : ICommand {
@@ -14,8 +15,7 @@ namespace RemoteFork.Plugins {
                 {"Content-Type", "text/html; charset=windows-1251"}
             };
 
-            string response = context.GetHttpClient()
-                .GetRequest(string.Format(Seasonvar.SITE_URL, "/autocomplete.php?query=" + searchText), header);
+            string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, "/autocomplete.php?query=" + searchText), header);
             response = DecodeEncodedNonAsciiCharacters(response);
             var matchesIds = Regex.Matches(Regex.Match(response, "(\"id\":\\[)(\"(.*?),*\")+?\\]").Groups[2].Value,
                 "(\"(\\d+?)\")\\,?");

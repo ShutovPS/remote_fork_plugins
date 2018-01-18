@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     public class GetVoiseListCommand : ICommand {
@@ -15,27 +16,27 @@ namespace RemoteFork.Plugins {
                 {"Content-Type", "text/html; charset=UTF-8"}
             };
 
-            context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL, url));
-            string response = context.GetHttpClient().GetRequest(string.Format(Seasonvar.SITE_URL, url), header)
+            //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL, url));
+            string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, url), header)
                 .Replace("\n", " ");
             
             var match = Regex.Match(response, "'(secureMark)': '(.*?)'.*?'time': (\\d+)");
             if (match.Success) {
                 string secure = match.Groups[2].Value;
                 string time = match.Groups[3].Value;
-                context.ConsoleLog("secure=" + secure);
-                context.ConsoleLog("time=" + time);
+                //context.ConsoleLog("secure=" + secure);
+                //context.ConsoleLog("time=" + time);
 
                 match = Regex.Match(response, "data-id-serial=\"(.*?)\"");
                 if (match.Success) {
                     string serialId = match.Groups[1].Value;
-                    context.ConsoleLog("serialId=" + serialId);
+                    //context.ConsoleLog("serialId=" + serialId);
 
                     match = Regex.Match(response, "data-id-season=\"(.*?)\"");
                     if (match.Success) {
                         string seasonId = match.Groups[1].Value;
 
-                        context.ConsoleLog("seasonId=" + seasonId);
+                        //context.ConsoleLog("seasonId=" + seasonId);
                         Item item = new GetSerialInfoCommand().GetItem(context, seasonId,response);
 
                         var dataRequest = new Dictionary<string, string>() {
@@ -57,9 +58,9 @@ namespace RemoteFork.Plugins {
                                           WebUtility.UrlEncode(k.Value);
                         }
 
-                        context.ConsoleLog(string.Format(Seasonvar.SITE_URL, "/player.php") + " datastring=" +
-                                           datastring);
-                        response = context.GetHttpClient()
+                        //context.ConsoleLog(string.Format(Seasonvar.SITE_URL, "/player.php") + " datastring=" +
+                        //                   datastring);
+                        response = HTTPUtility
                             .PostRequest(string.Format(Seasonvar.SITE_URL, "/player.php"), datastring, header)
                             .Replace("\n", "");
                         //context.ConsoleLog("response=" + response.Substring(0, 1000));
@@ -67,8 +68,8 @@ namespace RemoteFork.Plugins {
 
                         var matches = Regex.Matches(response,
                             "data-translate=\"([^0].*?)\">(.*?)</li.{1,30}>pl\\[.*?\"(.*?)\"");
-                        context.ConsoleLog("matches0=" + matches0.Count);
-                        context.ConsoleLog("matches=" + matches.Count);
+                        //context.ConsoleLog("matches0=" + matches0.Count);
+                        //context.ConsoleLog("matches=" + matches.Count);
                         if (matches0.Count == 1 && matches.Count < 2) {
                             data[2] = matches0[0].Groups[1].Value;
                             return new GetSeriesListCommand().GetItems(context, data);

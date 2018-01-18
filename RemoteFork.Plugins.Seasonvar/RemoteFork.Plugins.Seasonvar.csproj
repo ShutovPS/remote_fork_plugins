@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\remote_fork_plugins\RemoteFork_Plugins\RemoteFork_Plugins.csproj" />
+    <ProjectReference Include="..\RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj" />
   </ItemGroup>
 
 </Project>
