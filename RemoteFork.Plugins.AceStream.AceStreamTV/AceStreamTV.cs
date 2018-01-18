@@ -4,7 +4,7 @@ using RemoteFork.Plugins.AceStream.Commands;
 using ICommand = RemoteFork.Plugins.AceStream.Commands.ICommand;
 
 namespace RemoteFork.Plugins.AceStream {
-    [PluginAttribute(Id = "acestreamtv", Version = "0.1", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
+    [PluginAttribute(Id = "acestreamtv", Version = "0.1.0", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
         Description = "Воспроизведение TORRENT IPTV через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
