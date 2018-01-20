@@ -7,8 +7,8 @@ namespace RemoteFork.Plugins {
             List<Item> items = new List<Item>();
 
             string lang = data.Length > 1 ? data[1] : string.Empty;
-            string sort = data.Length > 2 ? data[3] : string.Empty;
-            string page = data.Length > 2 ? data[3] : string.Empty;
+            string sort = data.Length > 2 ? data[2] : string.Empty;
+            string page = data.Length > 3 ? data[3] : string.Empty;
 
             var tempSerials = Seasonvar.SERIAL_MATCHES[lang + sort];
 
@@ -23,13 +23,7 @@ namespace RemoteFork.Plugins {
                 }
 
                 if (tempSerials.Count - id > 50) {
-                    var item = new Item() {
-                        Name = string.Format(Seasonvar.PAGE, id / 50 + 2),
-                        Link = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, id + 50),
-                        ImageLink = Seasonvar.NEXT_PAGE_IMAGE_URL
-                    };
-
-                    items.Add(item);
+                    Seasonvar.NextPageUrl = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, id + 50);
                 }
             }
 

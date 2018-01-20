@@ -114,13 +114,14 @@ namespace RemoteFork.Plugins {
                 }
 
                 if (tempSerials.Count > 50) {
-                    var item = new Item() {
-                        Name = string.Format(Seasonvar.PAGE, 2),
-                        Link = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, 50),
-                        ImageLink = Seasonvar.NEXT_PAGE_IMAGE_URL
-                    };
+                    Seasonvar.NextPageUrl = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, 50);
+                    //var item = new Item() {
+                    //    Name = string.Format(Seasonvar.PAGE, 2),
+                    //    Link = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, 50),
+                    //    ImageLink = Seasonvar.NEXT_PAGE_IMAGE_URL
+                    //};
 
-                    items.Add(item);
+                    //items.Add(item);
                 }
             }
 

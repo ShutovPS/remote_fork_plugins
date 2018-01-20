@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "seasonvar", Version = "0.4.4", Author = "fd_crash&&forkplayer", Name = "Seasonvar",
+    [PluginAttribute(Id = "seasonvar", Version = "0.4.5", Author = "fd_crash&&forkplayer", Name = "Seasonvar",
         Description = "Сериалы ТУТ! Сериалы онлайн смотреть бесплатно. Смотреть онлайн",
         ImageLink = "http://cdn.seasonvar.ru/images/fav/apple-touch-icon-144x144.png")]
     public class Seasonvar : IPlugin {
@@ -17,8 +17,9 @@ namespace RemoteFork.Plugins {
         public const string SITE_URL = "http://seasonvar.ru{0}";
         public const string IMAGE_URL = "http://cdn.seasonvar.ru/oblojka/{0}.jpg";
         public const string SMALL_IMAGE_URL = "http://cdn.seasonvar.ru/oblojka/small/{0}.jpg";
-        public const string NEXT_PAGE_IMAGE_URL = "http://www.rasputins.ca/images/right.png";
-        public const string PAGE = "СТРАНИЦА {0}";
+        //public const string PAGE = "СТРАНИЦА {0}";
+
+        public static string NextPageUrl = string.Empty;
 
         // Item представляет собой класс, содержащащий следующие поля:
         //// Name - навзание
@@ -67,6 +68,7 @@ namespace RemoteFork.Plugins {
                     }
                     break;
             }
+            NextPageUrl = null;
             if (command != null) {
                 string[] data = new string[4];
                 for (int i = 0; i < arg.Length; i++) {
@@ -80,6 +82,13 @@ namespace RemoteFork.Plugins {
 
         private static Playlist CreatePlaylist(List<Item> items, IPluginContext context) {
             var playlist = new Playlist();
+
+            if (!string.IsNullOrEmpty(NextPageUrl)) {
+                var pluginParams = new NameValueCollection { [PLUGIN_PATH] = NextPageUrl };
+                playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
+            } else {
+                playlist.NextPageUrl = null;
+            }
 
             foreach (var item in items) {
                 if (ItemType.DIRECTORY == item.Type) {
