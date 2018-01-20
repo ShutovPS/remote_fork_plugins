@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>RemoteFork.Plugins.AceStream</RootNamespace>
+    <RootNamespace>RemoteFork.Plugins</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
