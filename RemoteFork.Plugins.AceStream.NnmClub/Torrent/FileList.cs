@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 [Serializable]
 public class Magnet {
@@ -13,7 +14,8 @@ namespace RemoteFork.Plugins {
     public class FileList {
         public static Dictionary<string, string> GetFileList(string pathTorrent) {
             string aceMadiaInfo =
-                HTTPUtility.GetRequest($"{NnmClub.GetAddress}/server/api?method=get_media_files&magnet={pathTorrent}");
+                HTTPUtility.GetRequest(string.Format(PluginSettings.Settings.AceStreamApi.GetMediaFiles,
+                    NnmClub.GetAddress, pathTorrent));
             if (!string.IsNullOrWhiteSpace(aceMadiaInfo)) {
                 var magnet = JsonConvert.DeserializeObject<Magnet>(aceMadiaInfo);
                 if (!string.IsNullOrEmpty(magnet.error)) {

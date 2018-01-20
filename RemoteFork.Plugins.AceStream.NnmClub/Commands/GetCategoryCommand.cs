@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetCategoryCommand : ICommand {
@@ -10,17 +10,17 @@ namespace RemoteFork.Plugins.Commands {
 
             string responseFromServer = HTTPUtility.GetRequest(data[2]+data[3]);
 
-            var regex = new Regex("(<td class=\"pcatHead\"><img class=\"picon\")([\\s\\S]*?)(><\\/table>)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryHead);
 
             foreach (Match match in regex.Matches(responseFromServer)) {
-                regex = new Regex("(title=\")(.*?)(\">)(\\2)");
-                var regexLink = new Regex("(<a class=\"pgenmed\" href=\")(.*?)(\")");
-                var regexImage = new Regex("(<var class=\"portalImg\" title=\")(.*?)(\">)");
+                regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTitle);
+                var regexLink = new Regex(PluginSettings.Settings.Regexp.GetCategoryPgenmed);
+                var regexImage = new Regex(PluginSettings.Settings.Regexp.GetCategoryPortalImg);
                 var item = new Item {
                     Name = regex.Match(match.Value).Groups[2].Value,
                     ImageLink = regexImage.Match(match.Value).Groups[2].Value,
                     Link =
-                        $"pagefilm{NnmClub.SEPARATOR}{NnmClub.TrackerServerNnm}/forum/{regexLink.Match(match.Value).Groups[2].Value}"
+                        $"pagefilm{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServerNnm}/forum/{regexLink.Match(match.Value).Groups[2].Value}"
                 };
 
                 item.Description = FormatDescription(match.Value, item.ImageLink);
@@ -28,11 +28,11 @@ namespace RemoteFork.Plugins.Commands {
                 items.Add(item);
             }
 
-            regex = new Regex("(<a href=\")((portal\\.php\\?c=\\d+&)(?:amp;)(start=\\d+))(\">([а-яА-Я]*?.?)<\\/a><\\/span>)");
+            regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryNextPage);
             if (regex.IsMatch(responseFromServer)) {
                 var matchGroups = regex.Match(responseFromServer).Groups;
                 NnmClub.NextPageUrl =
-                    $"page{NnmClub.SEPARATOR}{NnmClub.TrackerServerNnm}/forum/{matchGroups[3].Value + matchGroups[4].Value}";
+                    $"page{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServerNnm}/forum/{matchGroups[3].Value + matchGroups[4].Value}";
             }
 
             NnmClub.IsIptv = false;
@@ -45,19 +45,19 @@ namespace RemoteFork.Plugins.Commands {
             string infoFilms = string.Empty;
             string infoPro = string.Empty;
 
-            var regex = new Regex("(title=\\\")(.*?)(\\\">)(\\2)(<\\/a)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTitleA);
             if (regex.IsMatch(html)) {
                 title = regex.Match(html).Groups[2].Value;
             }
-            regex = new Regex("(<img class=\"tit-b pims\" src=\")(.*?)(\")");
+            regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTitPims);
             if (regex.IsMatch(html)) {
                 infoFile = regex.Match(html).Groups[2].Value;
             }
-            regex = new Regex("(</var></a>)(.*?)(<br />)");
+            regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryVarA);
             if (regex.IsMatch(html)) {
                 infoFilms = regex.Match(html).Groups[2].Value;
             }
-            regex = new Regex("(<br \\/>)(<b>.*)(<\\/span>)");
+            regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryBrB);
             if (regex.IsMatch(html)) {
                 infoPro = regex.Match(html).Groups[2].Value;
             }
