@@ -15,7 +15,7 @@ namespace RemoteFork.Plugins {
         public static Dictionary<string, string> GetFileList(string pathTorrent) {
             string aceMadiaInfo =
                 HTTPUtility.GetRequest(string.Format(PluginSettings.Settings.AceStreamApi.GetMediaFiles,
-                    NnmClub.GetAddress, pathTorrent));
+                    Rutracker.GetAddress, pathTorrent));
             if (!string.IsNullOrWhiteSpace(aceMadiaInfo)) {
                 var magnet = JsonConvert.DeserializeObject<Magnet>(aceMadiaInfo);
                 if (!string.IsNullOrEmpty(magnet.error)) {

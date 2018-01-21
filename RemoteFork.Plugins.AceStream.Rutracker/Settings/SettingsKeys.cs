@@ -24,22 +24,23 @@
 
         public const string REGEXP = "REGEXP";
         public const string GET_PAGE_FILM_MAGNET = "GET_PAGE_FILM_MAGNET";
-        public const string GET_SEARCH_PROW = "GET_SEARCH_PROW";
-        public const string GET_SEARCH_GENMED = "GET_SEARCH_GENMED";
+
+        public const string GET_SEARCH_CENTER = "GET_SEARCH_CENTER";
+        public const string GET_SEARCH_DATA_TOPIC = "GET_SEARCH_DATA_TOPIC";
         public const string GET_SEARCH_BBA = "GET_SEARCH_BBA";
         public const string GET_SEARCH_BB = "GET_SEARCH_BB";
         public const string GET_SEARCH_UTD = "GET_SEARCH_UTD";
         public const string GET_SEARCH_SEEDMED = "GET_SEARCH_SEEDMED";
         public const string GET_SEARCH_LEECHMED = "GET_SEARCH_LEECHMED";
 
-        public const string GET_CATEGORY_HEAD = "GET_CATEGORY_HEAD";
-        public const string GET_CATEGORY_TITLE = "GET_CATEGORY_TITLE";
-        public const string GET_CATEGORY_PGENMED = "GET_CATEGORY_PGENMED";
-        public const string GET_CATEGORY_PORTAL_IMG = "GET_CATEGORY_PORTAL_IMG";
+        public const string GET_CATEGORY_LEECHERS = "GET_CATEGORY_LEECHERS";
+        public const string GET_CATEGORY_SUB_CATEGORY = "GET_CATEGORY_SUB_CATEGORY";
+        public const string GET_CATEGORY_SEEDERS = "GET_CATEGORY_SEEDERS";
+        public const string GET_CATEGORY_TABLE = "GET_CATEGORY_TABLE";
         public const string GET_CATEGORY_NEXT_PAGE = "GET_CATEGORY_NEXT_PAGE";
-        public const string GET_CATEGORY_TITLE_A = "GET_CATEGORY_TITLE_A";
-        public const string GET_CATEGORY_TIT_PIMS = "GET_CATEGORY_TIT_PIMS";
-        public const string GET_CATEGORY_VAR_A = "GET_CATEGORY_VAR_A";
-        public const string GET_CATEGORY_BR_B = "GET_CATEGORY_BR_B";
+        public const string GET_CATEGORY_TOPICS = "GET_CATEGORY_TOPICS";
+        public const string GET_CATEGORY_MINITABLE = "GET_CATEGORY_MINITABLE";
+        public const string GET_CATEGORY_TOPIC = "GET_CATEGORY_TOPIC";
+        public const string GET_CATEGORY_SIZE = "GET_CATEGORY_SIZE";
     }
 }

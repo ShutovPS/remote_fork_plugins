@@ -9,10 +9,10 @@ namespace RemoteFork.Plugins.Settings {
         public string PluginPath { get; set; }
 
         [JsonProperty(SettingsKey.TRACKER_SERVER_NNM)]
-        public string TrackerServerNnm { get; set; }
+        public string TrackerServer { get; set; }
 
         [JsonProperty(SettingsKey.LOGO_NO_NAME_CLUB)]
-        public string LogoNoNameClub { get; set; }
+        public string Logo { get; set; }
 
         [JsonProperty(SettingsKey.ICONS)]
         public Icons Icons { get; set; }
@@ -24,11 +24,11 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            TrackerServerNnm = "https://nnm-club.name",
+            TrackerServer = "https://rutracker.org",
             PluginPath = "pluginPath",
             Separator = ';',
 
-            LogoNoNameClub = "http://assets.nnm-club.ws/forum/images/logos/10let8.png",
+            Logo = "https://rutrk.org/logo/logo.png",
 
             Icons = new Icons() {
                 IcoError = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolError.png",
@@ -47,25 +47,25 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Regexp = new Regexp() {
-                GetPageFilmMagnet = "(<a rel=\"nofollow\" href=\")(magnet.*?)(\")",
+                GetPageFilmMagnet = "(<a href=\")(magnet.*?)(\")",
 
-                GetSearchProw = "(<tr class=\"prow)([\\s\\S]*?)(<\\/tr>)",
+                GetSearchCenter = "(<tr class=\"tCenter hl-tr\">)(.*?)(</tr>)",
                 GetSearchBB = "(\"><b>)(.*?)(</b>)",
-                GetSearchBBA = "(\"><b>)(.*?)(<\\/b><\\/a>)",
-                GetSearchGenmed = "(<a class=\"genmed \\w*\" href=\")(.*?)(\")",
+                GetSearchBBA = "\">)(.*?)(</a>)",
+                GetSearchDataTopic = "(<a data-topic_id=\")(.*?)(\")",
                 GetSearchSeedmed = "(class=\"seedmed\">)(.*?)(</td>)",
                 GetSearchUTD = "(?<=</u>).*?(?=</td>)",
                 GetSearchLeechmed = "(ass=\"leechmed\">)(.*?)(</td>)",
 
-                GetCategoryHead = "(<td class=\"pcatHead\"><img class=\"picon\")([\\s\\S]*?)(><\\/table>)",
-                GetCategoryPgenmed = "(<a class=\"pgenmed\" href=\")(.*?)(\")",
-                GetCategoryPortalImg = "(<var class=\"portalImg\" title=\")(.*?)(\">)",
-                GetCategoryNextPage = "(<a href=\")((portal\\.php\\?c=\\d+&)(?:amp;)(start=\\d+))(\">([а-яА-Я]*?.?)<\\/a><\\/span>)",
-                GetCategoryTitle = "(title=\")(.*?)(\">)(\\2)",
-                GetCategoryTitleA = "(title=\")(.*?)(\">)(\\2)(<\\/a)",
-                GetCategoryTitPims = "(<img class=\"tit-b pims\" src=\")(.*?)(\")",
-                GetCategoryVarA = "(</var></a>)(.*?)(<br />)",
-                GetCategoryBrB = "(<br \\/>)(<b>.*)(<\\/span>)"
+                GetCategoryLeechers = "(title=\"Leechers\"><b>)(\\d+)(<)",
+                GetCategorySeeders = "(title=\"Seeders\"><b>)(\\d+)(<)",
+                GetCategoryTable = "(<table class=\"forumline forum\">)([\\s\\S]*?)(<\\/table>)",
+                GetCategoryNextPage = "(href=\")((viewforum\\.php\\?f=\\d+&)(?:amp;)(start=\\d+))(\\\">([а-яА-Я]*?.?)<\\/a><\\/p>)",
+                GetCategorySubCategory = "(<h4 class=\"forumlink\"><a href=\")(.*?)(\">)(.*?)(<\\/a><\\/h4>)",
+                GetCategoryTopics = "(<td colspan=\"5\" class=\"row3 topicSep\">Темы<\\/td>)([\\s\\S]*?)(<\\/table>)",
+                GetCategoryMinitable = "(<div id=\"c-18\" class=\"category\">)([\\s\\S]*?)(<\\/table>)",
+                GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
+                GetCategorySize = "(text-decoration: none\">)(.*?)(<)"
             }
         };
     }
@@ -81,10 +81,10 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.GET_PAGE_FILM_MAGNET)]
         public string GetPageFilmMagnet { get; set; }
 
-        [JsonProperty(SettingsKey.GET_SEARCH_PROW)]
-        public string GetSearchProw { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_GENMED)]
-        public string GetSearchGenmed { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_CENTER)]
+        public string GetSearchCenter { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_DATA_TOPIC)]
+        public string GetSearchDataTopic { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_BBA)]
         public string GetSearchBBA { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_BB)]
@@ -96,24 +96,24 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.GET_SEARCH_LEECHMED)]
         public string GetSearchLeechmed { get; set; }
 
-        [JsonProperty(SettingsKey.GET_CATEGORY_HEAD)]
-        public string GetCategoryHead { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_TITLE)]
-        public string GetCategoryTitle { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_PGENMED)]
-        public string GetCategoryPgenmed { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_PORTAL_IMG)]
-        public string GetCategoryPortalImg { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_LEECHERS)]
+        public string GetCategoryLeechers { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_SEEDERS)]
+        public string GetCategorySeeders { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_SUB_CATEGORY)]
+        public string GetCategorySubCategory { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_TABLE)]
+        public string GetCategoryTable { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_NEXT_PAGE)]
         public string GetCategoryNextPage{ get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_TITLE_A)]
-        public string GetCategoryTitleA { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_TIT_PIMS)]
-        public string GetCategoryTitPims { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_VAR_A)]
-        public string GetCategoryVarA { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_BR_B)]
-        public string GetCategoryBrB{ get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_TOPICS)]
+        public string GetCategoryTopics { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_MINITABLE)]
+        public string GetCategoryMinitable { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_TOPIC)]
+        public string GetCategoryTopic { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_SIZE)]
+        public string GetCategorySize{ get; set; }
     }
 
     public class Icons {

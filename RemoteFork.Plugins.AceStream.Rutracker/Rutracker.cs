@@ -5,14 +5,15 @@ using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "nnmclub", Version = "0.1.1", Author = "fd_crash&ORAMAN", Name = "NNM-Club (AceStream)",
-        Description = "Воспроизведение NNM-Club через меда-сервер Ace Stream",
+    [Plugin(Id = "rutracker", Version = "0.1.0", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
+        Description = "Воспроизведение Rutracker через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
-    public class NnmClub : IPlugin {
+    public class Rutracker : IPlugin {
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
+        public static string CX = string.Empty;
 
         public static string GetAddress => $"http://{ProgramSettings.Settings.IpAddress}:{ProgramSettings.Settings.AceStreamPort}";
 
@@ -41,7 +42,7 @@ namespace RemoteFork.Plugins {
                         case "pagefilm":
                             command = new GetPageFilmCommand();
                             break;
-                        case "page":
+                        case "category":
                             command = new GetCategoryCommand();
                             break;
                     }

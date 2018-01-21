@@ -10,7 +10,7 @@ namespace RemoteFork.Plugins.Commands {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
 
-            string responseFromServer = HTTPUtility.GetRequest(data[2]);
+            string responseFromServer = HTTPUtility.GetRequest(PluginSettings.Settings.TrackerServer + data[2]);
 
             string torrentPath = null;
             var regex = new Regex(PluginSettings.Settings.Regexp.GetPageFilmMagnet);
@@ -20,10 +20,10 @@ namespace RemoteFork.Plugins.Commands {
             if (!string.IsNullOrWhiteSpace(torrentPath)) {
                 var files = FileList.GetFileList(torrentPath);
                 if (files.Count > 0) {
-                    string stream = string.Format(PluginSettings.Settings.AceStreamApi.GetStream, NnmClub.GetAddress,
+                    string stream = string.Format(PluginSettings.Settings.AceStreamApi.GetStream, Rutracker.GetAddress,
                         torrentPath);
                     if (files.Count > 1) {
-                        NnmClub.Source = HTTPUtility.GetRequest(stream);
+                        Rutracker.Source = HTTPUtility.GetRequest(stream);
                     } else {
                         string name = Path.GetFileName(files.First().Value);
                         var item = new Item() {
@@ -37,7 +37,7 @@ namespace RemoteFork.Plugins.Commands {
                 }
             }
 
-            NnmClub.IsIptv = false;
+            Rutracker.IsIptv = false;
             return items;
         }
     }
