@@ -41,6 +41,7 @@
         public const string GET_CATEGORY_TOPICS = "GET_CATEGORY_TOPICS";
         public const string GET_CATEGORY_MINITABLE = "GET_CATEGORY_MINITABLE";
         public const string GET_CATEGORY_TOPIC = "GET_CATEGORY_TOPIC";
+        public const string GET_CATEGORY_TOPIC_FILM = "GET_CATEGORY_TOPIC_FILM";
         public const string GET_CATEGORY_SIZE = "GET_CATEGORY_SIZE";
     }
 }

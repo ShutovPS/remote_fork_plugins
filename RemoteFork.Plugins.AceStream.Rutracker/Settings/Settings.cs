@@ -64,7 +64,8 @@ namespace RemoteFork.Plugins.Settings {
                 GetCategorySubCategory = "(<h4 class=\"forumlink\"><a href=\")(.*?)(\">)(.*?)(<\\/a><\\/h4>)",
                 GetCategoryTopics = "(<td colspan=\"5\" class=\"row3 topicSep\">Темы<\\/td>)([\\s\\S]*?)(<\\/table>)",
                 GetCategoryMinitable = "(<div id=\"c-18\" class=\"category\">)([\\s\\S]*?)(<\\/table>)",
-                GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
+                GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)([\\s\\S]*?)(<\\/tr>)",
+                GetCategoryTopicFilm = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
                 GetCategorySize = "(text-decoration: none\">)(.*?)(<)"
             }
         };
@@ -112,6 +113,8 @@ namespace RemoteFork.Plugins.Settings {
         public string GetCategoryMinitable { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_TOPIC)]
         public string GetCategoryTopic { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_TOPIC_FILM)]
+        public string GetCategoryTopicFilm { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_SIZE)]
         public string GetCategorySize{ get; set; }
     }

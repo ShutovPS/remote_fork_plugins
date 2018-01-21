@@ -40,16 +40,20 @@ namespace RemoteFork.Plugins.Commands {
             regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTopic);
             if (regex.IsMatch(topics)) {
                 foreach (Match match in regex.Matches(topics)) {
-                    string id = match.Groups[4].Value;
-                    string name = match.Groups[6].Value;
-                    var item = new Item() {
-                        Type = ItemType.DIRECTORY,
-                        ImageLink = PluginSettings.Settings.Icons.IcoTorrentFile,
-                        Name = name,
-                        Link = $"pagefilm{PluginSettings.Settings.Separator}/forum/{id}",
-                        Description = GetDescription(match.Value)
-                    };
-                    items.Add(item);
+                    regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTopicFilm);
+                    if (regex.IsMatch(match.Value)) {
+                        var tempMatch = regex.Match(match.Value);
+                        string id = tempMatch.Groups[4].Value;
+                        string name = tempMatch.Groups[6].Value;
+                        var item = new Item() {
+                            Type = ItemType.DIRECTORY,
+                            ImageLink = PluginSettings.Settings.Icons.IcoTorrentFile,
+                            Name = name,
+                            Link = $"pagefilm{PluginSettings.Settings.Separator}/forum/{id}",
+                            Description = GetDescription(tempMatch.Value)
+                        };
+                        items.Add(item);
+                    }
                 }
             }
 
@@ -57,7 +61,7 @@ namespace RemoteFork.Plugins.Commands {
             if (regex.IsMatch(response)) {
                 var matchGroups = regex.Match(response).Groups;
                 Rutracker.NextPageUrl =
-                    $"page{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServer}/forum/{matchGroups[3].Value + matchGroups[4].Value}";
+                    $"category{PluginSettings.Settings.Separator}/forum/{matchGroups[3].Value + matchGroups[4].Value}";
             }
 
             return items;
