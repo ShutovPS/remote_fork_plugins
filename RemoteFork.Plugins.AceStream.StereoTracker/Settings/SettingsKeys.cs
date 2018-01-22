@@ -1,6 +1,7 @@
 ﻿namespace RemoteFork.Plugins.Settings {
     public static class SettingsKey {
         public const string SEPARATOR = "SEPARATOR";
+        public const string SETTINGS_VERSION = "SETTINGS_VERSION";
         public const string PLUGIN_PATH = "PLUGIN_PATH";
 
         public const string LOGO_NO_NAME_CLUB = "LOGO_NO_NAME_CLUB";
@@ -19,19 +20,20 @@
         public const string TRACKER_SERVER_NNM = "TRACKER_SERVER_NNM";
 
         public const string ACE_STREAM_API = "ACE_STREAM_API";
+        public const string GET_CONTENT_ID = "GET_CONTENT_ID";
         public const string GET_MEDIA_FILES = "GET_MEDIA_FILES";
         public const string GET_STREAM = "GET_STREAM";
 
         public const string REGEXP = "REGEXP";
         public const string GET_PAGE_FILM_MAGNET = "GET_PAGE_FILM_MAGNET";
+        public const string GET_CONTENT_ID_TORRENT = "GET_CONTENT_ID_TORRENT";
 
-        public const string GET_SEARCH_CENTER = "GET_SEARCH_CENTER";
+        public const string GET_PAGE_FILM_TORRENT = "GET_PAGE_FILM_TORRENT";
         public const string GET_SEARCH_DATA_TOPIC = "GET_SEARCH_DATA_TOPIC";
-        public const string GET_SEARCH_BBA = "GET_SEARCH_BBA";
-        public const string GET_SEARCH_BB = "GET_SEARCH_BB";
+        public const string GET_SEARCH_NAME = "GET_SEARCH_NAME";
+        public const string GET_SEARCH_KINOPOISK = "GET_SEARCH_KINOPOISK";
         public const string GET_SEARCH_UTD = "GET_SEARCH_UTD";
-        public const string GET_SEARCH_SEEDMED = "GET_SEARCH_SEEDMED";
-        public const string GET_SEARCH_LEECHMED = "GET_SEARCH_LEECHMED";
+        public const string GET_SEARCH_IMAGE = "GET_SEARCH_IMAGE";
 
         public const string GET_CATEGORY_LEECHERS = "GET_CATEGORY_LEECHERS";
         public const string GET_CATEGORY_SUB_CATEGORY = "GET_CATEGORY_SUB_CATEGORY";
