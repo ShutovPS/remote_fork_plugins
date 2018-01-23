@@ -9,10 +9,10 @@ namespace RemoteFork.Plugins.Settings {
             defaultSettings = Settings.DefaultSettings;
         }
 
-        //public PluginSettings() : base() {
-        //    if (defaultSettings.SettingsVersion > Settings.SettingsVersion) {
-        //        //settingsManager.Save(defaultSettings);
-        //    }
-        //}
+        public PluginSettings() {
+            if (defaultSettings.SettingsVersion > settingsManager.Settings.SettingsVersion) {
+                settingsManager.Save(defaultSettings);
+            }
+        }
     }
 }
