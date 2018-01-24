@@ -5,6 +5,9 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.SEPARATOR)]
         public char Separator { get; set; }
 
+        [JsonProperty(SettingsKey.SETTINGS_VERSION)]
+        public float SettingsVersion { get; set; }
+
         [JsonProperty(SettingsKey.PLUGIN_PATH)]
         public string PluginPath { get; set; }
 
@@ -24,11 +27,12 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            TrackerServer = "https://rutracker.org",
+            SettingsVersion = 0,
+            TrackerServer = "http://rutor.info",
             PluginPath = "pluginPath",
             Separator = ';',
 
-            Logo = "https://rutrk.org/logo/logo.png",
+            Logo = "/templates/newfilmsx/images/logo.png",
 
             Icons = new Icons() {
                 IcoError = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolError.png",
@@ -42,60 +46,71 @@ namespace RemoteFork.Plugins.Settings {
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
             },
             AceStreamApi = new AceStreamApi() {
-                GetMediaFiles = "{0}/server/api?method=get_media_files&magnet={1}",
-                GetStream = "{0}/ace/getstream?magnet={1}",
+                GetContentId = "http://api.torrentstream.net/upload/raw",
+                GetMediaFilesByTorrent = "{0}/server/api?method=get_media_files&content_id={1}",
+                GetMediaFilesByMagnet = "{0}/server/api?method=get_media_files&magnet={1}",
+                GetStreamByTorrent = "{0}/ace/getstream?id={1}",
+                GetStreamByMagnet = "{0}/ace/getstream?magnet={1}",
             },
 
             Regexp = new Regexp() {
-                GetPageFilmMagnet = "(<a href=\")(magnet.*?)(\")",
+                GetPageFilmTorrent = "(id=)(\\d+)(\'>)",
 
-                GetSearchCenter = "(<tr class=\"tCenter hl-tr\">)(.*?)(</tr>)",
-                GetSearchBB = "(\"><b>)(.*?)(</b>)",
-                GetSearchBBA = "\">)(.*?)(</a>)",
-                GetSearchDataTopic = "(<a data-topic_id=\")(.*?)(\")",
-                GetSearchSeedmed = "(class=\"seedmed\">)(.*?)(</td>)",
-                GetSearchUTD = "(?<=</u>).*?(?=</td>)",
-                GetSearchLeechmed = "(ass=\"leechmed\">)(.*?)(</td>)",
+                GetContentId = "({\"content_id\":\")(.*?)(\"})",
 
+                GetSearchCenter = "(<tr class=\"backgr\">)([\\s\\S]*?)(<\\/center>)",
+                GetSearchDataTopic = "(<tr class=)([\\s\\S]*?)(<\\/span><\\/td><\\/tr>)",
+                GetSearchTorrent = "(<a class=\"downgif\" href=\")(.*?)(\">)",
+                GetSearchMagnet = "(<a href=\")(magnet:.*?)(\">)",
+                GetSearchName = "(<a href=\"\\/torrent.*?\">)(.*?)(<\\/a>)",
+                GetSearchSize = "(<td align=\"right\">)(.*?)(<\\/td>)",
+
+                GetCategoryNextPage = "(<a href=\"\\/browse\\/)({1})(\\/{0}\\/\\d+\\/\\d+\"><b>([а-яА-Я]*?.?).*?<\\/b><\\/a>)",
+                GetCategoryTopics = "(<div id=\'dle-content\'>)([\\s\\S]*?)(<div class=\"hblock\">)",
+                GetCategoryTopic = "(<div class=\"post-films\">)([\\s\\S]*?)(<\\/div>\\s*<\\/div>)",
+                GetCategoryTopicFilm = "(title=)(.*?)(\"\\s?\\/>[\\s\\S]*?<a href=\")(.*?)(\">)",
+
+                GetCategoryMinitable = "(<table border=\"0\" id=\"atachment\")([\\s\\S]*?)(<\\/tr>)",
+                GetCategorySubCategory = "(\\s*)(.*?)(<br>)",
+                GetCategorySize = "(<strong>\\s*)(.*?)(<\\s*\\/strong>\\s*)(.*?)(<br>)",
                 GetCategoryLeechers = "(title=\"Leechers\"><b>)(\\d+)(<)",
                 GetCategorySeeders = "(title=\"Seeders\"><b>)(\\d+)(<)",
-                GetCategoryTable = "(<table class=\"forumline forum\">)([\\s\\S]*?)(<\\/table>)",
-                GetCategoryNextPage = "(href=\")((viewforum\\.php\\?f=\\d+&)(?:amp;)(start=\\d+))(\\\">([а-яА-Я]*?.?)<\\/a><\\/p>)",
-                GetCategorySubCategory = "(<h4 class=\"forumlink\"><a href=\")(.*?)(\">)(.*?)(<\\/a><\\/h4>)",
-                GetCategoryTopics = "(<td colspan=\"5\" class=\"row3 topicSep\">Темы<\\/td>)([\\s\\S]*?)(<\\/table>)",
-                GetCategoryMinitable = "(<div id=\"c-18\" class=\"category\">)([\\s\\S]*?)(<\\/table>)",
-                GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)([\\s\\S]*?)(<\\/tr>)",
-                GetCategoryTopicFilm = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
-                GetCategorySize = "(text-decoration: none\">)(.*?)(<)"
+                GetCategoryTable = "(<table class=\"forumline forum\">)([\\s\\S]*?)(<\\/table>)"
             }
         };
     }
 
     public class AceStreamApi {
-        [JsonProperty(SettingsKey.GET_MEDIA_FILES)]
-        public string GetMediaFiles { get; set; }
-        [JsonProperty(SettingsKey.GET_STREAM)]
-        public string GetStream { get; set; }
+        [JsonProperty(SettingsKey.GET_CONTENT_ID)]
+        public string GetContentId { get; set; }
+        [JsonProperty(SettingsKey.GET_MEDIA_FILES_BY_TORRENT)]
+        public string GetMediaFilesByTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_MEDIA_FILES_BY_MAGNET)]
+        public string GetMediaFilesByMagnet { get; set; }
+        [JsonProperty(SettingsKey.GET_STREAM_BY_TORRENT)]
+        public string GetStreamByTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_STREAM_BY_MAGNET)]
+        public string GetStreamByMagnet { get; set; }
     }
 
     public class Regexp {
-        [JsonProperty(SettingsKey.GET_PAGE_FILM_MAGNET)]
-        public string GetPageFilmMagnet { get; set; }
+        [JsonProperty(SettingsKey.GET_PAGE_FILM_TORRENT)]
+        public string GetPageFilmTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_CONTENT_ID_TORRENT)]
+        public string GetContentId { get; set; }
 
         [JsonProperty(SettingsKey.GET_SEARCH_CENTER)]
         public string GetSearchCenter { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_DATA_TOPIC)]
         public string GetSearchDataTopic { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_BBA)]
-        public string GetSearchBBA { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_BB)]
-        public string GetSearchBB { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_UTD)]
-        public string GetSearchUTD { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_SEEDMED)]
-        public string GetSearchSeedmed { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_LEECHMED)]
-        public string GetSearchLeechmed { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_NAME)]
+        public string GetSearchName { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_SIZE)]
+        public string GetSearchSize { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_TORRENT)]
+        public string GetSearchTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_MAGNET)]
+        public string GetSearchMagnet { get; set; }
 
         [JsonProperty(SettingsKey.GET_CATEGORY_LEECHERS)]
         public string GetCategoryLeechers { get; set; }

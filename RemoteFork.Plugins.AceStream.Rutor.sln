@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteFork.Plugins.AceStream.Rutor", "RemoteFork.Plugins.AceStream.Rutor\RemoteFork.Plugins.AceStream.Rutor.csproj", "{1C37D047-DDB9-4EC7-8DC7-632E1FBBB26F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Log", "RemoteFork.Utility\RemoteFork.Log\RemoteFork.Log.csproj", "{2668E004-3646-4AB9-B473-75094300AFC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Network", "RemoteFork.Utility\RemoteFork.Network\RemoteFork.Network.csproj", "{80C516C3-C863-4BD1-BB1D-CA22B2CB6D30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins", "RemoteFork.Utility\RemoteFork.Plugins\RemoteFork.Plugins.csproj", "{7969640D-0A7B-437F-9780-F37FF7E8D5BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Settings", "RemoteFork.Utility\RemoteFork.Settings\RemoteFork.Settings.csproj", "{AC7F593A-61F7-4609-B924-A27A779F6085}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Tools", "RemoteFork.Utility\RemoteFork.Tools\RemoteFork.Tools.csproj", "{3987F852-B119-4B11-85C3-3678A7FCFD83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{CC29E11A-A5C8-401F-8E0A-714AD46C3962}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C37D047-DDB9-4EC7-8DC7-632E1FBBB26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C37D047-DDB9-4EC7-8DC7-632E1FBBB26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C37D047-DDB9-4EC7-8DC7-632E1FBBB26F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C37D047-DDB9-4EC7-8DC7-632E1FBBB26F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2668E004-3646-4AB9-B473-75094300AFC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2668E004-3646-4AB9-B473-75094300AFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2668E004-3646-4AB9-B473-75094300AFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2668E004-3646-4AB9-B473-75094300AFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C516C3-C863-4BD1-BB1D-CA22B2CB6D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C516C3-C863-4BD1-BB1D-CA22B2CB6D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C516C3-C863-4BD1-BB1D-CA22B2CB6D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C516C3-C863-4BD1-BB1D-CA22B2CB6D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7969640D-0A7B-437F-9780-F37FF7E8D5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7969640D-0A7B-437F-9780-F37FF7E8D5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7969640D-0A7B-437F-9780-F37FF7E8D5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7969640D-0A7B-437F-9780-F37FF7E8D5BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC7F593A-61F7-4609-B924-A27A779F6085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC7F593A-61F7-4609-B924-A27A779F6085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC7F593A-61F7-4609-B924-A27A779F6085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC7F593A-61F7-4609-B924-A27A779F6085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3987F852-B119-4B11-85C3-3678A7FCFD83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3987F852-B119-4B11-85C3-3678A7FCFD83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3987F852-B119-4B11-85C3-3678A7FCFD83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3987F852-B119-4B11-85C3-3678A7FCFD83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC29E11A-A5C8-401F-8E0A-714AD46C3962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC29E11A-A5C8-401F-8E0A-714AD46C3962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC29E11A-A5C8-401F-8E0A-714AD46C3962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC29E11A-A5C8-401F-8E0A-714AD46C3962}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7279DCC-51A0-4F61-9797-AACC60D1C72F}
+	EndGlobalSection
+EndGlobal
