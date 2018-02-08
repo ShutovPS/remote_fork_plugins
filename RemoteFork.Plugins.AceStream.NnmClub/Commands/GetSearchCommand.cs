@@ -6,7 +6,7 @@ using RemoteFork.Plugins.Settings;
 namespace RemoteFork.Plugins.Commands {
     public class GetSearchCommand : ICommand {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            string responseFromServer = HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServerNnm + "/forum/tracker.php", $"nm={data[2]}");
+            string responseFromServer = HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/tracker.php", $"nm={data[2]}");
 
             var items = new List<Item>();
             var regex = new Regex(PluginSettings.Settings.Regexp.GetSearchProw);
@@ -17,7 +17,7 @@ namespace RemoteFork.Plugins.Commands {
                     regex = new Regex(PluginSettings.Settings.Regexp.GetSearchGenmed);
                     var item = new Item {
                         Link =
-                            $"pagefilm{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServerNnm}/forum/{regex.Match(match.Value).Groups[2].Value}"
+                            $"pagefilm{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServer}/forum/{regex.Match(match.Value).Groups[2].Value}"
                     };
                     regex = new Regex(PluginSettings.Settings.Regexp.GetSearchBBA);
                     item.Name = regex.Match(match.Value).Groups[2].Value;
@@ -29,7 +29,6 @@ namespace RemoteFork.Plugins.Commands {
                 items = NonSearch();
             }
 
-            NnmClub.IsIptv = false;
             return items;
         }
 

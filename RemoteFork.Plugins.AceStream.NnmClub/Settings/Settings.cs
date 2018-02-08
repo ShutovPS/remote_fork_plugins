@@ -1,18 +1,21 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace RemoteFork.Plugins.Settings {
     public class Settings {
         [JsonProperty(SettingsKey.SEPARATOR)]
         public char Separator { get; set; }
 
+        [JsonProperty(SettingsKey.SETTINGS_VERSION)]
+        public float SettingsVersion { get; set; }
+
         [JsonProperty(SettingsKey.PLUGIN_PATH)]
         public string PluginPath { get; set; }
 
-        [JsonProperty(SettingsKey.TRACKER_SERVER_NNM)]
-        public string TrackerServerNnm { get; set; }
+        [JsonProperty(SettingsKey.TRACKER_SERVER)]
+        public string TrackerServer { get; set; }
 
-        [JsonProperty(SettingsKey.LOGO_NO_NAME_CLUB)]
-        public string LogoNoNameClub { get; set; }
+        [JsonProperty(SettingsKey.LOGO)]
+        public string Logo { get; set; }
 
         [JsonProperty(SettingsKey.ICONS)]
         public Icons Icons { get; set; }
@@ -24,11 +27,12 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            TrackerServerNnm = "https://nnm-club.name",
+            SettingsVersion = 1,
+            TrackerServer = "https://nnmclub.to",
             PluginPath = "pluginPath",
             Separator = ';',
 
-            LogoNoNameClub = "http://assets.nnm-club.ws/forum/images/logos/10let8.png",
+            Logo = "http://assets.nnm-club.ws/forum/images/logos/10let8.png",
 
             Icons = new Icons() {
                 IcoError = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolError.png",
@@ -49,6 +53,9 @@ namespace RemoteFork.Plugins.Settings {
             Regexp = new Regexp() {
                 GetPageFilmMagnet = "(<a rel=\"nofollow\" href=\")(magnet.*?)(\")",
 
+                GetRootCategories = "(<span class=\"genmed\" style=\"line-height)([\\s\\S]*?)(<\\/span>)",
+                GetRootCategory = "(<a class=\"genmed\" href=\")(.*?)(\" title=\".*?\">)(.*?)(<\\/)",
+
                 GetSearchProw = "(<tr class=\"prow)([\\s\\S]*?)(<\\/tr>)",
                 GetSearchBB = "(\"><b>)(.*?)(</b>)",
                 GetSearchBBA = "(\"><b>)(.*?)(<\\/b><\\/a>)",
@@ -58,12 +65,12 @@ namespace RemoteFork.Plugins.Settings {
                 GetSearchLeechmed = "(ass=\"leechmed\">)(.*?)(</td>)",
 
                 GetCategoryHead = "(<td class=\"pcatHead\"><img class=\"picon\")([\\s\\S]*?)(><\\/table>)",
-                GetCategoryPgenmed = "(<a class=\"pgenmed\" href=\")(.*?)(\")",
-                GetCategoryPortalImg = "(<var class=\"portalImg\" title=\")(.*?)(\">)",
+                GetCategoryLink = "(<a rel=\"nofollow\" href=\")(.*?)(\")",
+                GetCategoryPortalImg = "(<var class=\"portalImg\".*?link=)(.*?)(\">)",
                 GetCategoryNextPage = "(<a href=\")((portal\\.php\\?c=\\d+&)(?:amp;)(start=\\d+))(\">([а-яА-Я]*?.?)<\\/a><\\/span>)",
-                GetCategoryTitle = "(title=\")(.*?)(\">)(\\2)",
-                GetCategoryTitleA = "(title=\")(.*?)(\">)(\\2)(<\\/a)",
-                GetCategoryTitPims = "(<img class=\"tit-b pims\" src=\")(.*?)(\")",
+                GetCategoryTitle = "(<a class=\"pgenmed\".*?title=\")(.*?)(\">)",
+                GetCategoryTitleA = "(<a class=\"pgenmed\".*?title=\")(.*?)(\">)",
+                GetCategoryTitPims = "(<img)( class=\"tit-b pims\")( src=\")(.*?)(\".*?title=\")(.*?)(\".*?\"pcomm bold\">)(.*?)(<)",
                 GetCategoryVarA = "(</var></a>)(.*?)(<br />)",
                 GetCategoryBrB = "(<br \\/>)(<b>.*)(<\\/span>)"
             }
@@ -80,6 +87,11 @@ namespace RemoteFork.Plugins.Settings {
     public class Regexp {
         [JsonProperty(SettingsKey.GET_PAGE_FILM_MAGNET)]
         public string GetPageFilmMagnet { get; set; }
+
+        [JsonProperty(SettingsKey.GET_ROOT_CATEGORIES)]
+        public string GetRootCategories { get; set; }
+        [JsonProperty(SettingsKey.GET_ROOT_CATEGORY)]
+        public string GetRootCategory { get; set; }
 
         [JsonProperty(SettingsKey.GET_SEARCH_PROW)]
         public string GetSearchProw { get; set; }
@@ -100,8 +112,8 @@ namespace RemoteFork.Plugins.Settings {
         public string GetCategoryHead { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_TITLE)]
         public string GetCategoryTitle { get; set; }
-        [JsonProperty(SettingsKey.GET_CATEGORY_PGENMED)]
-        public string GetCategoryPgenmed { get; set; }
+        [JsonProperty(SettingsKey.GET_CATEGORY_LINK)]
+        public string GetCategoryLink { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_PORTAL_IMG)]
         public string GetCategoryPortalImg { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_NEXT_PAGE)]

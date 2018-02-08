@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
 
@@ -10,13 +9,7 @@ namespace RemoteFork.Plugins.Commands {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
 
-            string responseFromServer = HTTPUtility.GetRequest(data[2]);
-
-            string torrentPath = null;
-            var regex = new Regex(PluginSettings.Settings.Regexp.GetPageFilmMagnet);
-            if (regex.IsMatch(responseFromServer)) {
-                torrentPath = regex.Match(responseFromServer).Groups[2].Value;
-            }
+            string torrentPath = data[2];
             if (!string.IsNullOrWhiteSpace(torrentPath)) {
                 var files = FileList.GetFileList(torrentPath);
                 if (files.Count > 0) {
@@ -36,8 +29,7 @@ namespace RemoteFork.Plugins.Commands {
                     }
                 }
             }
-
-            NnmClub.IsIptv = false;
+            
             return items;
         }
     }

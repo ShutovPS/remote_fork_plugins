@@ -8,5 +8,11 @@ namespace RemoteFork.Plugins.Settings {
             fileName = Path.Combine("Plugins", typeof(NnmClub).GetCustomAttribute<PluginAttribute>().Id + ".json");
             defaultSettings = Settings.DefaultSettings;
         }
+
+        public PluginSettings() {
+            if (defaultSettings.SettingsVersion > settingsManager.Settings.SettingsVersion) {
+                settingsManager.Save(defaultSettings);
+            }
+        }
     }
 }
