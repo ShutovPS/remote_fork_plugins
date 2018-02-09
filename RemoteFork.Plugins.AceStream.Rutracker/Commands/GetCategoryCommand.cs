@@ -44,13 +44,13 @@ namespace RemoteFork.Plugins.Commands {
                     if (regex.IsMatch(match.Value)) {
                         var tempMatch = regex.Match(match.Value);
                         string id = tempMatch.Groups[4].Value;
-                        string name = tempMatch.Groups[6].Value;
+                        string name = tempMatch.Groups[6].Value.Replace("<wbr>","");
                         var item = new Item() {
                             Type = ItemType.DIRECTORY,
                             ImageLink = PluginSettings.Settings.Icons.IcoTorrentFile,
                             Name = name,
                             Link = $"pagefilm{PluginSettings.Settings.Separator}/forum/{id}",
-                            Description = GetDescription(tempMatch.Value)
+                            Description = GetDescription(match.Value)
                         };
                         items.Add(item);
                     }
@@ -68,28 +68,33 @@ namespace RemoteFork.Plugins.Commands {
         }
 
         private static string GetDescription(string text) {
-            string sizeFile = null;
-            string seeders = null;
-            string leechers = null;
+            string sizeFile = string.Empty;
+            string seeders = string.Empty;
+            string leechers = string.Empty;
+            string title = string.Empty;
 
-            var regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySize);
+            var regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryTopicFilm);
+            if (regex.IsMatch(text)) {
+                title = "<span style=\"color:#3090F0\">" + regex.Match(text).Groups[6].Value.Replace("<wbr>", "") + "</span>";
+            }
+
+            regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySize);
             if (regex.IsMatch(text)) {
                 sizeFile = "<br>Размер: " + regex.Match(text).Groups[2].Value;
             }
 
             regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryLeechers);
             if (regex.IsMatch(text)) {
-                leechers = regex.Match(text).Groups[2].Value;
+                leechers = "Leechers: " + regex.Match(text).Groups[2].Value;
             }
 
 
             regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySeeders);
             if (regex.IsMatch(text)) {
-                seeders = regex.Match(text).Groups[2].Value;
+                seeders = "Seeders: " + regex.Match(text).Groups[2].Value;
             }
 
-            return "<span style=\"color:#3090F0\">" + "</span><br>" + sizeFile + "<br><br>Seeders: " + seeders +
-                   "<br>Leechers: " + leechers;
+            return title + "<br>" + sizeFile + "<br><br>" + seeders + "<br>" + leechers;
         }
     }
 }

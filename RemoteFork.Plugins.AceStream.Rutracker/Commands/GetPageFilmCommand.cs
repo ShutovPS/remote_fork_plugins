@@ -37,7 +37,6 @@ namespace RemoteFork.Plugins.Commands {
                 }
             }
 
-            Rutracker.IsIptv = false;
             return items;
         }
     }

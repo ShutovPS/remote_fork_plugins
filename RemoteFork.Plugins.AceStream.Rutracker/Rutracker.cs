@@ -5,7 +5,7 @@ using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "rutracker", Version = "0.1.1", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
+    [Plugin(Id = "rutracker", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
         Description = "Воспроизведение Rutracker через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
@@ -13,7 +13,6 @@ namespace RemoteFork.Plugins {
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
-        public static string CX = string.Empty;
 
         public static string GetAddress => $"http://{ProgramSettings.Settings.IpAddress}:{ProgramSettings.Settings.AceStreamPort}";
 

@@ -5,8 +5,14 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.SEPARATOR)]
         public char Separator { get; set; }
 
+        [JsonProperty(SettingsKey.SETTINGS_VERSION)]
+        public float SettingsVersion { get; set; }
+
         [JsonProperty(SettingsKey.PLUGIN_PATH)]
         public string PluginPath { get; set; }
+
+        [JsonProperty(SettingsKey.BB_SESSION)]
+        public string BbSession { get; set; }
 
         [JsonProperty(SettingsKey.TRACKER_SERVER_NNM)]
         public string TrackerServer { get; set; }
@@ -24,6 +30,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
+            SettingsVersion = 1,
             TrackerServer = "https://rutracker.org",
             PluginPath = "pluginPath",
             Separator = ';',
@@ -49,13 +56,17 @@ namespace RemoteFork.Plugins.Settings {
             Regexp = new Regexp() {
                 GetPageFilmMagnet = "(<a href=\")(magnet.*?)(\")",
 
-                GetSearchCenter = "(<tr class=\"tCenter hl-tr\">)(.*?)(</tr>)",
-                GetSearchBB = "(\"><b>)(.*?)(</b>)",
-                GetSearchBBA = "\">)(.*?)(</a>)",
+                GetRootCategories = "(<h3>Кино, Видео, ТВ<\\/h3>)([\\s\\S]*?)(<\\/div>)",
+                GetRootLink = "(<a href=\")(.*?)(\">)(.*?)(<\\/a>)",
+
+                GetSearchCenter = "(<tr class=\"tCenter hl-tr\">)([\\s\\S]*?)(<\\/tr>)",
                 GetSearchDataTopic = "(<a data-topic_id=\")(.*?)(\")",
-                GetSearchSeedmed = "(class=\"seedmed\">)(.*?)(</td>)",
-                GetSearchUTD = "(?<=</u>).*?(?=</td>)",
-                GetSearchLeechmed = "(ass=\"leechmed\">)(.*?)(</td>)",
+                GetSearchLink = "({0}\">)(.*?)(</a>)",
+                GetSearchSeedmed = "(<b class=\"seedmed\">)(.*?)(<\\/b>)",
+                GetSearchLeechmed = "(title=\"Личи\"><b>)(.*?)(<\\/b>)",
+                GetSearchTitle = "(href=\"viewtopic\\.php.*?>)(.*?)(<\\/a>)",
+                GetSearchSize = "(<a class=\"small tr-dl dl-stub\".*?\">)(.*)(&.*?;<\\/a>)",
+                GetSearchCategory = "(<a class=\"gen f\".*\">)(.*?)(<\\/a>)",
 
                 GetCategoryLeechers = "(title=\"Leechers\"><b>)(\\d+)(<)",
                 GetCategorySeeders = "(title=\"Seeders\"><b>)(\\d+)(<)",
@@ -82,20 +93,28 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.GET_PAGE_FILM_MAGNET)]
         public string GetPageFilmMagnet { get; set; }
 
+        [JsonProperty(SettingsKey.GET_ROOT_CATEGORIES)]
+        public string GetRootCategories { get; set; }
+
+        [JsonProperty(SettingsKey.GET_ROOT_LINK)]
+        public string GetRootLink { get; set; }
+
         [JsonProperty(SettingsKey.GET_SEARCH_CENTER)]
         public string GetSearchCenter { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_DATA_TOPIC)]
         public string GetSearchDataTopic { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_BBA)]
-        public string GetSearchBBA { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_BB)]
-        public string GetSearchBB { get; set; }
-        [JsonProperty(SettingsKey.GET_SEARCH_UTD)]
-        public string GetSearchUTD { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_LINK)]
+        public string GetSearchLink { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_TITLE)]
+        public string GetSearchTitle { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_SIZE)]
+        public string GetSearchSize { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_SEEDMED)]
         public string GetSearchSeedmed { get; set; }
         [JsonProperty(SettingsKey.GET_SEARCH_LEECHMED)]
         public string GetSearchLeechmed { get; set; }
+        [JsonProperty(SettingsKey.GET_SEARCH_CATEGORY)]
+        public string GetSearchCategory { get; set; }
 
         [JsonProperty(SettingsKey.GET_CATEGORY_LEECHERS)]
         public string GetCategoryLeechers { get; set; }
