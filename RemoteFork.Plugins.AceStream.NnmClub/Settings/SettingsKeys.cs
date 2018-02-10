@@ -18,10 +18,13 @@
         public const string ICO_OTHER = "ICO_OTHER";
 
         public const string TRACKER_SERVER = "TRACKER_SERVER";
-
+        
         public const string ACE_STREAM_API = "ACE_STREAM_API";
-        public const string GET_MEDIA_FILES = "GET_MEDIA_FILES";
-        public const string GET_STREAM = "GET_STREAM";
+        public const string GET_CONTENT_ID = "GET_CONTENT_ID";
+        public const string GET_MEDIA_FILES_BY_TORRENT = "GET_MEDIA_FILES_BY_TORRENT";
+        public const string GET_MEDIA_FILES_BY_MAGNET = "GET_MEDIA_FILES_BY_MAGNET";
+        public const string GET_STREAM_BY_TORRENT = "GET_STREAM_BY_TORRENT";
+        public const string GET_STREAM_BY_MAGNET = "GET_STREAM_BY_MAGNET";
 
         public const string REGEXP = "REGEXP";
 

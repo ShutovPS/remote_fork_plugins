@@ -27,7 +27,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1,
+            SettingsVersion = 1.2f,
             TrackerServer = "https://nnmclub.to",
             PluginPath = "pluginPath",
             Separator = ';',
@@ -46,12 +46,17 @@ namespace RemoteFork.Plugins.Settings {
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
             },
             AceStreamApi = new AceStreamApi() {
-                GetMediaFiles = "{0}/server/api?method=get_media_files&magnet={1}",
-                GetStream = "{0}/ace/getstream?magnet={1}",
+                GetContentId = "http://api.torrentstream.net/upload/raw",
+                GetMediaFilesByTorrent = "{0}/server/api?method=get_media_files&content_id={1}",
+                GetMediaFilesByMagnet = "{0}/server/api?method=get_media_files&magnet={1}",
+                GetStreamByTorrent = "{0}/ace/getstream?id={1}",
+                GetStreamByMagnet = "{0}/ace/getstream?magnet={1}",
             },
 
             Regexp = new Regexp() {
                 GetPageFilmMagnet = "(<a rel=\"nofollow\" href=\")(magnet.*?)(\")",
+
+                GetContentId = "({\"content_id\":\")(.*?)(\"})",
 
                 GetRootCategories = "(<span class=\"genmed\" style=\"line-height)([\\s\\S]*?)(<\\/span>)",
                 GetRootCategory = "(<a class=\"genmed\" href=\")(.*?)(\" title=\".*?\">)(.*?)(<\\/)",
@@ -59,7 +64,7 @@ namespace RemoteFork.Plugins.Settings {
                 GetSearchProw = "(<tr class=\"prow)([\\s\\S]*?)(<\\/tr>)",
                 GetSearchBB = "(\"><b>)(.*?)(</b>)",
                 GetSearchBBA = "(\"><b>)(.*?)(<\\/b><\\/a>)",
-                GetSearchGenmed = "(<a class=\"genmed \\w*\" href=\")(.*?)(\")",
+                GetSearchGenmed = "(genmed topictitle\" href=\")(.*?)(\")",
                 GetSearchSeedmed = "(class=\"seedmed\">)(.*?)(</td>)",
                 GetSearchUTD = "(?<=</u>).*?(?=</td>)",
                 GetSearchLeechmed = "(ass=\"leechmed\">)(.*?)(</td>)",
@@ -78,15 +83,24 @@ namespace RemoteFork.Plugins.Settings {
     }
 
     public class AceStreamApi {
-        [JsonProperty(SettingsKey.GET_MEDIA_FILES)]
-        public string GetMediaFiles { get; set; }
-        [JsonProperty(SettingsKey.GET_STREAM)]
-        public string GetStream { get; set; }
+        [JsonProperty(SettingsKey.GET_CONTENT_ID)]
+        public string GetContentId { get; set; }
+        [JsonProperty(SettingsKey.GET_MEDIA_FILES_BY_TORRENT)]
+        public string GetMediaFilesByTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_MEDIA_FILES_BY_MAGNET)]
+        public string GetMediaFilesByMagnet { get; set; }
+        [JsonProperty(SettingsKey.GET_STREAM_BY_TORRENT)]
+        public string GetStreamByTorrent { get; set; }
+        [JsonProperty(SettingsKey.GET_STREAM_BY_MAGNET)]
+        public string GetStreamByMagnet { get; set; }
     }
 
     public class Regexp {
         [JsonProperty(SettingsKey.GET_PAGE_FILM_MAGNET)]
         public string GetPageFilmMagnet { get; set; }
+
+        [JsonProperty(SettingsKey.GET_CONTENT_ID)]
+        public string GetContentId { get; set; }
 
         [JsonProperty(SettingsKey.GET_ROOT_CATEGORIES)]
         public string GetRootCategories { get; set; }

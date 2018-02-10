@@ -6,7 +6,7 @@ using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetCategoryCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
             string responseFromServer =
@@ -21,7 +21,7 @@ namespace RemoteFork.Plugins.Commands {
                     Name = regex.Match(match.Value).Groups[2].Value,
                     ImageLink = PluginSettings.Settings.Icons.IcoTorrentFile,
                     Link =
-                        $"pagefilm{PluginSettings.Settings.Separator}{regexLink.Match(match.Value).Groups[2].Value}",
+                        $"torrrent{PluginSettings.Settings.Separator}{regexLink.Match(match.Value).Groups[2].Value}",
                     Description = FormatDescription(match.Value)
                 };
 

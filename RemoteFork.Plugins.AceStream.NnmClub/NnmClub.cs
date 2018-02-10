@@ -5,7 +5,7 @@ using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "nnmclub", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "NNM-Club (AceStream)",
+    [Plugin(Id = "nnmclub", Version = "0.1.3", Author = "fd_crash&ORAMAN", Name = "NNM-Club (AceStream)",
         Description = "Воспроизведение NNM-Club через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
@@ -40,6 +40,9 @@ namespace RemoteFork.Plugins {
                             break;
                         case "pagefilm":
                             command = new GetPageFilmCommand();
+                            break;
+                        case "torrrent":
+                            command = new GetTorrentCommand();
                             break;
                         case "category":
                             command = new GetCategoryCommand();

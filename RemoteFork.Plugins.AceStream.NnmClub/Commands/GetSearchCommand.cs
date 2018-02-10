@@ -5,7 +5,7 @@ using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetSearchCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             string responseFromServer = HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/tracker.php", $"nm={data[2]}");
 
             var items = new List<Item>();
@@ -17,7 +17,7 @@ namespace RemoteFork.Plugins.Commands {
                     regex = new Regex(PluginSettings.Settings.Regexp.GetSearchGenmed);
                     var item = new Item {
                         Link =
-                            $"pagefilm{PluginSettings.Settings.Separator}{PluginSettings.Settings.TrackerServer}/forum/{regex.Match(match.Value).Groups[2].Value}"
+                            $"pagefilm{PluginSettings.Settings.Separator}{regex.Match(match.Value).Groups[2].Value}"
                     };
                     regex = new Regex(PluginSettings.Settings.Regexp.GetSearchBBA);
                     item.Name = regex.Match(match.Value).Groups[2].Value;
