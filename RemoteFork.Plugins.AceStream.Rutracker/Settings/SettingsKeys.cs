@@ -4,8 +4,6 @@
         public const string SETTINGS_VERSION = "SETTINGS_VERSION";
         public const string PLUGIN_PATH = "PLUGIN_PATH";
 
-        public const string BB_SESSION = "BB_SESSION";
-
         public const string LOGO_NO_NAME_CLUB = "LOGO_NO_NAME_CLUB";
         
         public const string ICONS = "ICONS";
@@ -18,6 +16,9 @@
         public const string ICO_VIDEO = "ICO_VIDEO";
         public const string ICO_IMAGE = "ICO_IMAGE";
         public const string ICO_OTHER = "ICO_OTHER";
+        public const string ICO_LOGIN = "ICO_LOGIN";
+        public const string ICO_PASSWORD = "ICO_PASSWORD";
+        public const string ICO_USER = "ICO_USER";
 
         public const string TRACKER_SERVER_NNM = "TRACKER_SERVER_NNM";
 
@@ -50,5 +51,15 @@
         public const string GET_CATEGORY_TOPIC = "GET_CATEGORY_TOPIC";
         public const string GET_CATEGORY_TOPIC_FILM = "GET_CATEGORY_TOPIC_FILM";
         public const string GET_CATEGORY_SIZE = "GET_CATEGORY_SIZE";
+
+        public const string USER_LOGOUT = "USER_LOGOUT";
+        public const string LOGIN_CAPTCHA = "LOGIN_CAPTCHA";
+        public const string LOGIN_CAPTCHA_IMAGE = "LOGIN_CAPTCHA_IMAGE";
+        public const string LOGIN_CAPTCHA_SID = "LOGIN_CAPTCHA_SID";
+        public const string LOGIN_CAPTCHA_CODE = "LOGIN_CAPTCHA_CODE";
+
+        public const string USER = "USER";
+        public const string USER_LOGIN = "USER_LOGIN";
+        public const string USER_PASSWORD = "USER_PASSWORD";
     }
 }

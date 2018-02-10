@@ -7,7 +7,7 @@ using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetPageFilmCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
             string responseFromServer = HTTPUtility.GetRequest(PluginSettings.Settings.TrackerServer + data[2]);

@@ -11,9 +11,6 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.PLUGIN_PATH)]
         public string PluginPath { get; set; }
 
-        [JsonProperty(SettingsKey.BB_SESSION)]
-        public string BbSession { get; set; }
-
         [JsonProperty(SettingsKey.TRACKER_SERVER_NNM)]
         public string TrackerServer { get; set; }
 
@@ -29,8 +26,11 @@ namespace RemoteFork.Plugins.Settings {
         [JsonProperty(SettingsKey.REGEXP)]
         public Regexp Regexp { get; set; }
 
+        [JsonProperty(SettingsKey.USER)]
+        public User User { get; set; }
+
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1,
+            SettingsVersion = 1.2f,
             TrackerServer = "https://rutracker.org",
             PluginPath = "pluginPath",
             Separator = ';',
@@ -47,6 +47,9 @@ namespace RemoteFork.Plugins.Settings {
                 IcoVideo = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png",
                 IcoImage = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597278jpgfile.png",
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
+                Login = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685464Login.png",
+                Password = "http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911371password.png",
+                User = "http://s1.iconbird.com/ico/0712/basicset2png/w64h641341506087useranonymous64.png",
             },
             AceStreamApi = new AceStreamApi() {
                 GetMediaFiles = "{0}/server/api?method=get_media_files&magnet={1}",
@@ -77,8 +80,15 @@ namespace RemoteFork.Plugins.Settings {
                 GetCategoryMinitable = "(<div id=\"c-18\" class=\"category\">)([\\s\\S]*?)(<\\/table>)",
                 GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)([\\s\\S]*?)(<\\/tr>)",
                 GetCategoryTopicFilm = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
-                GetCategorySize = "(text-decoration: none\">)(.*?)(<)"
-            }
+                GetCategorySize = "(text-decoration: none\">)(.*?)(<)",
+
+                UserLogout = "(\'login\\.php\', {logout: 1})",
+                LoginCaptcha = "(<td class=\"tRight nowrap\">)([\\s\\S]*?)(<\\/tr>)",
+                LoginCaptchaImage = "(<img src=\")(.*?)(\")",
+                LoginCaptchaSid = "(name=\"cap_sid\" value=\")(.*?)(\")",
+                LoginCaptchaCode = "(name=\"cap_code_)(.*?)(\")",
+            },
+            User = new User()
         };
     }
 
@@ -136,6 +146,17 @@ namespace RemoteFork.Plugins.Settings {
         public string GetCategoryTopicFilm { get; set; }
         [JsonProperty(SettingsKey.GET_CATEGORY_SIZE)]
         public string GetCategorySize{ get; set; }
+
+        [JsonProperty(SettingsKey.USER_LOGOUT)]
+        public string UserLogout { get; set; }
+        [JsonProperty(SettingsKey.LOGIN_CAPTCHA)]
+        public string LoginCaptcha { get; set; }
+        [JsonProperty(SettingsKey.LOGIN_CAPTCHA_IMAGE)]
+        public string LoginCaptchaImage { get; set; }
+        [JsonProperty(SettingsKey.LOGIN_CAPTCHA_SID)]
+        public string LoginCaptchaSid { get; set; }
+        [JsonProperty(SettingsKey.LOGIN_CAPTCHA_CODE)]
+        public string LoginCaptchaCode { get; set; }
     }
 
     public class Icons {
@@ -157,5 +178,18 @@ namespace RemoteFork.Plugins.Settings {
         public string IcoImage { get; set; }
         [JsonProperty(SettingsKey.ICO_OTHER)]
         public string IcoOther { get; set; }
+        [JsonProperty(SettingsKey.ICO_LOGIN)]
+        public string Login { get; set; }
+        [JsonProperty(SettingsKey.ICO_PASSWORD)]
+        public string Password { get; set; }
+        [JsonProperty(SettingsKey.ICO_USER)]
+        public string User { get; set; }
+    }
+
+    public class User {
+        [JsonProperty(SettingsKey.USER_LOGIN)]
+        public string Login { get; set; }
+        [JsonProperty(SettingsKey.USER_PASSWORD)]
+        public string Password { get; set; }
     }
 }

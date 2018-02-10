@@ -5,7 +5,7 @@ using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "rutracker", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
+    [Plugin(Id = "rutracker", Version = "0.1.3", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
         Description = "Воспроизведение Rutracker через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
@@ -25,7 +25,7 @@ namespace RemoteFork.Plugins {
 
             var items = new List<Item>();
             ICommand command = null;
-            var data = new string[4];
+            var data = new string[arg.Length > 4 ? arg.Length : 4];
             switch (arg.Length) {
                 case 0:
                     break;
@@ -43,6 +43,9 @@ namespace RemoteFork.Plugins {
                             break;
                         case "category":
                             command = new GetCategoryCommand();
+                            break;
+                        case "login":
+                            command = new LoginCommand();
                             break;
                     }
                     break;

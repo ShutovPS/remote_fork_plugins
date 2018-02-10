@@ -5,16 +5,15 @@ using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetSearchCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            var header = new Dictionary<string, string>();
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
+            //var header = new Dictionary<string, string>();
 
-            if (!string.IsNullOrWhiteSpace(PluginSettings.Settings.BbSession)) {
-                header.Add("Cookie", "bb_session=" + PluginSettings.Settings.BbSession);
-            }
+            //if (!string.IsNullOrWhiteSpace(PluginSettings.Settings.BbSession)) {
+            //    header.Add("Cookie", "bb_session=" + PluginSettings.Settings.BbSession);
+            //}
 
             string responseFromServer =
-                HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/tracker.php", $"nm={data[2]}",
-                    header);
+                HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/tracker.php", $"nm={data[2]}");
 
             var items = new List<Item>();
             var regex = new Regex(PluginSettings.Settings.Regexp.GetSearchCenter);
