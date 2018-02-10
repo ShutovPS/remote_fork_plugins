@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteFork.Plugins.YouTube", "RemoteFork.Plugins.YouTube\RemoteFork.Plugins.YouTube.csproj", "{4D0785FB-8897-42A8-A459-59AE47C2E274}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Log", "RemoteFork.Utility\RemoteFork.Log\RemoteFork.Log.csproj", "{77C164CC-53F1-4F90-AE8A-A5848C755614}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Network", "RemoteFork.Utility\RemoteFork.Network\RemoteFork.Network.csproj", "{ED92A671-781D-4E88-A980-5F3FC61D2705}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins", "RemoteFork.Utility\RemoteFork.Plugins\RemoteFork.Plugins.csproj", "{6CC219D2-A165-404E-9DCD-3FF6B139C2C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Settings", "RemoteFork.Utility\RemoteFork.Settings\RemoteFork.Settings.csproj", "{7979F206-2323-4AE1-BDD5-E11DD88AD370}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Tools", "RemoteFork.Utility\RemoteFork.Tools\RemoteFork.Tools.csproj", "{656A2CD8-38E0-45C1-92A1-B75FE094353C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{AB1A2873-2A47-4537-A331-09A0C44027A6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D0785FB-8897-42A8-A459-59AE47C2E274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0785FB-8897-42A8-A459-59AE47C2E274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D0785FB-8897-42A8-A459-59AE47C2E274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D0785FB-8897-42A8-A459-59AE47C2E274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C164CC-53F1-4F90-AE8A-A5848C755614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C164CC-53F1-4F90-AE8A-A5848C755614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C164CC-53F1-4F90-AE8A-A5848C755614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C164CC-53F1-4F90-AE8A-A5848C755614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED92A671-781D-4E88-A980-5F3FC61D2705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED92A671-781D-4E88-A980-5F3FC61D2705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED92A671-781D-4E88-A980-5F3FC61D2705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED92A671-781D-4E88-A980-5F3FC61D2705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CC219D2-A165-404E-9DCD-3FF6B139C2C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CC219D2-A165-404E-9DCD-3FF6B139C2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CC219D2-A165-404E-9DCD-3FF6B139C2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CC219D2-A165-404E-9DCD-3FF6B139C2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7979F206-2323-4AE1-BDD5-E11DD88AD370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7979F206-2323-4AE1-BDD5-E11DD88AD370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7979F206-2323-4AE1-BDD5-E11DD88AD370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7979F206-2323-4AE1-BDD5-E11DD88AD370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{656A2CD8-38E0-45C1-92A1-B75FE094353C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{656A2CD8-38E0-45C1-92A1-B75FE094353C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{656A2CD8-38E0-45C1-92A1-B75FE094353C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{656A2CD8-38E0-45C1-92A1-B75FE094353C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB1A2873-2A47-4537-A331-09A0C44027A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB1A2873-2A47-4537-A331-09A0C44027A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB1A2873-2A47-4537-A331-09A0C44027A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB1A2873-2A47-4537-A331-09A0C44027A6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C17C27A-D6F4-4E05-968C-3C3BA7C6BCC3}
+	EndGlobalSection
+EndGlobal

@@ -2,19 +2,17 @@
 using System.Collections.Specialized;
 using RemoteFork.Plugins.Commands;
 using RemoteFork.Plugins.Settings;
-using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "nnmclub", Version = "0.1.3", Author = "fd_crash&ORAMAN", Name = "NNM-Club (AceStream)",
-        Description = "Воспроизведение NNM-Club через меда-сервер Ace Stream",
+    [Plugin(Id = "youtube", Version = "0.1.0", Author = "fd_crash", Name = "YouTube",
+        Description = "Видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео. Пользователи могут загружать, просматривать, оценивать, комментировать, добавлять в избранное и делиться теми или иными видеозаписями",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
-    public class NnmClub : IPlugin {
+    public class YouTube : IPlugin {
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
-
-        public static string GetAddress => $"http://{ProgramSettings.Settings.IpAddress}:{ProgramSettings.Settings.AceStreamPort}";
+        internal const string API_KEY = "AIzaSyD6nuSKJVzCG4KI9yJ_ecHqhQpg3yTbJQg";
 
         public Playlist GetList(IPluginContext context) {
             string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
@@ -34,18 +32,20 @@ namespace RemoteFork.Plugins {
                     break;
                 default:
                     switch (arg[1]) {
+                        case "list":
+                            command = new GetListCommand();
+                            break;
                         case "search":
-                            data[2] = context.GetRequestParams()["search"];
                             command = new GetSearchCommand();
                             break;
-                        case "pagefilm":
-                            command = new GetPageFilmCommand();
+                        case "video":
+                            command = new GetVideoCommand();
                             break;
-                        case "torrrent":
-                            command = new GetTorrentCommand();
+                        case "channel":
+                            command = new GetChannelCommand();
                             break;
-                        case "category":
-                            command = new GetCategoryCommand();
+                        case "playlist":
+                            command = new GetPlaylistCommand();
                             break;
                     }
                     break;
