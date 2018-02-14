@@ -2,19 +2,16 @@
 using System.Collections.Specialized;
 using RemoteFork.Plugins.Commands;
 using RemoteFork.Plugins.Settings;
-using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "rutracker", Version = "0.1.3", Author = "fd_crash&ORAMAN", Name = "Rutracker (AceStream)",
-        Description = "Воспроизведение Rutracker через меда-сервер Ace Stream",
-        ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
+    [Plugin(Id = "thvp", Version = "0.1.0", Author = "fd_crash", Name = "THVP",
+        Description = "THVP предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы",
+        ImageLink = "http://thvp.ru/img/logo.png")]
 
-    public class Rutracker : IPlugin {
+    public class Thvp : IPlugin {
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
-
-        public static string GetAddress => $"http://{ProgramSettings.Settings.IpAddress}:{ProgramSettings.Settings.AceStreamPort}";
 
         public Playlist GetList(IPluginContext context) {
             string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
@@ -34,18 +31,14 @@ namespace RemoteFork.Plugins {
                     break;
                 default:
                     switch (arg[1]) {
-                        case "search":
-                            data[2] = context.GetRequestParams()["search"];
-                            command = new GetSearchCommand();
+                        case GetCategoriesCommand.KEY:
+                            command = new GetCategoriesCommand();
                             break;
-                        case "pagefilm":
-                            command = new GetPageFilmCommand();
-                            break;
-                        case "category":
+                        case GetCategoryCommand.KEY:
                             command = new GetCategoryCommand();
                             break;
-                        case "login":
-                            command = new LoginCommand();
+                        case GetSearchCommand.KEY:
+                            command = new GetSearchCommand();
                             break;
                     }
                     break;
@@ -68,7 +61,7 @@ namespace RemoteFork.Plugins {
             var playlist = new Playlist();
 
             if (!string.IsNullOrEmpty(NextPageUrl)) {
-                var pluginParams = new NameValueCollection {[PluginSettings.Settings.PluginPath] = NextPageUrl };
+                var pluginParams = new NameValueCollection { [PluginSettings.Settings.PluginPath] = NextPageUrl };
                 playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
             }
             playlist.Timeout = "60";
