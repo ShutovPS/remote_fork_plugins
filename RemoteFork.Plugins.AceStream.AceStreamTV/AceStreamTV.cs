@@ -4,7 +4,7 @@ using RemoteFork.Plugins.AceStream.Commands;
 using ICommand = RemoteFork.Plugins.AceStream.Commands.ICommand;
 
 namespace RemoteFork.Plugins.AceStream {
-    [PluginAttribute(Id = "acestreamtv", Version = "0.1.0", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
+    [PluginAttribute(Id = "acestreamtv", Version = "0.1.1", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
         Description = "Воспроизведение TORRENT IPTV через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
@@ -13,8 +13,8 @@ namespace RemoteFork.Plugins.AceStream {
         public const string PLUGIN_PATH = "pluginPath";
         
         public static bool IsIptv = false;
-        public static string NextPageUrl = string.Empty;
-        public static string Source = string.Empty;
+        public static string NextPageUrl = null;
+        public static string Source = null;
 
         public Playlist GetList(IPluginContext context) {
             string path = context.GetRequestParams().Get(PLUGIN_PATH);
@@ -28,38 +28,35 @@ namespace RemoteFork.Plugins.AceStream {
             var data = new string[4];
             switch (arg.Length) {
                 case 0:
+                    command = new GetRootListCommand();
                     break;
                 case 1:
                     command = new GetRootListCommand();
                     break;
                 default:
                     switch (arg[1]) {
-                        case "searchtvtoace":
-                            data[2] = context.GetRequestParams()["search"];
+                        case GetPageSearchStreamTVCommand.KEY:
                             command = new GetPageSearchStreamTVCommand();
                             break;
-                        case "SEARCHTV":
-                            command = new GetPageSearchStreamTVCommand();
-                            break;
-                        case "tv":
+                        case GetRootListCommand.KEY:
                             command = new GetRootListCommand();
                             break;
-                        case "torrenttv":
+                        case GetTorrentTVCommand.KEY:
                             command = new GetTorrentTVCommand();
                             break;
-                        case "acestreamnettv":
+                        case GetAceStreamNetTVCommand.KEY:
                             command = new GetAceStreamNetTVCommand();
                             break;
-                        case "tvp2p":
+                        case GetTvP2PCommand.KEY:
                             command = new GetTvP2PCommand();
                             break;
-                        case "TvP2PCategory":
+                        case GetTvP2PCategoryCommand.KEY:
                             command = new GetTvP2PCategoryCommand();
                             break;
-                        case "TvP2PChanel":
+                        case GetTvP2PChanelCommand.KEY:
                             command = new GetTvP2PChanelCommand();
                             break;
-                        case "iproxy":
+                        case GetIproxyListCommand.KEY:
                             command = new GetIproxyListCommand();
                             break;
                     }
@@ -85,8 +82,6 @@ namespace RemoteFork.Plugins.AceStream {
             if (!string.IsNullOrEmpty(NextPageUrl)) {
                 var pluginParams = new NameValueCollection {[PLUGIN_PATH] = NextPageUrl };
                 playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
-            } else {
-                playlist.NextPageUrl = null;
             }
             playlist.Timeout = "60";
 

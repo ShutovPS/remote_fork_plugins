@@ -4,7 +4,9 @@ using RemoteFork.Network;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetTvP2PCategoryCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public const string KEY = "TvP2PCategory";
+
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
             string response = HTTPUtility.GetRequest("http://tv-p2p.ru/" + data[2]).Replace("\n", "");
@@ -21,8 +23,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                             Link = $"TvP2PChanel{AceStreamTV.SEPARATOR}{match.Groups[2]}",
                             ImageLink = "http://tv-p2p.ru" + match.Groups[7]
                         };
-                        item.Description = "<html><font face=\"Arial\" size=\"5\"><b>" + item.Name +
-                                           "</font></b><p><img src=\"" + item.ImageLink + "\"></html><p>";
+                        item.Description = $"<html><font face=\"Arial\" size=\"5\"><b>{item.Name}</font></b><p><img src=\"{item.ImageLink}\"></html><p>";
                         items.Add(item);
                     }
                 }
@@ -33,8 +34,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                     goto LineGo;
                 }
             }
-
-            AceStreamTV.IsIptv = false;
+            
             return items;
         }
     }

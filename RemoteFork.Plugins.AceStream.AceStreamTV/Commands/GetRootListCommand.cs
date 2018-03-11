@@ -2,7 +2,9 @@
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetRootListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public const string KEY = "tv";
+
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
             var item = new Item {
                 Name = "Поиск",
@@ -54,8 +56,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                 Description = "<html><img src=\"http://tv-p2p.ru/skin/p2p/images/logo.png\"></html><p>"
             };
             items.Add(item);
-
-            AceStreamTV.IsIptv = false;
+            
             return items;
         }
     }

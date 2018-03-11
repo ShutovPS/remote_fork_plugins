@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Tools", "RemoteF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{560C75D1-EB01-4EDD-928C-99C040C921EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Torrents", "RemoteFork.Utility\RemoteFork.Torrents\RemoteFork.Torrents.csproj", "{718481EB-9EEE-4025-953D-F752096ECF4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{560C75D1-EB01-4EDD-928C-99C040C921EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{560C75D1-EB01-4EDD-928C-99C040C921EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{560C75D1-EB01-4EDD-928C-99C040C921EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{718481EB-9EEE-4025-953D-F752096ECF4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{718481EB-9EEE-4025-953D-F752096ECF4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{718481EB-9EEE-4025-953D-F752096ECF4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{718481EB-9EEE-4025-953D-F752096ECF4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

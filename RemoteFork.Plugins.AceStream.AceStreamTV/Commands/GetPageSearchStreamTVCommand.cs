@@ -6,16 +6,23 @@ using RemoteFork.Tools;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetPageSearchStreamTVCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public const string KEY = "search";
+
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
             var reGexInfioHash = new Regex("(?<=\"infohash\":\").*?(?=\")");
             var reGexName = new Regex("(?<=\"name\":\").*?(?=\")");
 
+            if (string.IsNullOrEmpty(data[2])) {
+                data[2] = context.GetRequestParams()["search"];
+            }
+
             string url = data[2];
             string page = data[3];
             string response = HTTPUtility
-                .GetRequest("https://search.acestream.net/?method=search&api_version=1.0&api_key=test_api_key&query=" +
-                            url + "&page_size=50&page=" + page).ReplaceUnicodeSymbols();
+                .GetRequest(
+                    $"https://search.acestream.net/?method=search&api_version=1.0&api_key=test_api_key&query={url}&page_size=50&page={page}")
+                .ReplaceUnicodeSymbols();
 
             if (reGexInfioHash.IsMatch(response)) {
                 var infoHashs = reGexInfioHash.Matches(response);
@@ -29,12 +36,14 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                         Type = ItemType.FILE,
                         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png"
                     };
-                    item.Description = "<html><font face=\"Arial\" size=\"5\"><b>" + item.Name + "</font></b>";
+                    item.Description = $"<html><font face=\"Arial\" size=\"5\"><b>{item.Name}</font></b>";
                     items.Add(item);
                 }
             }
 
-            AceStreamTV.NextPageUrl = $"SEARCHTV{AceStreamTV.SEPARATOR}{url}{AceStreamTV.SEPARATOR}{page + 1}";
+            int.TryParse(page, out int pageValue);
+
+            AceStreamTV.NextPageUrl = $"SEARCHTV{AceStreamTV.SEPARATOR}{url}{AceStreamTV.SEPARATOR}{pageValue + 1}";
             AceStreamTV.IsIptv = true;
 
             return items;

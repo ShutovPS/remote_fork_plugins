@@ -4,7 +4,9 @@ using RemoteFork.Network;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetTvP2PCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+        public const string KEY = "tvp2p";
+
+        public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
             var reGexTop = new Regex("(<div class=\"modal-body category-body\">)([\\s\\S]+?)(<\\/div>)");
             var reGex = new Regex("(<a href=)(.*?)(\\/a>)");
@@ -21,8 +23,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                 };
                 items.Add(item);
             }
-
-            AceStreamTV.IsIptv =false;
+            
             return items;
         }
     }
