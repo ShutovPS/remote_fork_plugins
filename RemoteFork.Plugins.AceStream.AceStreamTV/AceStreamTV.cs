@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
 using RemoteFork.Plugins.AceStream.Commands;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
 using ICommand = RemoteFork.Plugins.AceStream.Commands.ICommand;
 
 namespace RemoteFork.Plugins.AceStream {
-    [PluginAttribute(Id = "acestreamtv", Version = "0.1.1", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
+    [PluginAttribute(Id = "acestreamtv", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
         Description = "Воспроизведение TORRENT IPTV через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
@@ -23,9 +25,8 @@ namespace RemoteFork.Plugins.AceStream {
 
             var arg = path.Split(SEPARATOR);
 
-            var items = new List<Item>();
             ICommand command = null;
-            var data = new string[4];
+            var data = new string[Math.Max(4, arg.Length)];
             switch (arg.Length) {
                 case 0:
                     command = new GetRootListCommand();
@@ -35,17 +36,17 @@ namespace RemoteFork.Plugins.AceStream {
                     break;
                 default:
                     switch (arg[1]) {
-                        case GetPageSearchStreamTVCommand.KEY:
-                            command = new GetPageSearchStreamTVCommand();
-                            break;
                         case GetRootListCommand.KEY:
                             command = new GetRootListCommand();
                             break;
-                        case GetTorrentTVCommand.KEY:
-                            command = new GetTorrentTVCommand();
+                        case GetPageSearchCommand.KEY:
+                            command = new GetPageSearchCommand();
                             break;
-                        case GetAceStreamNetTVCommand.KEY:
-                            command = new GetAceStreamNetTVCommand();
+                        case GetAsCategoriesCommand.KEY:
+                            command = new GetAsCategoriesCommand();
+                            break;
+                        case GetAsChannelsCommand.KEY:
+                            command = new GetAsChannelsCommand();
                             break;
                         case GetTvP2PCommand.KEY:
                             command = new GetTvP2PCommand();
@@ -56,9 +57,6 @@ namespace RemoteFork.Plugins.AceStream {
                         case GetTvP2PChanelCommand.KEY:
                             command = new GetTvP2PChanelCommand();
                             break;
-                        case GetIproxyListCommand.KEY:
-                            command = new GetIproxyListCommand();
-                            break;
                     }
                     break;
             }
@@ -66,6 +64,7 @@ namespace RemoteFork.Plugins.AceStream {
             NextPageUrl = Source = null;
             IsIptv = false;
 
+            var items = new List<Item>();
             if (command != null) {
                 for (int i = 0; i < arg.Length; i++) {
                     data[i] = arg[i];
@@ -96,10 +95,28 @@ namespace RemoteFork.Plugins.AceStream {
                 }
             }
 
+            playlist.IsIptv = IsIptv ? "True" :string.Empty;
+            if (IsIptv && string.IsNullOrEmpty(Source)) {
+                Source = PlaylistToM3U8(playlist);
+            }
+
             playlist.source = Source;
-            playlist.IsIptv = IsIptv ? "True" : "False";
 
             return playlist;
+        }
+
+        public static string PlaylistToM3U8(Playlist pluginResponse) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("#EXTM3U");
+            stringBuilder.AppendLine();
+
+            foreach (var item in pluginResponse.Items) {
+                stringBuilder.AppendLine($"#EXTINF:0,{item.Name}");
+                stringBuilder.AppendLine(item.Link);
+            }
+            stringBuilder.AppendLine();
+
+            return stringBuilder.ToString();
         }
     }
 }

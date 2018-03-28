@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using RemoteFork.Network;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using RemoteFork.Network;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetTvP2PCategoryCommand : ICommand {
@@ -11,7 +11,8 @@ namespace RemoteFork.Plugins.AceStream.Commands {
 
             string response = HTTPUtility.GetRequest("http://tv-p2p.ru/" + data[2]).Replace("\n", "");
             var reGex = new Regex("(<div class=\"main_short\">)(.*?)(<div class=\"navigation\" align=\"center\"\\s?>)");
-            var reGexDesc = new Regex("(href=\\\")(.*?)(\")(.*?title=\")(.*?)(\")(.*?<img src=\")(.*?)(\")(.*?)(<\\/a>)");
+            var reGexDesc =
+                new Regex("(href=\\\")(.*?)(\")(.*?title=\")(.*?)(\")(.*?<img src=\")(.*?)(\")(.*?)(<\\/a>)");
 
             if (reGex.IsMatch(response)) {
                 LineGo:
@@ -20,10 +21,11 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                         var item = new Item {
                             Type = ItemType.DIRECTORY,
                             Name = match.Groups[5].Value,
-                            Link = $"TvP2PChanel{AceStreamTV.SEPARATOR}{match.Groups[2]}",
+                            Link = $"{GetTvP2PChanelCommand.KEY}{AceStreamTV.SEPARATOR}{match.Groups[2]}",
                             ImageLink = "http://tv-p2p.ru" + match.Groups[7]
                         };
-                        item.Description = $"<html><font face=\"Arial\" size=\"5\"><b>{item.Name}</font></b><p><img src=\"{item.ImageLink}\"></html><p>";
+                        item.Description =
+                            $"<html><font face=\"Arial\" size=\"5\"><b>{item.Name}</font></b><p><img src=\"{item.ImageLink}\"></html><p>";
                         items.Add(item);
                     }
                 }
@@ -34,7 +36,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                     goto LineGo;
                 }
             }
-            
+
             return items;
         }
     }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using RemoteFork.Network;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using RemoteFork.Network;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     public class GetTvP2PCommand : ICommand {
@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                 var item = new Item {
                     Type = ItemType.DIRECTORY,
                     Name = linkName.Groups[4].Value,
-                    Link = $"TvP2PCategory{AceStreamTV.SEPARATOR}{linkName.Groups[2].Value}",
+                    Link = $"{GetTvP2PCategoryCommand.KEY}{AceStreamTV.SEPARATOR}{linkName.Groups[2].Value}",
                     ImageLink = "http://torrent-tv.ru/images/all_channels.png"
                 };
                 items.Add(item);

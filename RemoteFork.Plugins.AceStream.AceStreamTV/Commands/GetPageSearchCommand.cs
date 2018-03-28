@@ -5,7 +5,7 @@ using RemoteFork.Settings;
 using RemoteFork.Tools;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
-    public class GetPageSearchStreamTVCommand : ICommand {
+    public class GetPageSearchCommand : ICommand {
         public const string KEY = "search";
 
         public List<Item> GetItems(IPluginContext context, params string[] data) {
@@ -43,7 +43,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
 
             int.TryParse(page, out int pageValue);
 
-            AceStreamTV.NextPageUrl = $"SEARCHTV{AceStreamTV.SEPARATOR}{url}{AceStreamTV.SEPARATOR}{pageValue + 1}";
+            AceStreamTV.NextPageUrl = $"{KEY}{AceStreamTV.SEPARATOR}{url}{AceStreamTV.SEPARATOR}{pageValue + 1}";
             AceStreamTV.IsIptv = true;
 
             return items;
