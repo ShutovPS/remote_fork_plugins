@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteFork.Plugins.AceStream.NnmClub", "RemoteFork.Plugins.AceStream.NnmClub\RemoteFork.Plugins.AceStream.NnmClub.csproj", "{3FC7322E-39B2-4583-98C9-81C993BBDC20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins.AceStream.NnmClub", "RemoteFork.Plugins.AceStream.NnmClub\RemoteFork.Plugins.AceStream.NnmClub.csproj", "{3FC7322E-39B2-4583-98C9-81C993BBDC20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Log", "RemoteFork.Utility\RemoteFork.Log\RemoteFork.Log.csproj", "{7A814853-52D5-4FC3-89A2-77FDF10FB0F5}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Tools", "RemoteFork.Utility\RemoteFork.Tools\RemoteFork.Tools.csproj", "{5104231E-59E8-4AC5-A901-7E1AFFA5BBC4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{322F1AED-51CC-444F-9C73-76ABA3BCFB4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Torrents", "RemoteFork.Utility\RemoteFork.Torrents\RemoteFork.Torrents.csproj", "{838E1EDF-6529-4097-B378-9045E5340C88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{322F1AED-51CC-444F-9C73-76ABA3BCFB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{322F1AED-51CC-444F-9C73-76ABA3BCFB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{322F1AED-51CC-444F-9C73-76ABA3BCFB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838E1EDF-6529-4097-B378-9045E5340C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838E1EDF-6529-4097-B378-9045E5340C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838E1EDF-6529-4097-B378-9045E5340C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838E1EDF-6529-4097-B378-9045E5340C88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
