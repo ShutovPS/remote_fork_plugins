@@ -48,6 +48,7 @@ namespace RemoteFork.Plugins.Commands {
 
             regex = new Regex(string.Format(PluginSettings.Settings.Regexp.GetCategoryNextPage, data[2],
                 int.Parse(page ?? "0") + 1));
+
             if (regex.IsMatch(response)) {
                 Rutor.NextPageUrl =
                     $"category{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{regex.Match(response).Groups[2].Value}";

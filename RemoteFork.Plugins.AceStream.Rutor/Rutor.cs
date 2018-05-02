@@ -5,7 +5,7 @@ using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "rutor", Version = "0.1.0", Author = "fd_crash", Name = "Rutor (AceStream)",
+    [Plugin(Id = "rutor", Version = "0.1.1", Author = "fd_crash", Name = "Rutor (AceStream)",
         Description = "Воспроизведение Rutor через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
