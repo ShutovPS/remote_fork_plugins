@@ -4,7 +4,7 @@ using RemoteFork.Plugins.Commands;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "youtube", Version = "0.1.0", Author = "fd_crash", Name = "YouTube",
+    [Plugin(Id = "youtube", Version = "0.1.1", Author = "fd_crash", Name = "YouTube",
         Description = "Видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео. Пользователи могут загружать, просматривать, оценивать, комментировать, добавлять в избранное и делиться теми или иными видеозаписями",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 

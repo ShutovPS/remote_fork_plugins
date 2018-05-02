@@ -32,7 +32,7 @@ namespace RemoteFork.Plugins.Commands {
                     if (searchResult.snippet.thumbnails != null) {
                         var item = new Item() {
                             Name = searchResult.snippet.title,
-                            Description = "<img src=\"" + searchResult.snippet.thumbnails.Last().Value.url + "\"/><br>" +
+                            Description = "<img src=\"" + searchResult.snippet.thumbnails.Last().Value.url + "\" style=\"width:400px\"  / ><br>" +
                                           searchResult.snippet.description + "<br>" + "Канал: " +
                                           searchResult.snippet.channelTitle
                         };
