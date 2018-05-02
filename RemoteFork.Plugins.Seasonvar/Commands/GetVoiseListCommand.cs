@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web;
 using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
@@ -80,7 +80,7 @@ namespace RemoteFork.Plugins {
                                     Name = "Стандартный",
                                     Link =
                                         string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, "series",
-                                            Uri.UnescapeDataString(matches0[0].Groups[1].Value)),
+                                            HttpUtility.UrlDecode(matches0[0].Groups[1].Value)),
                                     ImageLink = item.ImageLink,
                                     Description = item.Description
                                 };
@@ -91,7 +91,7 @@ namespace RemoteFork.Plugins {
                                     Name = matches[i].Groups[2].Value.Trim(),
                                     Link =
                                         string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, "series",
-                                            Uri.UnescapeDataString(matches[i].Groups[3].Value)),
+                                            HttpUtility.UrlDecode(matches[i].Groups[3].Value)),
                                     ImageLink = item.ImageLink,
                                     Description = item.Description
                                 };
