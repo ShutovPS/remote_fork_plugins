@@ -3,7 +3,6 @@ using RemoteFork.Plugins.AceStream.Commands;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
-using ICommand = RemoteFork.Plugins.AceStream.Commands.ICommand;
 
 namespace RemoteFork.Plugins.AceStream {
     [PluginAttribute(Id = "acestreamtv", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",

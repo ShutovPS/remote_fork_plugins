@@ -19,7 +19,7 @@ namespace RemoteFork.Plugins.AceStream.Channels {
 
         public static ChannelsModel GetModel(string key) {
             if (!_channels.ContainsKey(key)) {
-                string response = HTTPUtility.GetRequest("https://pomoyka.lib.emergate.net/trash/ttv-list/" + key);
+                string response = HTTPUtility.GetRequest("http://pomoyka.lib.emergate.net/trash/ttv-list/" + key);
 
                 if (!string.IsNullOrEmpty(response)) {
                     try {
@@ -51,6 +51,9 @@ namespace RemoteFork.Plugins.AceStream.Channels {
 
         public static List<string> GetCategories(string key) {
             var result = new List<string>();
+            if (_channels.ContainsKey(key)) {
+                _channels.Remove(key);
+            }
 
             if (GetModel(key) != null) {
                 result.AddRange(_channels[key].List.Select(i => i.Category).Distinct().OrderBy(i => i));
