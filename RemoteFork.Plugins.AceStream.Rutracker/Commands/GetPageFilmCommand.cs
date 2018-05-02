@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
+using RemoteFork.Torrents;
 
 namespace RemoteFork.Plugins.Commands {
     public class GetPageFilmCommand : ICommand {
@@ -18,7 +19,7 @@ namespace RemoteFork.Plugins.Commands {
                 torrentPath = regex.Match(responseFromServer).Groups[2].Value;
             }
             if (!string.IsNullOrWhiteSpace(torrentPath)) {
-                var files = FileList.GetFileList(torrentPath);
+                var files = FileList.GetFileList(torrentPath, "magnet");
                 if (files.Count > 0) {
                     string stream = string.Format(PluginSettings.Settings.AceStreamApi.GetStream, Rutracker.GetAddress,
                         torrentPath);
