@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdserials", Version = "0.0.1", Author = "fd_crash", Name = "HDSerials",
+    [PluginAttribute(Id = "hdserials", Version = "0.0.2", Author = "fd_crash", Name = "HDSerials",
         Description = "Смотреть сериалы онлайн в хорошем качестве.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png")]
     public class HDSerials : IPlugin {

@@ -112,9 +112,11 @@ namespace RemoteFork.Plugins {
                         items.Add(item);
                     }
                 } else {
+                    data[3] = url;
                     items.AddRange(GetSerialSeries(data));
                 }
             } else {
+                data[3] = url;
                 items.AddRange(GetSerialSeries(data));
             }
 

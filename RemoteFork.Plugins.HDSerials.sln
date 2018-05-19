@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins.HDSerials", "RemoteFork.Plugins.HDkino\RemoteFork.Plugins.HDSerials.csproj", "{4B1FD9FF-5D67-4073-B20B-9E6B18BADD95}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Log", "RemoteFork.Utility\RemoteFork.Log\RemoteFork.Log.csproj", "{3896F722-325D-410E-92D3-5576ED105414}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Network", "RemoteFork.Utility\RemoteFork.Network\RemoteFork.Network.csproj", "{E37CBA74-BF5B-4337-A863-C4FF6469F3EC}"
@@ -19,16 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Torrents", "Remo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{08E4F015-5C6C-4A0A-A9FF-8173A2F5B97F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins.HDSerials", "RemoteFork.Plugins.HDSerials\RemoteFork.Plugins.HDSerials.csproj", "{8CC281BC-EB0D-48B6-B294-F0C0F63945FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B1FD9FF-5D67-4073-B20B-9E6B18BADD95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B1FD9FF-5D67-4073-B20B-9E6B18BADD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B1FD9FF-5D67-4073-B20B-9E6B18BADD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B1FD9FF-5D67-4073-B20B-9E6B18BADD95}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3896F722-325D-410E-92D3-5576ED105414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3896F722-325D-410E-92D3-5576ED105414}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3896F722-325D-410E-92D3-5576ED105414}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{08E4F015-5C6C-4A0A-A9FF-8173A2F5B97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08E4F015-5C6C-4A0A-A9FF-8173A2F5B97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08E4F015-5C6C-4A0A-A9FF-8173A2F5B97F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC281BC-EB0D-48B6-B294-F0C0F63945FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC281BC-EB0D-48B6-B294-F0C0F63945FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC281BC-EB0D-48B6-B294-F0C0F63945FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC281BC-EB0D-48B6-B294-F0C0F63945FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
