@@ -9,3 +9,4 @@
 - [Rutor](https://github.com/ShutovPS/RemoteFork.Plugins/tree/rutor) - Крупнейший торрент-трекер.
 - [YouTube](https://github.com/ShutovPS/RemoteFork.Plugins/tree/youtube) - Видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео.
 - [THVP](https://github.com/ShutovPS/RemoteFork.Plugins/tree/thvp) - THVP предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы.
+- [HD Serials](https://github.com/ShutovPS/RemoteFork.Plugins/tree/hdserials) - Плагин для сайтов coldfilm.hdkino и lostfilm.hdkino.
