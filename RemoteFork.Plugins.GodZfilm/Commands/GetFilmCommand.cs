@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
-    public class GetSerialCommand : ICommand {
+    public class GetFilmCommand : ICommand {
         public const string KEY = "getserial";
 
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
@@ -60,22 +60,21 @@ namespace RemoteFork.Plugins {
                         foreach (Match match in regex.Matches(translations)) {
                             var item = new Item(baseItem) {
                                 Name = match.Groups[6].Value,
-                                Link = $"{KEY}{HDSerials.SEPARATOR}seasons{HDSerials.SEPARATOR}{match.Groups[3].Value}{HDSerials.SEPARATOR}{WebUtility.UrlEncode(url)}"
+                                Link =
+                                    $"{KEY}{GodZfilm.SEPARATOR}seasons{GodZfilm.SEPARATOR}{match.Groups[3].Value}{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(url)}"
                             };
                             items.Add(item);
                         }
-                    } else {
-                        data[3] = url;
-                        data[4] = WebUtility.UrlEncode(url);
-                        items.AddRange(GetSerialSeasons(data));
-                    }
-                } else {
-                    data[3] = url;
-                    data[4] = WebUtility.UrlEncode(url);
-                    items.AddRange(GetSerialSeasons(data));
-                }
-            }
 
+                        return items;
+                    }
+                }
+
+                data[3] = WebUtility.UrlEncode(moonwalkUrl);
+                data[4] = WebUtility.UrlEncode(url);
+                return GetSerialSeasons(data);
+            }
+            
             return items;
         }
 
@@ -102,25 +101,21 @@ namespace RemoteFork.Plugins {
                     ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597246folder.png"
                 };
 
-                if (seasons.Length > 1) {
+                if (seasons.Length > 0) {
                     foreach (string season in seasons) {
                         string seasonUrl = $"{url}?season={season}";
                         var item = new Item(baseItem) {
                             Name = $"Сезон {season}",
-                            Link = $"{KEY}{HDSerials.SEPARATOR}series{HDSerials.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{HDSerials.SEPARATOR}{data[4]}"
+                            Link = $"{KEY}{GodZfilm.SEPARATOR}series{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{GodZfilm.SEPARATOR}{data[4]}"
                         };
                         items.Add(item);
                     }
-                } else {
-                    data[3] = url;
-                    items.AddRange(GetSerialSeries(data));
+                    return items;
                 }
-            } else {
-                data[3] = url;
-                items.AddRange(GetSerialSeries(data));
             }
 
-            return items;
+            data[3] = WebUtility.UrlEncode(url);
+            return GetSerialSeries(data);
         }
 
         private static IEnumerable<Item> GetSerialSeries(params string[] data) {
@@ -143,20 +138,21 @@ namespace RemoteFork.Plugins {
                     ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597246folder.png"
                 };
 
-                if (episodes.Length > 1) {
+                if (episodes.Length > 0) {
                     foreach (string episode in episodes) {
                         string episodeUrl = $"{url}{(url.Contains("?") ? "&" : "?")}episode={episode}";
                         var item = new Item(baseItem) {
                             Name = $"Серия {episode}",
                             Link =
-                                $"{GetEpisodeCommand.KEY}{HDSerials.SEPARATOR}{GetEpisodeCommand.KEY}{HDSerials.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{HDSerials.SEPARATOR}{data[4]}"
+                                $"{GetEpisodeCommand.KEY}{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{GodZfilm.SEPARATOR}{data[4]}"
                         };
                         items.Add(item);
                     }
+                    return items;
                 }
             }
 
-            return items;
+            return GetEpisodeCommand.GetEpisodes(url, WebUtility.UrlDecode(data[4]));
         }
 
         private static string GetDescription(string text) {

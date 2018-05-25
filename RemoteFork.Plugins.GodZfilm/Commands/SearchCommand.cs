@@ -3,22 +3,22 @@ using System.Net;
 using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
-    public class SearchSearialsCommand : ICommand {
+    public class SearchCommand : ICommand {
         public const string KEY = "search";
 
         public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
-            string url = WebUtility.UrlDecode(data[3]);
+            const string url = "http://godzfilm.net/index.php?do=search";
 
             string searchText = WebUtility.UrlEncode(context.GetRequestParams()["search"]);
 
             string searchData = "do=search&subaction=search&search_start=1&full_search=0&result_from=1&story=" +
                                 searchText;
 
-            string response = HTTPUtility.PostRequest(string.Concat(url, "/index.php?do=search"), searchData);
+            string response = HTTPUtility.PostRequest(url, searchData);
 
-            items.AddRange(GetCategoryCommand.GetSerialsItems(response));
+            items.AddRange(GetCategoryCommand.GetFilmsItems(response, true));
 
             return items;
         }

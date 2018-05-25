@@ -11,15 +11,18 @@ namespace RemoteFork.Plugins {
         public const string KEY = "episode";
 
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
+            return GetEpisodes(WebUtility.UrlDecode(data[2]), WebUtility.UrlDecode(data[3]));
+        }
+
+        public static List<Item> GetEpisodes(string url, string referer) {
             var items = new List<Item>();
 
             var header = new Dictionary<string, string>() {
-                {"Referer", WebUtility.UrlDecode(data[4])}
+                {"Referer", referer}
             };
-            string url = WebUtility.UrlDecode(data[3]);
 
             string response = HTTPUtility.GetRequest(url, header);
-            
+
             var regex = new Regex("(<script src=\")(.*?)(\">)");
 
             if (regex.IsMatch(response)) {

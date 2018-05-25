@@ -4,17 +4,17 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdserials", Version = "0.0.2", Author = "fd_crash", Name = "HDSerials",
-        Description = "Смотреть сериалы онлайн в хорошем качестве.",
+    [PluginAttribute(Id = "godzfilm", Version = "0.0.1", Author = "fd_crash", Name = "GodZfilm",
+        Description = "Смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png")]
-    public class HDSerials : IPlugin {
+    public class GodZfilm : IPlugin {
         public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
         public static readonly Dictionary<string, Item> SERIAL_ITEMS = new Dictionary<string, Item>();
         
         public const char SEPARATOR = ';';
         public const string PLUGIN_PATH = "pluginPath";
         public static string NextPageUrl = null;
-
+        
         public Playlist GetList(IPluginContext context) {
             string path = context.GetRequestParams().Get(PLUGIN_PATH);
 
@@ -32,17 +32,14 @@ namespace RemoteFork.Plugins {
                     break;
                 default:
                     switch (arg[1]) {
-                        case SearchSearialsCommand.KEY:
-                            command = new SearchSearialsCommand();
+                        case SearchCommand.KEY:
+                            command = new SearchCommand();
                             break;
                         case GetCategoryCommand.KEY:
                             command = new GetCategoryCommand();
                             break;
-                        case GetCatalogCommand.KEY:
-                            command = new GetCatalogCommand();
-                            break;
-                        case GetSerialCommand.KEY:
-                            command = new GetSerialCommand();
+                        case GetFilmCommand.KEY:
+                            command = new GetFilmCommand();
                             break;
                         case GetEpisodeCommand.KEY:
                             command = new GetEpisodeCommand();
@@ -55,7 +52,7 @@ namespace RemoteFork.Plugins {
             NextPageUrl = null;
 
             if (command != null) {
-                string[] data = new string[Math.Max(4, arg.Length)];
+                string[] data = new string[Math.Max(5, arg.Length)];
                 for (int i = 0; i < arg.Length; i++) {
                     data[i] = arg[i];
                 }
