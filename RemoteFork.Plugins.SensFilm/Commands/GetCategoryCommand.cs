@@ -10,57 +10,55 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
 
-            items.AddRange(GetFilmsItems(data));
+            items.AddRange(GetFilmsItems(WebUtility.UrlDecode(data[2])));
 
             return items;
         }
 
-        private static IEnumerable<Item> GetFilmsItems(params string[] data) {
+        public static IEnumerable<Item> GetFilmsItems(string url) {
             var items = new List<Item>();
-
-            string url = WebUtility.UrlDecode(data[2]);
 
             string response = HTTPUtility.GetRequest(url);
 
-            items.AddRange(GetFilmsItems(response));
+            items.AddRange(GetFilmsItemsFromHtml(response));
 
             return items;
         }
 
-        public static IEnumerable<Item> GetFilmsItems(string htmlText, bool search = false) {
+        public static IEnumerable<Item> GetFilmsItemsFromHtml(string htmlText, bool search = false) {
             var items = new List<Item>();
 
-            var regex = new Regex("(<div class=\"main-news\">)([\\s\\S]*?)(<div class=\"main-news-more\">)");
+            var regex = new Regex("(<div class=\"list-item\">)([\\s\\S]*?)(class=\"btn readmore\">)");
 
             foreach (Match match in regex.Matches(htmlText)) {
-                items.Add(GetItem(match.Value, search));
+                items.Add(GetItem(match.Value));
             }
 
-            regex = new Regex("(<i class=\"next-nav1\"><a href=\")(.*?)(\">)");
+            regex = new Regex("(<span>\\d+<\\/span>\\s*<a href=\")(.*?)(\")");
             if (regex.IsMatch(htmlText)) {
                 string navigation = regex.Match(htmlText).Groups[2].Value;
                 if (!string.IsNullOrEmpty(navigation)) {
-                    GodZfilm.NextPageUrl =
-                        $"{KEY}{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(navigation)}";
+                    SensFilm.NextPageUrl =
+                        $"{KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(navigation)}";
                 }
             }
 
             return items;
         }
 
-        private static Item GetItem(string text, bool search) {
+        private static Item GetItem(string text) {
             string title = string.Empty;
             string link = string.Empty;
             string image = string.Empty;
             string series = string.Empty;
             string translate = string.Empty;
 
-            var regex = new Regex("(alt=\")(.*?)(\">)");
+            var regex = new Regex("(<font color=\"#000000\">)(.*?)(<\\/font>)");
             if (regex.IsMatch(text)) {
                 title = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<a href=\")(.*?)(\"><img)");
+            regex = new Regex("(<a href=\")(.*?)(\" class=\"item-thumbnail\">)");
             if (regex.IsMatch(text)) {
                 link = regex.Match(text).Groups[2].Value;
             }
@@ -70,7 +68,7 @@ namespace RemoteFork.Plugins {
                 image = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex(search ? "(<center.*?\">)(.*?)(<.*\\/center>)" : "(<center.*?>)(.*?)(<.*\\/center>)");
+            regex = new Regex("(<p>\\s?<B>)(.*?)(<\\/B><\\/p)");
             if (regex.IsMatch(text)) {
                 series = regex.Match(text).Groups[2].Value;
                 if (!string.IsNullOrEmpty(series)) {
@@ -78,7 +76,7 @@ namespace RemoteFork.Plugins {
                 }
             }
 
-            regex = new Regex(search ? "(<div class=\"main-news-janr\".*?\">)(.*?)(<.*\\/div>)" : "(<h2><a href=\".*\">)(.*?)((<\\/font>)?<\\/a>)");
+            regex = new Regex("(<\\/B>\\s*)(.+?)(<\\/p>)");
             if (regex.IsMatch(text)) {
                 translate = regex.Match(text).Groups[2].Value;
                 if (!string.IsNullOrEmpty(translate)) {
@@ -87,13 +85,13 @@ namespace RemoteFork.Plugins {
             }
 
             string description =
-                $"<img src=\"http://godzfilm.net{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{translate}<br>{series}";
+                $"<img src=\"http://sensfilm.xyz{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{translate}<br>{series}";
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title}",
                 Link =
-                    $"{GetFilmCommand.KEY}{GodZfilm.SEPARATOR}translations{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(link)}",
+                    $"{GetFilmCommand.KEY}{SensFilm.SEPARATOR}translations{SensFilm.SEPARATOR}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 

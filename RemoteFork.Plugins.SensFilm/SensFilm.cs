@@ -4,10 +4,10 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "godzfilm", Version = "0.0.1", Author = "fd_crash", Name = "GodZfilm",
-        Description = "Смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы.",
+    [PluginAttribute(Id = "sensfilm", Version = "0.0.1", Author = "fd_crash", Name = "SensFilm",
+        Description = "Cамые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png")]
-    public class GodZfilm : IPlugin {
+    public class SensFilm : IPlugin {
         public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
         public static readonly Dictionary<string, Item> SERIAL_ITEMS = new Dictionary<string, Item>();
         

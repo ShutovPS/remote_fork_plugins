@@ -9,7 +9,7 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
-            const string url = "http://godzfilm.net/index.php?do=search";
+            const string url = "http://sensfilm.xyz/index.php?do=search";
 
             string searchText = WebUtility.UrlEncode(context.GetRequestParams()["search"]);
 
@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.PostRequest(url, searchData);
 
-            items.AddRange(GetCategoryCommand.GetFilmsItems(response, true));
+            items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(response));
 
             return items;
         }

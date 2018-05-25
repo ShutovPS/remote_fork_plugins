@@ -61,7 +61,7 @@ namespace RemoteFork.Plugins {
                             var item = new Item(baseItem) {
                                 Name = match.Groups[6].Value,
                                 Link =
-                                    $"{KEY}{GodZfilm.SEPARATOR}seasons{GodZfilm.SEPARATOR}{match.Groups[3].Value}{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(url)}"
+                                    $"{KEY}{SensFilm.SEPARATOR}seasons{SensFilm.SEPARATOR}{match.Groups[3].Value}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(url)}"
                             };
                             items.Add(item);
                         }
@@ -106,7 +106,7 @@ namespace RemoteFork.Plugins {
                         string seasonUrl = $"{url}?season={season}";
                         var item = new Item(baseItem) {
                             Name = $"Сезон {season}",
-                            Link = $"{KEY}{GodZfilm.SEPARATOR}series{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{GodZfilm.SEPARATOR}{data[4]}"
+                            Link = $"{KEY}{SensFilm.SEPARATOR}series{SensFilm.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{SensFilm.SEPARATOR}{data[4]}"
                         };
                         items.Add(item);
                     }
@@ -144,7 +144,7 @@ namespace RemoteFork.Plugins {
                         var item = new Item(baseItem) {
                             Name = $"Серия {episode}",
                             Link =
-                                $"{GetEpisodeCommand.KEY}{GodZfilm.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{GodZfilm.SEPARATOR}{data[4]}"
+                                $"{GetEpisodeCommand.KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{SensFilm.SEPARATOR}{data[4]}"
                         };
                         items.Add(item);
                     }
