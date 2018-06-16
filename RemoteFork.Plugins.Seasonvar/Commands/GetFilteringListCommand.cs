@@ -78,7 +78,7 @@ namespace RemoteFork.Plugins {
                 };
                 var header = new Dictionary<string, string>() {
                     {"Accept-Encoding", "gzip, deflate, lzma"},
-                    {"Content-Type", "text/html; charset=UTF-8"}
+                    //{"Content-Type", "text/html; charset=UTF-8"}
                 };
                 var datastring = new StringBuilder();
                 foreach (var k in dataRequest) {

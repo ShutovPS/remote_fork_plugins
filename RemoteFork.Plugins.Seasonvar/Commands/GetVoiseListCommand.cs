@@ -13,7 +13,7 @@ namespace RemoteFork.Plugins {
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
-                {"Content-Type", "text/html; charset=UTF-8"}
+                //{"Content-Type", "text/html; charset=UTF-8"}
             };
 
             //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL, url));
@@ -49,7 +49,7 @@ namespace RemoteFork.Plugins {
                         header = new Dictionary<string, string>() {
                             {"X-Requested-With", "XMLHttpRequest"},
                             {"Accept-Encoding", "gzip, deflate, lzma"},
-                            {"Content-Type", "text/html; charset=UTF-8"}
+                            //{"Content-Type", "text/html; charset=UTF-8"}
                         };
                         string datastring = "";
                         foreach (var k in dataRequest) {

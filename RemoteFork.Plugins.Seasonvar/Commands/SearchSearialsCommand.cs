@@ -12,7 +12,7 @@ namespace RemoteFork.Plugins {
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
-                {"Content-Type", "text/html; charset=windows-1251"}
+                //{"Content-Type", "text/html; charset=windows-1251"}
             };
 
             string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, "/autocomplete.php?query=" + searchText), header);
