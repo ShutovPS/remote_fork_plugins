@@ -4,7 +4,7 @@ using RemoteFork.Plugins.Commands;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "thvp", Version = "0.1.0", Author = "fd_crash", Name = "THVP",
+    [Plugin(Id = "thvp", Version = "0.1.1", Author = "fd_crash", Name = "THVP",
         Description = "THVP предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы",
         ImageLink = "http://thvp.ru/img/logo.png")]
 
@@ -78,7 +78,7 @@ namespace RemoteFork.Plugins {
             }
 
             playlist.source = Source;
-            playlist.IsIptv = IsIptv ? "True" : "False";
+            playlist.IptvPlaylist = IsIptv;
 
             return playlist;
         }
