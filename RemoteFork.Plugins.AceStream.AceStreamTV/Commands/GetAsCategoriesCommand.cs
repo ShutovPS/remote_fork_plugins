@@ -1,5 +1,6 @@
 ﻿using RemoteFork.Plugins.AceStream.Channels;
 using System.Collections.Generic;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
     class GetAsCategoriesCommand : ICommand {
@@ -18,7 +19,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                 var item = new Item(baseItem) {
                     Name = category,
                     Description = category,
-                    Link = $"{GetAsChannelsCommand.KEY}{AceStreamTV.SEPARATOR}{data[2]}{AceStreamTV.SEPARATOR}{category}"
+                    Link = $"{GetAsChannelsCommand.KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{category}"
                 };
                 items.Add(item);
             }

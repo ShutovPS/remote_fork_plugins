@@ -1,28 +1,26 @@
-﻿using System;
+using System;
 using RemoteFork.Plugins.AceStream.Commands;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.AceStream {
-    [PluginAttribute(Id = "acestreamtv", Version = "0.1.2", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
+    [PluginAttribute(Id = "acestreamtv", Version = "0.1.3", Author = "fd_crash&ORAMAN", Name = "AceStreamTV",
         Description = "Воспроизведение TORRENT IPTV через меда-сервер Ace Stream",
         ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
 
     public class AceStreamTV : IPlugin {
-        public const char SEPARATOR = ';';
-        public const string PLUGIN_PATH = "pluginPath";
-        
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
 
         public Playlist GetList(IPluginContext context) {
-            string path = context.GetRequestParams().Get(PLUGIN_PATH);
+            string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
 
             path = path == null ? "plugin" : "plugin;" + path;
 
-            var arg = path.Split(SEPARATOR);
+            var arg = path.Split(PluginSettings.Settings.Separator);
 
             ICommand command = null;
             var data = new string[Math.Max(4, arg.Length)];
@@ -78,7 +76,7 @@ namespace RemoteFork.Plugins.AceStream {
             var playlist = new Playlist();
 
             if (!string.IsNullOrEmpty(NextPageUrl)) {
-                var pluginParams = new NameValueCollection {[PLUGIN_PATH] = NextPageUrl };
+                var pluginParams = new NameValueCollection {[PluginSettings.Settings.PluginPath] = NextPageUrl };
                 playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
             }
             playlist.Timeout = "60";
@@ -88,13 +86,13 @@ namespace RemoteFork.Plugins.AceStream {
             foreach (var item in playlist.Items) {
                 if (ItemType.DIRECTORY == item.Type) {
                     var pluginParams = new NameValueCollection {
-                        [PLUGIN_PATH] = item.Link
+                        [PluginSettings.Settings.PluginPath] = item.Link
                     };
                     item.Link = context.CreatePluginUrl(pluginParams);
                 }
             }
 
-            playlist.IsIptv = IsIptv ? "True" :string.Empty;
+            playlist.IptvPlaylist = IsIptv;
             if (IsIptv && string.IsNullOrEmpty(Source)) {
                 Source = PlaylistToM3U8(playlist);
             }

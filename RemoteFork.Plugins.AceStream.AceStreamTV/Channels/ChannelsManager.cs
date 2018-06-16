@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins.AceStream.Channels {
     public static class ChannelsManager {
@@ -19,7 +20,7 @@ namespace RemoteFork.Plugins.AceStream.Channels {
 
         public static ChannelsModel GetModel(string key) {
             if (!_channels.ContainsKey(key)) {
-                string response = HTTPUtility.GetRequest("http://pomoyka.lib.emergate.net/trash/ttv-list/" + key);
+                string response = HTTPUtility.GetRequest(PluginSettings.Settings.Links.TrashTTV + key);
 
                 if (!string.IsNullOrEmpty(response)) {
                     try {

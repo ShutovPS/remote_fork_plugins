@@ -1,5 +1,6 @@
 ﻿using RemoteFork.Plugins.AceStream.Channels;
 using System.Collections.Generic;
+using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
 
 namespace RemoteFork.Plugins.AceStream.Commands {
@@ -11,7 +12,7 @@ namespace RemoteFork.Plugins.AceStream.Commands {
 
             var baseItem = new Item() {
                 Type = ItemType.FILE,
-                ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png"
+                ImageLink = PluginSettings.Settings.Icons.IcoVideo
             };
 
             var channels = ChannelsManager.GetChannelsByCategory(data[2], data[3]);
@@ -19,8 +20,9 @@ namespace RemoteFork.Plugins.AceStream.Commands {
                 var item = new Item(baseItem) {
                     Name = channel.Name,
                     Description = channel.Name,
-                    Link =
-                        $"http://{ProgramSettings.Settings.IpAddress}:{ProgramSettings.Settings.AceStreamPort}/ace/getstream?id={channel.Url}&.mp4",
+                    Link = string.Format(PluginSettings.Settings.AceStreamApi.GetStreamById,
+                        ProgramSettings.Settings.IpAddress, ProgramSettings.Settings.AceStreamPort,
+                        $"{channel.Url}&.mp4")
                 };
                 items.Add(item);
             }
