@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "seasonvar", Version = "0.4.7", Author = "fd_crash&&forkplayer", Name = "Seasonvar",
+    [PluginAttribute(Id = "seasonvar", Version = "0.4.8", Author = "fd_crash&&forkplayer", Name = "Seasonvar",
         Description = "Сериалы ТУТ! Сериалы онлайн смотреть бесплатно. Смотреть онлайн",
         ImageLink = "http://cdn.seasonvar.ru/images/fav/apple-touch-icon-144x144.png")]
     public class Seasonvar : IPlugin {

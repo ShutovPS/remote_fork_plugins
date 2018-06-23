@@ -5,10 +5,10 @@ using System.Linq;
 namespace RemoteFork.Plugins {
     class FirstSymbolGroupCommand : ICommand {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            List<Item> items = new List<Item>();
+            var items = new List<Item>();
 
             string lang = data.Length > 1 ? data[1] : string.Empty;
-            string page = data.Length > 2 ? data[2] : string.Empty;
+            string page = data.Length > 2 ? data[3] : string.Empty;
 
             var tempSerials = Seasonvar.SERIAL_MATCHES[lang + "name"];
             var group = tempSerials.GroupBy(i => i.Groups[3].Value.Trim().Replace("\"", "#").First());
