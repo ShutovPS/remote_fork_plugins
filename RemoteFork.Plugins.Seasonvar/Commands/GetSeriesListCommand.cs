@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
     public class GetSeriesListCommand : ICommand {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            List<Item> items = new List<Item>();
+            var items = new List<Item>();
 
             string url = data.Length > 2 ? data[2] : string.Empty;
 
@@ -25,12 +27,19 @@ namespace RemoteFork.Plugins {
 
             var match = Regex.Match(url, "(\\/)(\\d+)(\\/)");
 
-            Item item = new GetSerialInfoCommand().GetItem(context, match.Groups[2].Value);
+            var item = new GetSerialInfoCommand().GetItem(context, match.Groups[2].Value);
 
             for (int i = 0; i < matches.Count; i++) {
+                string fileLink = matches[i].Groups[9].Value;
+                if (fileLink.StartsWith("#2")) {
+                    var regex = new Regex(@"(\\\/\\\/.*?=)");
+                    fileLink = regex.Replace(fileLink, string.Empty);
+                    byte[] linkData = Convert.FromBase64String(fileLink.Substring(2));
+                    fileLink = Encoding.UTF8.GetString(linkData);
+                }
                 var itemR = new Item() {
                     Name = string.Format("{0} Серия", matches[i].Groups[3].Value, matches[i].Groups[19].Value),
-                    Link = matches[i].Groups[9].Value,
+                    Link = fileLink,
                     Type = ItemType.FILE,
                     ImageLink = item.ImageLink,
                     Description = item.Description
