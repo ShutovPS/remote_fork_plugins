@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class SearchCommand : ICommand {
@@ -9,14 +10,13 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
-            const string url = "http://sensfilm.xyz/index.php?do=search";
+            string url = $"{PluginSettings.Settings.Links.Site}/index.php";
 
             string searchText = WebUtility.UrlEncode(context.GetRequestParams()["search"]);
 
-            string searchData = "do=search&subaction=search&search_start=1&full_search=0&result_from=1&story=" +
-                                searchText;
+            string searchData = "?do=search&subaction=search&q=" + WebUtility.UrlEncode(searchText);
 
-            string response = HTTPUtility.PostRequest(url, searchData);
+            string response = HTTPUtility.GetRequest(url + searchData);
 
             items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(response));
 

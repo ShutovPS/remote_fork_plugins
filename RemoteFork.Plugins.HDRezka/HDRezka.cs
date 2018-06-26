@@ -1,26 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text.RegularExpressions;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "sensfilm", Version = "0.0.1", Author = "fd_crash", Name = "SensFilm",
-        Description = "Cамые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно.",
+    [PluginAttribute(Id = "hdrezka", Version = "0.0.1", Author = "fd_crash", Name = "HDRezka",
+        Description = "Cмотреть лучшие новинки фильмов 2016 2017 онлайн в хорошем качестве и бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png")]
-    public class SensFilm : IPlugin {
-        public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
-        public static readonly Dictionary<string, Item> SERIAL_ITEMS = new Dictionary<string, Item>();
-        
-        public const char SEPARATOR = ';';
-        public const string PLUGIN_PATH = "pluginPath";
+    public class HDRezka : IPlugin {
         public static string NextPageUrl = null;
         
         public Playlist GetList(IPluginContext context) {
-            string path = context.GetRequestParams().Get(PLUGIN_PATH);
+            string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
 
             path = path == null ? "plugin" : "plugin;" + path;
 
-            var arg = path.Split(SEPARATOR);
+            var arg = path.Split(PluginSettings.Settings.Separator);
 
             var items = new List<Item>();
             ICommand command = null;
@@ -67,7 +62,7 @@ namespace RemoteFork.Plugins {
             var playlist = new Playlist();
 
             if (!string.IsNullOrEmpty(NextPageUrl)) {
-                var pluginParams = new NameValueCollection {[PLUGIN_PATH] = NextPageUrl};
+                var pluginParams = new NameValueCollection {[PluginSettings.Settings.PluginPath] = NextPageUrl};
                 playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
             } else {
                 playlist.NextPageUrl = null;
@@ -76,7 +71,7 @@ namespace RemoteFork.Plugins {
             foreach (var item in items) {
                 if (ItemType.DIRECTORY == item.Type) {
                     var pluginParams = new NameValueCollection {
-                        [PLUGIN_PATH] = item.Link
+                        [PluginSettings.Settings.PluginPath] = item.Link
                     };
 
                     item.Link = context.CreatePluginUrl(pluginParams);

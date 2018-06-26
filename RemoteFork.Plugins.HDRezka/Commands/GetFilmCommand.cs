@@ -2,10 +2,11 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetFilmCommand : ICommand {
-        public const string KEY = "getserial";
+        public const string KEY = "getfilm";
 
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
@@ -34,7 +35,7 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url);
 
-            var regex = new Regex("(<iframe.*?src=\")(.*?)(\")");
+            var regex = new Regex(PluginSettings.Settings.Regexp.Iframe);
             if (regex.IsMatch((response))) {
                 var header = new Dictionary<string, string>() {
                     {"Referer", url}
@@ -42,63 +43,72 @@ namespace RemoteFork.Plugins {
                 string moonwalkUrl = regex.Match(response).Groups[2].Value;
                 string moonwalkResponse = HTTPUtility.GetRequest(moonwalkUrl, header);
 
-                regex = new Regex("(translations:\\s*)(\\[\\[.*?\\]\\])");
-
-                if (regex.IsMatch(moonwalkResponse)) {
-                    string translations = regex.Match(moonwalkResponse).Groups[2].Value;
-
-                    string description = GetDescription(response);
-
-                    var baseItem = new Item() {
-                        Type = ItemType.DIRECTORY,
-                        Description = description,
-                        ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597246folder.png"
-                    };
-
-                    regex = new Regex("(\\[)(\")(.*?)(\")(,\")(.*?)(\"\\])");
-                    if (regex.Matches(translations).Count > 1) {
-                        foreach (Match match in regex.Matches(translations)) {
-                            var item = new Item(baseItem) {
-                                Name = match.Groups[6].Value,
-                                Link =
-                                    $"{KEY}{SensFilm.SEPARATOR}seasons{SensFilm.SEPARATOR}{match.Groups[3].Value}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(url)}"
-                            };
-                            items.Add(item);
-                        }
-
-                        return items;
-                    }
-                }
-
-                data[3] = WebUtility.UrlEncode(moonwalkUrl);
-                data[4] = WebUtility.UrlEncode(url);
-                return GetSerialSeasons(data);
+                items.AddRange(GetSerialTranslationsData(moonwalkUrl, data[3], response, moonwalkResponse));
             }
-            
+
             return items;
         }
 
-        private static IEnumerable<Item> GetSerialSeasons(params string[] data) {
+        private static IEnumerable<Item> GetSerialTranslationsData(string url, string referer, string response,
+            string moonwalkResponse) {
             var items = new List<Item>();
 
+            var regex = new Regex(PluginSettings.Settings.Regexp.Translations);
+
+            if (regex.IsMatch(moonwalkResponse)) {
+                string translations = regex.Match(moonwalkResponse).Groups[2].Value;
+
+                string description = GetDescription(response);
+
+                var baseItem = new Item() {
+                    Type = ItemType.DIRECTORY,
+                    Description = description,
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                };
+
+                regex = new Regex(PluginSettings.Settings.Regexp.Translation);
+                if (regex.Matches(translations).Count > 1) {
+                    foreach (Match match in regex.Matches(translations)) {
+                        var item = new Item(baseItem) {
+                            Name = match.Groups[6].Value,
+                            Link =
+                                $"{KEY}{PluginSettings.Settings.Separator}seasons{PluginSettings.Settings.Separator}{match.Groups[3].Value}{PluginSettings.Settings.Separator}{referer}"
+                        };
+                        items.Add(item);
+                    }
+
+                    return items;
+                }
+            }
+
+            return GetSerialSeasonsData(url, referer, moonwalkResponse);
+        }
+
+        private static IEnumerable<Item> GetSerialSeasons(params string[] data) {
             var header = new Dictionary<string, string>() {
                 {"Referer", WebUtility.UrlDecode(data[4])}
             };
             string url = WebUtility.UrlDecode(data[3]);
             if (!url.Contains("://")) {
-                url = $"http://moonwalk.cc/serial/{data[3]}/iframe";
+                url = $"{PluginSettings.Settings.Links.Moonwalk}/serial/{data[3]}/iframe";
             }
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            var regex = new Regex("(seasons:\\s\\[)(.*?)(\\])");
+            return GetSerialSeasonsData(url, data[4], response);
+        }
 
-            if (regex.IsMatch(response)) {
-                var seasons = regex.Match(response).Groups[2].Value.Split(',');
+        private static IEnumerable<Item> GetSerialSeasonsData(string url, string referer, string moonwalkResponse) {
+            var items = new List<Item>();
+
+            var regex = new Regex(PluginSettings.Settings.Regexp.Seasons);
+
+            if (regex.IsMatch(moonwalkResponse)) {
+                var seasons = regex.Match(moonwalkResponse).Groups[2].Value.Split(',');
 
                 var baseItem = new Item() {
                     Type = ItemType.DIRECTORY,
-                    ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597246folder.png"
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
 
                 if (seasons.Length > 0) {
@@ -106,21 +116,20 @@ namespace RemoteFork.Plugins {
                         string seasonUrl = $"{url}?season={season}";
                         var item = new Item(baseItem) {
                             Name = $"Сезон {season}",
-                            Link = $"{KEY}{SensFilm.SEPARATOR}series{SensFilm.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{SensFilm.SEPARATOR}{data[4]}"
+                            Link =
+                                $"{KEY}{PluginSettings.Settings.Separator}series{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(seasonUrl)}{PluginSettings.Settings.Separator}{referer}"
                         };
                         items.Add(item);
                     }
+
                     return items;
                 }
             }
 
-            data[3] = WebUtility.UrlEncode(url);
-            return GetSerialSeries(data);
+            return GetSerialSeriesData(url, referer, moonwalkResponse);
         }
 
         private static IEnumerable<Item> GetSerialSeries(params string[] data) {
-            var items = new List<Item>();
-
             var header = new Dictionary<string, string>() {
                 {"Referer", WebUtility.UrlDecode(data[4])}
             };
@@ -128,14 +137,20 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            var regex = new Regex("(episodes:\\s\\[)(.*?)(\\])");
+            return GetSerialSeriesData(url, data[4], response);
+        }
 
-            if (regex.IsMatch(response)) {
-                var episodes = regex.Match(response).Groups[2].Value.Split(',');
+        private static IEnumerable<Item> GetSerialSeriesData(string url, string referer, string moonwalkResponse) {
+            var items = new List<Item>();
+
+            var regex = new Regex(PluginSettings.Settings.Regexp.Episodes);
+
+            if (regex.IsMatch(moonwalkResponse)) {
+                var episodes = regex.Match(moonwalkResponse).Groups[2].Value.Split(',');
 
                 var baseItem = new Item() {
                     Type = ItemType.DIRECTORY,
-                    ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597246folder.png"
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
 
                 if (episodes.Length > 0) {
@@ -144,15 +159,16 @@ namespace RemoteFork.Plugins {
                         var item = new Item(baseItem) {
                             Name = $"Серия {episode}",
                             Link =
-                                $"{GetEpisodeCommand.KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{SensFilm.SEPARATOR}{data[4]}"
+                                $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(episodeUrl)}{PluginSettings.Settings.Separator}{referer}"
                         };
                         items.Add(item);
                     }
+
                     return items;
                 }
             }
 
-            return GetEpisodeCommand.GetEpisodes(url, WebUtility.UrlDecode(data[4]));
+            return GetEpisodeCommand.GetEpisodes(url, referer);
         }
 
         private static string GetDescription(string text) {
@@ -160,20 +176,23 @@ namespace RemoteFork.Plugins {
             string image = string.Empty;
             string description = string.Empty;
 
-            var regex = new Regex("(<meta property=\"og:title\" content=\")(.*?)(\">)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.MetaTitle);
             if (regex.IsMatch(text)) {
                 title = regex.Match(text).Groups[2].Value;
             }
-            regex = new Regex("(<meta property=\"og:image\" content=\")(.*?)(\">)");
+
+            regex = new Regex(PluginSettings.Settings.Regexp.MetaImage);
             if (regex.IsMatch(text)) {
                 image = regex.Match(text).Groups[2].Value;
             }
-            regex = new Regex("(<div class=\"full-news-content\">.*?\"><\\/span>\\s*)(.*)");
+
+            regex = new Regex(PluginSettings.Settings.Regexp.MiniDescription);
             if (regex.IsMatch(text)) {
                 description = regex.Match(text).Groups[2].Value;
             }
 
-            description = $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{description}";
+            description =
+                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{description}";
 
             return description;
         }

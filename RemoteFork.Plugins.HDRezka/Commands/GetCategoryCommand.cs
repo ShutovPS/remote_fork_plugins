@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetCategoryCommand : ICommand {
@@ -28,18 +29,18 @@ namespace RemoteFork.Plugins {
         public static IEnumerable<Item> GetFilmsItemsFromHtml(string htmlText, bool search = false) {
             var items = new List<Item>();
 
-            var regex = new Regex("(<div class=\"list-item\">)([\\s\\S]*?)(class=\"btn readmore\">)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.Categories);
 
             foreach (Match match in regex.Matches(htmlText)) {
                 items.Add(GetItem(match.Value));
             }
 
-            regex = new Regex("(<span>\\d+<\\/span>\\s*<a href=\")(.*?)(\")");
+            regex = new Regex(PluginSettings.Settings.Regexp.FilmUrl);
             if (regex.IsMatch(htmlText)) {
                 string navigation = regex.Match(htmlText).Groups[2].Value;
                 if (!string.IsNullOrEmpty(navigation)) {
-                    SensFilm.NextPageUrl =
-                        $"{KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(navigation)}";
+                    HDRezka.NextPageUrl =
+                        $"{KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(navigation)}";
                 }
             }
 
@@ -51,47 +52,33 @@ namespace RemoteFork.Plugins {
             string link = string.Empty;
             string image = string.Empty;
             string series = string.Empty;
-            string translate = string.Empty;
+            string category = string.Empty;
+            string info = string.Empty;
 
-            var regex = new Regex("(<font color=\"#000000\">)(.*?)(<\\/font>)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.FullDescription);
             if (regex.IsMatch(text)) {
-                title = regex.Match(text).Groups[2].Value;
-            }
+                var match = regex.Match(text);
 
-            regex = new Regex("(<a href=\")(.*?)(\" class=\"item-thumbnail\">)");
-            if (regex.IsMatch(text)) {
-                link = regex.Match(text).Groups[2].Value;
-            }
+                title = match.Groups[13].Value;
+                link = match.Groups[2].Value;
+                image = match.Groups[4].Value;
+                category = match.Groups[6].Value;
+                info = match.Groups[15].Value;
 
-            regex = new Regex("(<img src=\")(.*?)(\")");
-            if (regex.IsMatch(text)) {
-                image = regex.Match(text).Groups[2].Value;
-            }
-
-            regex = new Regex("(<p>\\s?<B>)(.*?)(<\\/B><\\/p)");
-            if (regex.IsMatch(text)) {
-                series = regex.Match(text).Groups[2].Value;
+                series = match.Groups[10].Value;
                 if (!string.IsNullOrEmpty(series)) {
                     title = $"{title} ({series})";
                 }
             }
 
-            regex = new Regex("(<\\/B>\\s*)(.+?)(<\\/p>)");
-            if (regex.IsMatch(text)) {
-                translate = regex.Match(text).Groups[2].Value;
-                if (!string.IsNullOrEmpty(translate)) {
-                    title = $"{title} ({translate})";
-                }
-            }
-
             string description =
-                $"<img src=\"http://sensfilm.xyz{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{translate}<br>{series}";
+                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{category}<br>{info}<br>{series}";
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title}",
                 Link =
-                    $"{GetFilmCommand.KEY}{SensFilm.SEPARATOR}translations{SensFilm.SEPARATOR}{WebUtility.UrlEncode(link)}",
+                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 
