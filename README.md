@@ -11,4 +11,5 @@
 - [THVP](https://github.com/ShutovPS/RemoteFork.Plugins/tree/thvp) - THVP предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы.
 - [HD Serials](https://github.com/ShutovPS/RemoteFork.Plugins/tree/hdserials) - Плагин для сайтов coldfilm.hdkino и lostfilm.hdkino.
 - [SensFilm](https://github.com/ShutovPS/RemoteFork.Plugins/tree/sensfilm) - Cамые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно.
-- [GodZfilm](https://github.com/ShutovPS/RemoteFork.Plugins/tree/godzfilm) - Смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы..
+- [GodZfilm](https://github.com/ShutovPS/RemoteFork.Plugins/tree/godzfilm) - Смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы.
+- [HDRezka](https://github.com/ShutovPS/RemoteFork.Plugins/tree/hdrezka) - Cмотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.
