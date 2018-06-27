@@ -30,7 +30,7 @@ namespace RemoteFork.Plugins.Settings {
                 IcoVideo = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png",
                 IcoImage = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597278jpgfile.png",
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
-                NewVersion = "https://png.icons8.com/office/1600/new.png",
+                NewVersion = "http://png.icons8.com/office/160/new.png",
             },
 
             Links = new Links() {
