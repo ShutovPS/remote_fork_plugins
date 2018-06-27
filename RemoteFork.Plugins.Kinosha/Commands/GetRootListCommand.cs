@@ -9,9 +9,9 @@ namespace RemoteFork.Plugins {
 
             if (context != null) {
                 string latestVersion =
-                    context.GetLatestVersionNumber(typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Id);
+                    context.GetLatestVersionNumber(typeof(Kinosha).GetCustomAttribute<PluginAttribute>().Id);
                 if (!string.IsNullOrEmpty(latestVersion)) {
-                    if (latestVersion != typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Version) {
+                    if (latestVersion != typeof(Kinosha).GetCustomAttribute<PluginAttribute>().Version) {
                         var updateItem = new Item() {
                             Name = $"Доступна новая версия: {latestVersion}",
                             Link = "http://newversion.m3u",
@@ -34,7 +34,7 @@ namespace RemoteFork.Plugins {
             item = new Item() {
                 Name = "Новинки",
                 Type = ItemType.DIRECTORY,
-                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/new/",
+                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/filmi-2018/",
                 ImageLink = PluginSettings.Settings.Icons.IcoFolder
             };
             items.Add(item);
@@ -50,7 +50,7 @@ namespace RemoteFork.Plugins {
             item = new Item() {
                 Name = "Сериалы",
                 Type = ItemType.DIRECTORY,
-                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/series/",
+                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/serial/",
                 ImageLink = PluginSettings.Settings.Icons.IcoFolder
             };
             items.Add(item);
@@ -64,9 +64,9 @@ namespace RemoteFork.Plugins {
             items.Add(item);
 
             item = new Item() {
-                Name = "Аниме",
+                Name = "ТВ",
                 Type = ItemType.DIRECTORY,
-                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/animation/",
+                Link = $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Site}/tv/",
                 ImageLink = PluginSettings.Settings.Icons.IcoFolder
             };
             items.Add(item);

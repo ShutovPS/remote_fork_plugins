@@ -35,11 +35,11 @@ namespace RemoteFork.Plugins {
                 items.Add(GetItem(match.Value));
             }
 
-            regex = new Regex(PluginSettings.Settings.Regexp.FilmUrl);
+            regex = new Regex(PluginSettings.Settings.Regexp.NextUrl);
             if (regex.IsMatch(htmlText)) {
                 string navigation = regex.Match(htmlText).Groups[2].Value;
                 if (!string.IsNullOrEmpty(navigation)) {
-                    HDRezka.NextPageUrl =
+                    Kinosha.NextPageUrl =
                         $"{KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(navigation)}";
                 }
             }
@@ -51,34 +51,41 @@ namespace RemoteFork.Plugins {
             string title = string.Empty;
             string link = string.Empty;
             string image = string.Empty;
-            string series = string.Empty;
-            string category = string.Empty;
+            string quality = string.Empty;
             string info = string.Empty;
 
-            var regex = new Regex(PluginSettings.Settings.Regexp.FullDescription);
+            var regex = new Regex(PluginSettings.Settings.Regexp.MiniDescription);
             if (regex.IsMatch(text)) {
                 var match = regex.Match(text);
 
-                title = match.Groups[13].Value;
+                title = match.Groups[8].Value;
                 link = match.Groups[2].Value;
-                image = match.Groups[4].Value;
-                category = match.Groups[6].Value;
-                info = match.Groups[15].Value;
+                image = match.Groups[5].Value;
+            }
 
-                series = match.Groups[10].Value;
-                if (!string.IsNullOrEmpty(series)) {
-                    title = $"{title} ({series})";
-                }
+            regex = new Regex(PluginSettings.Settings.Regexp.Quality);
+            if (regex.IsMatch(text)) {
+                quality = regex.Match(text).Groups[2].Value;
+            }
+
+            regex = new Regex(PluginSettings.Settings.Regexp.Description);
+            if (regex.IsMatch(text)) {
+                info = regex.Match(text).Groups[2].Value;
+            }
+
+            regex = new Regex(PluginSettings.Settings.Regexp.Title);
+            if (regex.IsMatch(text)) {
+                title = regex.Match(text).Groups[2].Value;
             }
 
             string description =
-                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{category}<br>{info}<br>{series}";
+                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{quality}<br>{info}";
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title}",
                 Link =
-                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
+                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 
