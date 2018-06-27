@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdrezka", Version = "0.0.1", Author = "fd_crash", Name = "HDRezka",
+    [PluginAttribute(Id = "hdrezka", Version = "0.0.2", Author = "fd_crash", Name = "HDRezka",
         Description = "Cмотреть лучшие новинки фильмов 2016 2017 онлайн в хорошем качестве и бесплатно.",
-        ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png")]
+        ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
+        Github = "ShutovPS/RemoteFork.Plugins/HDRezka")]
     public class HDRezka : IPlugin {
+        public static readonly Logger Logger = new Logger(typeof(HDRezka));
+
         public static string NextPageUrl = null;
         
         public Playlist GetList(IPluginContext context) {
@@ -47,7 +51,7 @@ namespace RemoteFork.Plugins {
             NextPageUrl = null;
 
             if (command != null) {
-                string[] data = new string[Math.Max(5, arg.Length)];
+                var data = new string[Math.Max(5, arg.Length)];
                 for (int i = 0; i < arg.Length; i++) {
                     data[i] = arg[i];
                 }

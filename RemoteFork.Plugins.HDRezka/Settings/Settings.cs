@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.1f,
+            SettingsVersion = 1.2f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -30,6 +30,7 @@ namespace RemoteFork.Plugins.Settings {
                 IcoVideo = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png",
                 IcoImage = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597278jpgfile.png",
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
+                NewVersion = "https://png.icons8.com/office/1600/new.png",
             },
 
             Links = new Links() {
@@ -111,5 +112,6 @@ namespace RemoteFork.Plugins.Settings {
         public string IcoVideo { get; set; }
         public string IcoImage { get; set; }
         public string IcoOther { get; set; }
+        public string NewVersion { get; set; }
     }
 }
