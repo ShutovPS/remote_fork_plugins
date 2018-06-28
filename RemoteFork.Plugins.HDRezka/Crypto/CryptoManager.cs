@@ -4,8 +4,8 @@ using System.Text;
 
 namespace RemoteFork.Plugins {
     public static class CryptoManager {
-        public static string Encrypt(string test, string key, string iv) {
-            var data = new UTF8Encoding().GetBytes(test);
+        public static string Encrypt(string text, string key, string iv) {
+            var data = new UTF8Encoding().GetBytes(text);
 
             var aes = Aes.Create();
             if (aes != null) {

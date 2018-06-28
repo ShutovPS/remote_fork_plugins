@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.2f,
+            SettingsVersion = 1.3f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -54,15 +54,26 @@ namespace RemoteFork.Plugins.Settings {
                 FullDescription = "(data-url=\")(.*?)(\">.*?<img src=\")(.*?)(\".*?<i class=\"entity\">)(.*?)(<\\/i>)((.*?<span class=\"info\">)(.*?)(<\\/span>))?(.*?.html\">)(.*?)(<\\/a>\\s*?<div>)(.*?)(<\\/div>)",
 
                 Script = "(<script src=\")(.*?)(\">)",
-                VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(o\\.done)",
+                Host = "(host:\\s?\')(.*?)(\')",
+                Proto = "(proto:\\s?\')(.*?)(\')",
+                VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
                 Password = "(e\\s*=\\s*\")(.*?)(\")",
                 IV = "(n\\s*=\\s*\")(.*?)(\")",
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
+                WindowId = "(window\\[\'[\\d\\w]+\'\\]\\s?=\\s?\')(.*?)(\')",
+                Ncodes = "(n\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
+                Ncode = "(\"(.*?)\")",
+
+                SecretArray = "(var _[\\d\\w]+\\s?=\\s?\\[)(\".*?\")(\\];)",
+                SecretWindow = "(window\\[)([_\\+\\s\\w\\d\\(\\)\"]*?)(\\]\\s?=\\s?)(.*?)(;)",
+                SecretValue = "((_[\\d\\w]+\\(\"[\\w\\d]*?(\\d)\"\\))|(\"(.*?)\"))",
 
                 M3U8 = "(\"m3u8\":\\s*\")(.*?)(\")",
                 ExtList = "(#EXT-X.*?=)(\\d+x\\d+)([\\s\\S]*?)(http:.*)",
+
+                Redirect = "(<a href=\")(http.+?iframe)(.*?\">)",
             }
         };
     }
@@ -84,15 +95,26 @@ namespace RemoteFork.Plugins.Settings {
         public string FullDescription { get; set; }
 
         public string Script { get; set; }
+        public string Host { get; set; }
+        public string Proto { get; set; }
         public string VideoManifest { get; set; }
         public string Password { get; set; }
         public string IV { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
         public string DomainId { get; set; }
+        public string WindowId { get; set; }
+        public string Ncodes { get; set; }
+        public string Ncode { get; set; }
+
+        public string SecretArray { get; set; }
+        public string SecretWindow { get; set; }
+        public string SecretValue { get; set; }
 
         public string M3U8 { get; set; }
         public string ExtList { get; set; }
+
+        public string Redirect { get; set; }
     }
 
     [Serializable]

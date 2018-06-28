@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RemoteFork.Network;
@@ -32,9 +34,12 @@ namespace RemoteFork.Plugins {
 
             if (regex.IsMatch(response)) {
                 string scriptUrl = regex.Match(response).Groups[2].Value;
-                var myUri = new Uri(url);
+                regex = new Regex(PluginSettings.Settings.Regexp.Host);
+                string scriptHost = regex.Match(response).Groups[2].Value;
+                regex = new Regex(PluginSettings.Settings.Regexp.Proto);
+                string scriptProto = regex.Match(response).Groups[2].Value;
 
-                scriptUrl = $"{myUri.Scheme}://{myUri.Host}{scriptUrl}";
+                scriptUrl = $"{scriptProto}{scriptHost}{scriptUrl}";
 
                 string scriptResponse = HTTPUtility.GetRequest(scriptUrl);
 
@@ -43,51 +48,97 @@ namespace RemoteFork.Plugins {
                     string script = regex.Match(scriptResponse).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.Password);
                     string password = regex.Match(script).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.IV);
+                    regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
+
                     string iv = regex.Match(script).Groups[2].Value;
+                    regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                    var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
+                    matches = matches.OrderByDescending(i => i.Length);
+                    iv = matches.First();
+                    iv = Base64Decode(iv);
+
                     regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
                     string videoToken = regex.Match(response).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.PartnerId);
-                    string partnerID = regex.Match(response).Groups[2].Value;
+                    string partnerId = regex.Match(response).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.DomainId);
-                    string domainID = regex.Match(response).Groups[2].Value;
+                    string domainId = regex.Match(response).Groups[2].Value;
+                    regex = new Regex(PluginSettings.Settings.Regexp.WindowId);
+                    string windowId = regex.Match(response).Groups[2].Value;
+                    
+                    regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
+                    string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
+                    regex = new Regex(PluginSettings.Settings.Regexp.SecretArray);
+                    string secretArray = regex.Match(scriptResponse).Groups[2].Value;
+                    regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                    var secretNumbers = regex.Matches(secretArray).Select(i => i.Groups[2].Value).ToArray();
+                    regex = new Regex(PluginSettings.Settings.Regexp.SecretValue);
+                    secretArray = string.Empty;
+                    foreach (Match match in regex.Matches(secretWindow)) {
+                        if (!string.IsNullOrEmpty(match.Groups[3].Value)) {
+                            secretArray += Base64Decode(secretNumbers[int.Parse(match.Groups[3].Value)]);
+                        } else {
+                            secretArray += match.Groups[5];
+                        }
+                    }
 
                     var o = new {
-                        a = int.Parse(partnerID),
-                        b = int.Parse(domainID),
+                        a = int.Parse(partnerId),
+                        b = int.Parse(domainId),
+                        d = windowId,
                         e = videoToken,
                         f = ProgramSettings.Settings.UserAgent
                     };
                     string q = JsonConvert.SerializeObject(o);
-                    q = CryptoManager.Encrypt(q, password, iv);
+                    q = CryptoManager.Encrypt(q, secretArray + password,  iv);
                     q = WebUtility.UrlEncode(q);
                     q = $"q={q}";
 
-                    response = HTTPUtility.PostRequest($"{PluginSettings.Settings.Links.Moonwalk}/vs", q);
 
-                    regex = new Regex(PluginSettings.Settings.Regexp.M3U8);
-                    if (regex.IsMatch(response)) {
-                        response = HTTPUtility.GetRequest(regex.Match(response).Groups[2].Value);
+                    regex = new Regex(PluginSettings.Settings.Regexp.Redirect);
+                    string moonwalkUrl = PluginSettings.Settings.Links.Moonwalk;
+                    response = string.Empty;
+                    for (int i = 0; i < 3; i++) {
+                        response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", q);
+                        if (regex.IsMatch(scriptResponse)) {
+                            moonwalkUrl = regex.Match(scriptResponse).Groups[2].Value;
+                        } else {
+                            break;
+                        }
 
-                        regex = new Regex(PluginSettings.Settings.Regexp.ExtList);
+                        response = string.Empty;
+                    }
 
-                        var baseItem = new Item() {
-                            Type = ItemType.FILE,
-                            ImageLink = PluginSettings.Settings.Icons.IcoVideo
-                        };
+                    if (!string.IsNullOrEmpty(response)) {
+                        regex = new Regex(PluginSettings.Settings.Regexp.M3U8);
+                        if (regex.IsMatch(response)) {
+                            response = HTTPUtility.GetRequest(regex.Match(response).Groups[2].Value);
 
-                        foreach (Match match in regex.Matches(response)) {
-                            var item = new Item(baseItem) {
-                                Name = match.Groups[2].Value,
-                                Link = match.Groups[4].Value
+                            regex = new Regex(PluginSettings.Settings.Regexp.ExtList);
+
+                            var baseItem = new Item() {
+                                Type = ItemType.FILE,
+                                ImageLink = PluginSettings.Settings.Icons.IcoVideo
                             };
-                            items.Add(item);
+
+                            foreach (Match match in regex.Matches(response)) {
+                                var item = new Item(baseItem) {
+                                    Name = match.Groups[2].Value,
+                                    Link = match.Groups[4].Value
+                                };
+                                items.Add(item);
+                            }
                         }
                     }
                 }
             }
 
             return items;
+        }
+
+        private static string Base64Decode(string text) {
+            byte[] data = Convert.FromBase64String(text);
+            return Encoding.UTF8.GetString(data);
         }
     }
 }
