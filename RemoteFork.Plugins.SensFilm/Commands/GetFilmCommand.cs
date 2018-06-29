@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetFilmCommand : ICommand {
@@ -61,7 +62,7 @@ namespace RemoteFork.Plugins {
                             var item = new Item(baseItem) {
                                 Name = match.Groups[6].Value,
                                 Link =
-                                    $"{KEY}{SensFilm.SEPARATOR}seasons{SensFilm.SEPARATOR}{match.Groups[3].Value}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(url)}"
+                                    $"{KEY}{PluginSettings.Settings.Separator}seasons{PluginSettings.Settings.Separator}{match.Groups[3].Value}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(url)}"
                             };
                             items.Add(item);
                         }
@@ -106,7 +107,7 @@ namespace RemoteFork.Plugins {
                         string seasonUrl = $"{url}?season={season}";
                         var item = new Item(baseItem) {
                             Name = $"Сезон {season}",
-                            Link = $"{KEY}{SensFilm.SEPARATOR}series{SensFilm.SEPARATOR}{WebUtility.UrlEncode(seasonUrl)}{SensFilm.SEPARATOR}{data[4]}"
+                            Link = $"{KEY}{PluginSettings.Settings.Separator}series{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(seasonUrl)}{PluginSettings.Settings.Separator}{data[4]}"
                         };
                         items.Add(item);
                     }
@@ -144,7 +145,7 @@ namespace RemoteFork.Plugins {
                         var item = new Item(baseItem) {
                             Name = $"Серия {episode}",
                             Link =
-                                $"{GetEpisodeCommand.KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(episodeUrl)}{SensFilm.SEPARATOR}{data[4]}"
+                                $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(episodeUrl)}{PluginSettings.Settings.Separator}{data[4]}"
                         };
                         items.Add(item);
                     }

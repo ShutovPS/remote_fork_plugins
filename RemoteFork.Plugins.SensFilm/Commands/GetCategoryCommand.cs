@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetCategoryCommand : ICommand {
@@ -39,7 +40,7 @@ namespace RemoteFork.Plugins {
                 string navigation = regex.Match(htmlText).Groups[2].Value;
                 if (!string.IsNullOrEmpty(navigation)) {
                     SensFilm.NextPageUrl =
-                        $"{KEY}{SensFilm.SEPARATOR}{WebUtility.UrlEncode(navigation)}";
+                        $"{KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(navigation)}";
                 }
             }
 
@@ -91,7 +92,7 @@ namespace RemoteFork.Plugins {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title}",
                 Link =
-                    $"{GetFilmCommand.KEY}{SensFilm.SEPARATOR}translations{SensFilm.SEPARATOR}{WebUtility.UrlEncode(link)}",
+                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 
