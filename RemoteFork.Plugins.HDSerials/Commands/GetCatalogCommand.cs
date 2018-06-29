@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetCatalogCommand : ICommand {
@@ -29,13 +30,14 @@ namespace RemoteFork.Plugins {
             foreach (var c in alpha) {
                 var item = new Item(baseItem) {
                     Name = c.ToString(),
-                    Link = $"{KEY}{HDSerials.SEPARATOR}{data[2]}{HDSerials.SEPARATOR}{c}"
+                    Link = $"{KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{c}"
                 };
                 items.Add(item);
             }
+
             var itemNumbers = new Item(baseItem) {
                 Name = "1-9",
-                Link = $"{KEY}{HDSerials.SEPARATOR}{data[2]}{HDSerials.SEPARATOR}1-9"
+                Link = $"{KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}1-9"
             };
             items.Add(itemNumbers);
 

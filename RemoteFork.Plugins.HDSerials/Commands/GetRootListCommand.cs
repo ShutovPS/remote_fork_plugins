@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetRootListCommand : ICommand {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
+
+            CheckUpdate(items, context);
 
             var baseItem = new Item() {
                 Type = ItemType.DIRECTORY
@@ -13,7 +17,7 @@ namespace RemoteFork.Plugins {
             var item = new Item(baseItem) {
                 Name = "LostFilm",
                 Link =
-                    $"{GetCategoryCommand.KEY}{HDSerials.SEPARATOR}serials{HDSerials.SEPARATOR}{WebUtility.UrlEncode("http://lostfilm.hdkino.biz/")}",
+                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode("http://lostfilm.hdkino.biz/")}",
                 ImageLink = "http://hdkino.biz/templates/kin/images/logos/lost.jpg",
                 Description =
                     "<img src=\"http://hdkino.biz/templates/kin/images/logos/lost.jpg\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
@@ -23,7 +27,7 @@ namespace RemoteFork.Plugins {
             item = new Item(baseItem) {
                 Name = "ColdFilm",
                 Link =
-                    $"{GetCategoryCommand.KEY}{HDSerials.SEPARATOR}serials{HDSerials.SEPARATOR}{WebUtility.UrlEncode("http://coldfilm.hdkino.biz/")}",
+                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode("http://coldfilm.hdkino.biz/")}",
                 ImageLink = "http://hdkino.biz/templates/kin/images/logos/cold.jpg",
                 Description =
                     "<img src=\"http://hdkino.biz/templates/kin/images/logos/cold.jpg\" alt =\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
@@ -31,6 +35,23 @@ namespace RemoteFork.Plugins {
             items.Add(item);
 
             return items;
+        }
+
+        private static void CheckUpdate(ICollection<Item> items, IPluginContext context) {
+            if (context != null) {
+                string latestVersion =
+                    context.GetLatestVersionNumber(typeof(HDSerials).GetCustomAttribute<PluginAttribute>().Id);
+                if (!string.IsNullOrEmpty(latestVersion)) {
+                    if (latestVersion != typeof(HDSerials).GetCustomAttribute<PluginAttribute>().Version) {
+                        var updateItem = new Item() {
+                            Name = $"Доступна новая версия: {latestVersion}",
+                            Link = "http://newversion.m3u",
+                            ImageLink = PluginSettings.Settings.Icons.NewVersion
+                        };
+                        items.Add(updateItem);
+                    }
+                }
+            }
         }
     }
 }

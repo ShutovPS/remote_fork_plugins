@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetCategoryCommand : ICommand {
@@ -16,7 +17,8 @@ namespace RemoteFork.Plugins {
                 var item = new Item() {
                     Name = "Поиск",
                     Type = ItemType.DIRECTORY,
-                    Link = $"{SearchSearialsCommand.KEY}{HDSerials.SEPARATOR}{data[2]}{HDSerials.SEPARATOR}{data[3]}",
+                    Link =
+                        $"{SearchSearialsCommand.KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{data[3]}",
                     SearchOn = "Поиск",
                     ImageLink =
                         "http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/256/Search-icon.png"
@@ -43,7 +45,7 @@ namespace RemoteFork.Plugins {
             if (data.Length < 5) {
                 var item = new Item() {
                     Name = "Каталог",
-                    Link = $"{GetCatalogCommand.KEY}{HDSerials.SEPARATOR}{url}",
+                    Link = $"{GetCatalogCommand.KEY}{PluginSettings.Settings.Separator}{url}",
                     Type = ItemType.DIRECTORY
 
                 };
@@ -76,7 +78,7 @@ namespace RemoteFork.Plugins {
                     regex = new Regex("(<a href=\")(.*?)(\">[a-zA-Zа-яА-Я]*?<\\/a>\\s*<div)");
                     if (regex.IsMatch(navigation)) {
                         HDSerials.NextPageUrl =
-                            $"{KEY}{HDSerials.SEPARATOR}serials{HDSerials.SEPARATOR}{WebUtility.UrlEncode(regex.Match(navigation).Groups[2].Value)}{HDSerials.SEPARATOR}";
+                            $"{KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(regex.Match(navigation).Groups[2].Value)}{PluginSettings.Settings.Separator}";
                     }
                 }
             }
@@ -94,25 +96,30 @@ namespace RemoteFork.Plugins {
             if (regex.IsMatch(text)) {
                 title = regex.Match(text).Groups[2].Value;
             }
+
             regex = new Regex("(<a href=\")(.*?)(\"><span)");
             if (regex.IsMatch(text)) {
                 link = regex.Match(text).Groups[2].Value;
             }
+
             regex = new Regex("(<!--TBegin:)(.*?)(\\|)");
             if (regex.IsMatch(text)) {
                 image = regex.Match(text).Groups[2].Value;
             }
+
             regex = new Regex("(<div class=\"custom-update\">)(.*?)(<\\/div>)");
             if (regex.IsMatch(text)) {
                 series = regex.Match(text).Groups[2].Value;
             }
 
-            string description = $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{series}";
+            string description =
+                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{series}";
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title} ({series})",
-                Link = $"{GetSerialCommand.KEY}{HDSerials.SEPARATOR}translations{HDSerials.SEPARATOR}{WebUtility.UrlEncode(link)}",
+                Link =
+                    $"{GetSerialCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 
