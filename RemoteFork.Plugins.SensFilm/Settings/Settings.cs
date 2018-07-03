@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.3f,
+            SettingsVersion = 1.4f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -34,7 +34,7 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Links = new Links() {
-                Site = "http://hdrezka.ag",
+                Site = "http://sensfilm.xyz",
                 Moonwalk = "http://moonwalk.cc"
             },
 
@@ -49,16 +49,21 @@ namespace RemoteFork.Plugins.Settings {
                 MetaImage = "(<meta property=\"og:image\" content=\")(.*?)([\"\\s\\/]*?>)",
                 MiniDescription = "(<div class=\"b-post__description_text\">\\s*)(.*?)(<\\s*\\/div>)",
 
-                Categories = "(<div class=\"b-content__inline_item\" data-id=\"\\d+\")([\\s\\S]*?)(<\\/div><\\/div>)",
-                FilmUrl = "(<a href=\")(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&\\/=]*))(\"><span class=\"b-navigation__next i-sprt\">(&nbsp;)?<\\/span><\\/a>)",
-                FullDescription = "(data-url=\")(.*?)(\">.*?<img src=\")(.*?)(\".*?<i class=\"entity\">)(.*?)(<\\/i>)((.*?<span class=\"info\">)(.*?)(<\\/span>))?(.*?.html\">)(.*?)(<\\/a>\\s*?<div>)(.*?)(<\\/div>)",
+                Categories = "(<div class=\"list-item\">)([\\s\\S]*?)(class=\"btn readmore\">)",
+                FilmUrl = "(<span>\\d+<\\/span>\\s*<a href=\")(.*?)(\")",
+                TitleDescription = "(<font color=\"#000000\">)(.*?)(<\\/font>)",
+                LinkDescription = "(<a href=\")(.*?)(\" class=\"item-thumbnail\">)",
+                ImageDescription = "(<img src=\")(.*?)(\")",
+                SeriesDescription = "(<p>\\s?<B>)(.*?)(<\\/B><\\/p)",
+                TranslateDescription = "(<\\/B>\\s*)(.+?)(<\\/p>)",
 
                 Script = "(<script src=\")(.*?)(\">)",
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
                 Password = "(e\\s*=\\s*\")(.*?)(\")",
-                IV = "(n\\s*=\\s*\")(.*?)(\")",
+                IV = "(,\\s?{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
+                IV0 = "iv\\s?:\\s?CryptoJS\\.(.*?\\()((r\\([\\\"x\\d]*?\\))|([\\w\\d]+))(\\)\\s*\\})",
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
@@ -92,7 +97,11 @@ namespace RemoteFork.Plugins.Settings {
 
         public string Categories { get; set; }
         public string FilmUrl { get; set; }
-        public string FullDescription { get; set; }
+        public string TitleDescription { get; set; }
+        public string LinkDescription { get; set; }
+        public string ImageDescription { get; set; }
+        public string SeriesDescription { get; set; }
+        public string TranslateDescription { get; set; }
 
         public string Script { get; set; }
         public string Host { get; set; }
@@ -100,6 +109,7 @@ namespace RemoteFork.Plugins.Settings {
         public string VideoManifest { get; set; }
         public string Password { get; set; }
         public string IV { get; set; }
+        public string IV0 { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
         public string DomainId { get; set; }

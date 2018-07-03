@@ -14,8 +14,7 @@ namespace RemoteFork.Plugins {
                 Type = ItemType.DIRECTORY,
                 Link = $"{SearchCommand.KEY}",
                 SearchOn = "Поиск",
-                ImageLink =
-                    "http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/256/Search-icon.png"
+                ImageLink = PluginSettings.Settings.Icons.IcoSearch
             };
             items.Add(item);
 

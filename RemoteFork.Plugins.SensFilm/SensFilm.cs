@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "sensfilm", Version = "0.0.2", Author = "fd_crash", Name = "SensFilm",
+    [PluginAttribute(Id = "sensfilm", Version = "0.0.3", Author = "fd_crash", Name = "SensFilm",
         Description = "Cамые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
         Github = "ShutovPS/RemoteFork.Plugins/SensFilm")]

@@ -29,13 +29,13 @@ namespace RemoteFork.Plugins {
         public static IEnumerable<Item> GetFilmsItemsFromHtml(string htmlText, bool search = false) {
             var items = new List<Item>();
 
-            var regex = new Regex("(<div class=\"list-item\">)([\\s\\S]*?)(class=\"btn readmore\">)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.Categories);
 
             foreach (Match match in regex.Matches(htmlText)) {
                 items.Add(GetItem(match.Value));
             }
 
-            regex = new Regex("(<span>\\d+<\\/span>\\s*<a href=\")(.*?)(\")");
+            regex = new Regex(PluginSettings.Settings.Regexp.FilmUrl);
             if (regex.IsMatch(htmlText)) {
                 string navigation = regex.Match(htmlText).Groups[2].Value;
                 if (!string.IsNullOrEmpty(navigation)) {
@@ -54,22 +54,22 @@ namespace RemoteFork.Plugins {
             string series = string.Empty;
             string translate = string.Empty;
 
-            var regex = new Regex("(<font color=\"#000000\">)(.*?)(<\\/font>)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.TitleDescription);
             if (regex.IsMatch(text)) {
                 title = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<a href=\")(.*?)(\" class=\"item-thumbnail\">)");
+            regex = new Regex(PluginSettings.Settings.Regexp.LinkDescription);
             if (regex.IsMatch(text)) {
                 link = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<img src=\")(.*?)(\")");
+            regex = new Regex(PluginSettings.Settings.Regexp.ImageDescription);
             if (regex.IsMatch(text)) {
                 image = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<p>\\s?<B>)(.*?)(<\\/B><\\/p)");
+            regex = new Regex(PluginSettings.Settings.Regexp.SeriesDescription);
             if (regex.IsMatch(text)) {
                 series = regex.Match(text).Groups[2].Value;
                 if (!string.IsNullOrEmpty(series)) {
@@ -77,7 +77,7 @@ namespace RemoteFork.Plugins {
                 }
             }
 
-            regex = new Regex("(<\\/B>\\s*)(.+?)(<\\/p>)");
+            regex = new Regex(PluginSettings.Settings.Regexp.TranslateDescription);
             if (regex.IsMatch(text)) {
                 translate = regex.Match(text).Groups[2].Value;
                 if (!string.IsNullOrEmpty(translate)) {

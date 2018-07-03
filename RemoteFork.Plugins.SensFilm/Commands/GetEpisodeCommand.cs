@@ -51,14 +51,26 @@ namespace RemoteFork.Plugins {
                     string script = regex.Match(scriptResponse).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.Password);
                     string password = regex.Match(script).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
 
-                    string iv = regex.Match(script).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                    var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
-                    matches = matches.OrderByDescending(i => i.Length);
-                    iv = matches.First();
-                    iv = Base64Decode(iv);
+                    string iv = string.Empty;
+                    regex = new Regex(PluginSettings.Settings.Regexp.IV0);
+                    if (regex.IsMatch(script)) {
+                        iv = regex.Match(script).Groups[4].Value;
+                        if (!string.IsNullOrEmpty(iv)) {
+                            regex = new Regex(string.Format(PluginSettings.Settings.Regexp.IV, iv));
+                            iv = regex.Match(script).Groups[2].Value;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(iv)) {
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
+                        iv = regex.Match(script).Groups[2].Value;
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                        var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
+                        matches = matches.OrderByDescending(i => i.Length);
+                        iv = matches.First();
+                        iv = Base64Decode(iv);
+                    }
 
                     regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
                     string videoToken = regex.Match(response).Groups[2].Value;
