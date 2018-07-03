@@ -18,10 +18,9 @@ namespace RemoteFork.Plugins {
                     Name = "Поиск",
                     Type = ItemType.DIRECTORY,
                     Link =
-                        $"{SearchSearialsCommand.KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{data[3]}",
+                        $"{SearchCommand.KEY}{PluginSettings.Settings.Separator}{data[2]}{PluginSettings.Settings.Separator}{data[3]}",
                     SearchOn = "Поиск",
-                    ImageLink =
-                        "http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/256/Search-icon.png"
+                    ImageLink = PluginSettings.Settings.Icons.IcoSearch
                 };
                 items.Add(item);
             }
@@ -62,20 +61,20 @@ namespace RemoteFork.Plugins {
         public static IEnumerable<Item> GetSerialsItems(string htmlText) {
             var items = new List<Item>();
 
-            var regex = new Regex("(<div class=\"left-col\">)([\\s\\S]*?)(<div class=\"right-col\">)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.LeftCol);
             if (regex.IsMatch(htmlText)) {
                 string leftCol = regex.Match(htmlText).Groups[2].Value;
 
-                regex = new Regex("(<div class=\"new-album-main\">)([\\s\\S]*?)(<\\/span><\\/a>)");
+                regex = new Regex(PluginSettings.Settings.Regexp.Categories);
 
                 foreach (Match match in regex.Matches(leftCol)) {
                     items.Add(GetItem(match.Value));
                 }
 
-                regex = new Regex("(<div class=\"navigation\">)([\\s\\S]*?)(<\\/div>)");
+                regex = new Regex(PluginSettings.Settings.Regexp.NavBar);
                 if (regex.IsMatch(htmlText)) {
                     string navigation = regex.Match(htmlText).Value;
-                    regex = new Regex("(<a href=\")(.*?)(\">[a-zA-Zа-яА-Я]*?<\\/a>\\s*<div)");
+                    regex = new Regex(PluginSettings.Settings.Regexp.FilmUrl);
                     if (regex.IsMatch(navigation)) {
                         HDSerials.NextPageUrl =
                             $"{KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(regex.Match(navigation).Groups[2].Value)}{PluginSettings.Settings.Separator}";
@@ -92,22 +91,22 @@ namespace RemoteFork.Plugins {
             string image = string.Empty;
             string series = string.Empty;
 
-            var regex = new Regex("(<span class=\"[\\w-]*?-title\".*?>)(.*?)(<\\/span>)");
+            var regex = new Regex(PluginSettings.Settings.Regexp.TitleDescription);
             if (regex.IsMatch(text)) {
                 title = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<a href=\")(.*?)(\"><span)");
+            regex = new Regex(PluginSettings.Settings.Regexp.LinkDescription);
             if (regex.IsMatch(text)) {
                 link = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<!--TBegin:)(.*?)(\\|)");
+            regex = new Regex(PluginSettings.Settings.Regexp.ImageDescription);
             if (regex.IsMatch(text)) {
                 image = regex.Match(text).Groups[2].Value;
             }
 
-            regex = new Regex("(<div class=\"custom-update\">)(.*?)(<\\/div>)");
+            regex = new Regex(PluginSettings.Settings.Regexp.SeriesDescription);
             if (regex.IsMatch(text)) {
                 series = regex.Match(text).Groups[2].Value;
             }
@@ -119,7 +118,7 @@ namespace RemoteFork.Plugins {
                 Type = ItemType.DIRECTORY,
                 Name = $"{title} ({series})",
                 Link =
-                    $"{GetSerialCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
+                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description
             };
 

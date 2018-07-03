@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text.RegularExpressions;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdserials", Version = "0.0.3", Author = "fd_crash", Name = "HDSerials",
+    [PluginAttribute(Id = "hdserials", Version = "0.0.4", Author = "fd_crash", Name = "HDSerials",
         Description = "Смотреть сериалы онлайн в хорошем качестве.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
         Github = "ShutovPS/RemoteFork.Plugins/HDSerials")]
@@ -29,8 +28,8 @@ namespace RemoteFork.Plugins {
                     break;
                 default:
                     switch (arg[1]) {
-                        case SearchSearialsCommand.KEY:
-                            command = new SearchSearialsCommand();
+                        case SearchCommand.KEY:
+                            command = new SearchCommand();
                             break;
                         case GetCategoryCommand.KEY:
                             command = new GetCategoryCommand();
@@ -38,8 +37,8 @@ namespace RemoteFork.Plugins {
                         case GetCatalogCommand.KEY:
                             command = new GetCatalogCommand();
                             break;
-                        case GetSerialCommand.KEY:
-                            command = new GetSerialCommand();
+                        case GetFilmCommand.KEY:
+                            command = new GetFilmCommand();
                             break;
                         case GetEpisodeCommand.KEY:
                             command = new GetEpisodeCommand();

@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.3f,
+            SettingsVersion = 1.4f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -34,7 +34,9 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Links = new Links() {
-                Site = "http://hdrezka.ag",
+                Site = "http://hdkino.biz",
+                LostFilm = "http://lostfilm.hdkino.biz",
+                ColdFilm = "http://coldfilm.hdkino.biz",
                 Moonwalk = "http://moonwalk.cc"
             },
 
@@ -45,20 +47,26 @@ namespace RemoteFork.Plugins.Settings {
                 Seasons = "(seasons:\\s\\[)(.*?)(\\])",
                 Episodes = "(episodes:\\s\\[)(.*?)(\\])",
 
-                MetaTitle = "(<meta property=\"og:title\" content=\")(.*?)([\"\\s\\/]*?>)",
-                MetaImage = "(<meta property=\"og:image\" content=\")(.*?)([\"\\s\\/]*?>)",
-                MiniDescription = "(<div class=\"b-post__description_text\">\\s*)(.*?)(<\\s*\\/div>)",
+                MetaTitle = "(<meta property=\"og:title\" content=\")(.*?)(\">)",
+                MetaImage = "(<meta property=\"og:image\" content=\")(.*?)(\">)",
+                MiniDescription = "(<div class=\"full-news-content\">.*?\"><\\/span>\\s*)(.*)",
 
-                Categories = "(<div class=\"b-content__inline_item\" data-id=\"\\d+\")([\\s\\S]*?)(<\\/div><\\/div>)",
-                FilmUrl = "(<a href=\")(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&\\/=]*))(\"><span class=\"b-navigation__next i-sprt\">(&nbsp;)?<\\/span><\\/a>)",
-                FullDescription = "(data-url=\")(.*?)(\">.*?<img src=\")(.*?)(\".*?<i class=\"entity\">)(.*?)(<\\/i>)((.*?<span class=\"info\">)(.*?)(<\\/span>))?(.*?.html\">)(.*?)(<\\/a>\\s*?<div>)(.*?)(<\\/div>)",
+                LeftCol = "(<div class=\"left-col\">)([\\s\\S]*?)(<div class=\"right-col\">)",
+                Categories = "(<div class=\"new-album-main\">)([\\s\\S]*?)(<\\/span><\\/a>)",
+                NavBar = "(<div class=\"navigation\">)([\\s\\S]*?)(<\\/div>)",
+                FilmUrl = "(<a href=\")(.*?)(\">[a-zA-Zà-ÿÀ-ß]*?<\\/a>\\s*<div)",
+                TitleDescription = "(<span class=\"[\\w-]*?-title\".*?>)(.*?)(<\\/span>)",
+                LinkDescription = "(<a href=\")(.*?)(\"><span)",
+                ImageDescription = "(<!--TBegin:)(.*?)(\\|)",
+                SeriesDescription = "(<div class=\"custom-update\">)(.*?)(<\\/div>)",
 
                 Script = "(<script src=\")(.*?)(\">)",
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
                 Password = "(e\\s*=\\s*\")(.*?)(\")",
-                IV = "(n\\s*=\\s*\")(.*?)(\")",
+                IV = "(,\\s?{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
+                IV0 = "iv\\s?:\\s?CryptoJS\\.(.*?\\()((r\\([\\\"x\\d]*?\\))|([\\w\\d]+))(\\)\\s*\\})",
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
@@ -90,9 +98,14 @@ namespace RemoteFork.Plugins.Settings {
         public string MetaImage { get; set; }
         public string MiniDescription { get; set; }
 
+        public string LeftCol { get; set; }
         public string Categories { get; set; }
+        public string NavBar { get; set; }
         public string FilmUrl { get; set; }
-        public string FullDescription { get; set; }
+        public string TitleDescription { get; set; }
+        public string LinkDescription { get; set; }
+        public string ImageDescription { get; set; }
+        public string SeriesDescription { get; set; }
 
         public string Script { get; set; }
         public string Host { get; set; }
@@ -100,6 +113,7 @@ namespace RemoteFork.Plugins.Settings {
         public string VideoManifest { get; set; }
         public string Password { get; set; }
         public string IV { get; set; }
+        public string IV0 { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
         public string DomainId { get; set; }
@@ -120,6 +134,8 @@ namespace RemoteFork.Plugins.Settings {
     [Serializable]
     public class Links {
         public string Site { get; set; }
+        public string LostFilm { get; set; }
+        public string ColdFilm { get; set; }
         public string Moonwalk { get; set; }
     }
 

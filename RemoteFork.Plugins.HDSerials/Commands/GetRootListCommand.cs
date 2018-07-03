@@ -17,20 +17,20 @@ namespace RemoteFork.Plugins {
             var item = new Item(baseItem) {
                 Name = "LostFilm",
                 Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode("http://lostfilm.hdkino.biz/")}",
-                ImageLink = "http://hdkino.biz/templates/kin/images/logos/lost.jpg",
+                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode($"{PluginSettings.Settings.Links.LostFilm}/")}",
+                ImageLink = $"{PluginSettings.Settings.Links.Site}/templates/kin/images/logos/lost.jpg",
                 Description =
-                    "<img src=\"http://hdkino.biz/templates/kin/images/logos/lost.jpg\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
+                    $"<img src=\"{PluginSettings.Settings.Links.Site}/templates/kin/images/logos/lost.jpg\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
 
             };
             items.Add(item);
             item = new Item(baseItem) {
                 Name = "ColdFilm",
                 Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode("http://coldfilm.hdkino.biz/")}",
-                ImageLink = "http://hdkino.biz/templates/kin/images/logos/cold.jpg",
+                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}serials{PluginSettings.Settings.Separator}{WebUtility.UrlEncode($"{PluginSettings.Settings.Links.ColdFilm}/")}",
+                ImageLink = $"{PluginSettings.Settings.Links.Site}/templates/kin/images/logos/cold.jpg",
                 Description =
-                    "<img src=\"http://hdkino.biz/templates/kin/images/logos/cold.jpg\" alt =\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
+                    $"<img src=\"{PluginSettings.Settings.Links.Site}/templates/kin/images/logos/cold.jpg\" alt =\"\" align=\"left\" style=\"width:240px;float:left;\"/>"
             };
             items.Add(item);
 

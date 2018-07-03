@@ -3,7 +3,7 @@ using System.Net;
 using RemoteFork.Network;
 
 namespace RemoteFork.Plugins {
-    public class SearchSearialsCommand : ICommand {
+    public class SearchCommand : ICommand {
         public const string KEY = "search";
 
         public List<Item> GetItems(IPluginContext context, params string[] data) {

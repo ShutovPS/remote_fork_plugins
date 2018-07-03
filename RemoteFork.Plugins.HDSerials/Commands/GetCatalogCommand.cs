@@ -49,7 +49,7 @@ namespace RemoteFork.Plugins {
 
             string url = WebUtility.UrlDecode(data[2]);
 
-            string response = HTTPUtility.GetRequest(string.Concat(url, $"/catalog/{data[3]}"));
+            string response = HTTPUtility.GetRequest(string.Concat(url, $"/{KEY}/{data[3]}"));
 
             items.AddRange(GetCategoryCommand.GetSerialsItems(response));
 
