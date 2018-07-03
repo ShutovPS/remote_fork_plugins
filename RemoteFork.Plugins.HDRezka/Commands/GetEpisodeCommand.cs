@@ -38,8 +38,11 @@ namespace RemoteFork.Plugins {
                 string scriptHost = regex.Match(response).Groups[2].Value;
                 regex = new Regex(PluginSettings.Settings.Regexp.Proto);
                 string scriptProto = regex.Match(response).Groups[2].Value;
-
-                scriptUrl = $"{scriptProto}{scriptHost}{scriptUrl}";
+                string moonwalkUrl = PluginSettings.Settings.Links.Moonwalk;
+                if (!string.IsNullOrEmpty(scriptHost) && !string.IsNullOrEmpty(scriptProto)) {
+                    moonwalkUrl = $"{scriptProto}{scriptHost}";
+                }
+                scriptUrl = $"{moonwalkUrl}{scriptUrl}";
 
                 string scriptResponse = HTTPUtility.GetRequest(scriptUrl);
 
@@ -48,14 +51,26 @@ namespace RemoteFork.Plugins {
                     string script = regex.Match(scriptResponse).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.Password);
                     string password = regex.Match(script).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
 
-                    string iv = regex.Match(script).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                    var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
-                    matches = matches.OrderByDescending(i => i.Length);
-                    iv = matches.First();
-                    iv = Base64Decode(iv);
+                    string iv = string.Empty;
+                    regex = new Regex(PluginSettings.Settings.Regexp.IV0);
+                    if (regex.IsMatch(script)) {
+                        iv = regex.Match(script).Groups[4].Value;
+                        if (!string.IsNullOrEmpty(iv)) {
+                            regex = new Regex(string.Format(PluginSettings.Settings.Regexp.IV, iv));
+                            iv = regex.Match(script).Groups[2].Value;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(iv)) {
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
+                        iv = regex.Match(script).Groups[2].Value;
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                        var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
+                        matches = matches.OrderByDescending(i => i.Length);
+                        iv = matches.First();
+                        iv = Base64Decode(iv);
+                    }
 
                     regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
                     string videoToken = regex.Match(response).Groups[2].Value;
@@ -65,7 +80,7 @@ namespace RemoteFork.Plugins {
                     string domainId = regex.Match(response).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.WindowId);
                     string windowId = regex.Match(response).Groups[2].Value;
-                    
+
                     regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
                     string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.SecretArray);
@@ -90,24 +105,11 @@ namespace RemoteFork.Plugins {
                         f = ProgramSettings.Settings.UserAgent
                     };
                     string q = JsonConvert.SerializeObject(o);
-                    q = CryptoManager.Encrypt(q, secretArray + password,  iv);
+                    q = CryptoManager.Encrypt(q, secretArray + password, iv);
                     q = WebUtility.UrlEncode(q);
                     q = $"q={q}";
 
-
-                    regex = new Regex(PluginSettings.Settings.Regexp.Redirect);
-                    string moonwalkUrl = PluginSettings.Settings.Links.Moonwalk;
-                    response = string.Empty;
-                    for (int i = 0; i < 3; i++) {
-                        response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", q);
-                        if (regex.IsMatch(scriptResponse)) {
-                            moonwalkUrl = regex.Match(scriptResponse).Groups[2].Value;
-                        } else {
-                            break;
-                        }
-
-                        response = string.Empty;
-                    }
+                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", q);
 
                     if (!string.IsNullOrEmpty(response)) {
                         regex = new Regex(PluginSettings.Settings.Regexp.M3U8);

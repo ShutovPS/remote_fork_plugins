@@ -7,20 +7,7 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
 
-            if (context != null) {
-                string latestVersion =
-                    context.GetLatestVersionNumber(typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Id);
-                if (!string.IsNullOrEmpty(latestVersion)) {
-                    if (latestVersion != typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Version) {
-                        var updateItem = new Item() {
-                            Name = $"Доступна новая версия: {latestVersion}",
-                            Link = "http://newversion.m3u",
-                            ImageLink = PluginSettings.Settings.Icons.NewVersion
-                        };
-                        items.Add(updateItem);
-                    }
-                }
-            }
+            CheckUpdate(items, context);
 
             var item = new Item() {
                 Name = "Поиск",
@@ -72,6 +59,23 @@ namespace RemoteFork.Plugins {
             items.Add(item);
 
             return items;
+        }
+
+        private static void CheckUpdate(ICollection<Item> items, IPluginContext context) {
+            if (context != null) {
+                string latestVersion =
+                    context.GetLatestVersionNumber(typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Id);
+                if (!string.IsNullOrEmpty(latestVersion)) {
+                    if (latestVersion != typeof(HDRezka).GetCustomAttribute<PluginAttribute>().Version) {
+                        var updateItem = new Item() {
+                            Name = $"Доступна новая версия: {latestVersion}",
+                            Link = "http://newversion.m3u",
+                            ImageLink = PluginSettings.Settings.Icons.NewVersion
+                        };
+                        items.Add(updateItem);
+                    }
+                }
+            }
         }
     }
 }

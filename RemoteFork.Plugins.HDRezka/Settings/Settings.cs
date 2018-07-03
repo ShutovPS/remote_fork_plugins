@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.3f,
+            SettingsVersion = 1.4f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -58,7 +58,8 @@ namespace RemoteFork.Plugins.Settings {
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
                 Password = "(e\\s*=\\s*\")(.*?)(\")",
-                IV = "(n\\s*=\\s*\")(.*?)(\")",
+                IV = "(,\\s?{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
+                IV0 = "iv\\s?:\\s?CryptoJS\\.(.*?\\()((r\\([\\\"x\\d]*?\\))|([\\w\\d]+))(\\)\\s*\\})",
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
@@ -99,6 +100,7 @@ namespace RemoteFork.Plugins.Settings {
         public string Proto { get; set; }
         public string VideoManifest { get; set; }
         public string Password { get; set; }
+        public string IV0 { get; set; }
         public string IV { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
