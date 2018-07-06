@@ -5,12 +5,12 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdrezka", Version = "0.0.4", Author = "fd_crash", Name = "HDRezka",
+    [PluginAttribute(Id = "moonwalk", Version = "0.0.1", Author = "fd_crash", Name = "Moonwalk",
         Description = "Cмотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
-        Github = "ShutovPS/RemoteFork.Plugins/HDRezka")]
-    public class HDRezka : IPlugin {
-        public static readonly Logger Logger = new Logger(typeof(HDRezka));
+        Github = "ShutovPS/RemoteFork.Plugins/Moonwalk")]
+    public class Moonwalk : IPlugin {
+        public static readonly Logger Logger = new Logger(typeof(Moonwalk));
 
         public static string NextPageUrl = null;
         

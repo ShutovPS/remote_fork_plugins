@@ -24,10 +24,10 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            return GetEpisodesData(url, response);
+            return GetEpisodesData(response);
         }
 
-        private static List<Item> GetEpisodesData(string url, string response) {
+        private static List<Item> GetEpisodesData(string response) {
             var items = new List<Item>();
 
             var regex = new Regex(PluginSettings.Settings.Regexp.Script);
@@ -38,7 +38,7 @@ namespace RemoteFork.Plugins {
                 string scriptHost = regex.Match(response).Groups[2].Value;
                 regex = new Regex(PluginSettings.Settings.Regexp.Proto);
                 string scriptProto = regex.Match(response).Groups[2].Value;
-                string moonwalkUrl = PluginSettings.Settings.Links.Moonwalk;
+                string moonwalkUrl = PluginSettings.Settings.Links.Site;
                 if (!string.IsNullOrEmpty(scriptHost) && !string.IsNullOrEmpty(scriptProto)) {
                     moonwalkUrl = $"{scriptProto}{scriptHost}";
                 }

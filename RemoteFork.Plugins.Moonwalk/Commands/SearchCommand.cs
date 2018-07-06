@@ -10,15 +10,15 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context, params string[] data) {
             var items = new List<Item>();
 
-            string url = $"{PluginSettings.Settings.Links.Site}/index.php";
+            string url = $"{PluginSettings.Settings.Links.Api}/videos.json";
 
             string searchText = WebUtility.UrlEncode(context.GetRequestParams()["search"]);
 
-            string searchData = "?do=search&subaction=search&q=" + WebUtility.UrlEncode(searchText);
+            string searchData = $"?api_token={PluginSettings.Settings.Key}&title={searchText}";
 
             string response = HTTPUtility.GetRequest(url + searchData);
 
-            items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(response));
+            items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(url, response, true));
 
             return items;
         }

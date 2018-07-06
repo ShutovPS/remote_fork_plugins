@@ -8,6 +8,8 @@ namespace RemoteFork.Plugins.Settings {
         public float SettingsVersion { get; set; }
         
         public string PluginPath { get; set; }
+
+        public string Key { get; set; }
         
         public Icons Icons { get; set; }
         
@@ -16,9 +18,11 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.4f,
+            SettingsVersion = 1.0f,
             PluginPath = "pluginPath",
             Separator = ';',
+
+            Key = "997e626ac4d9ce453e6c920785db8f45",
 
             Icons = new Icons() {
                 IcoError = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolError.png",
@@ -34,24 +38,15 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Links = new Links() {
-                Site = "http://hdrezka.ag",
-                Moonwalk = "http://moonwalk.cc"
+                Api = "http://moonwalk.cc/api",
+                Site = "http://moonwalk.cc"
             },
 
             Regexp = new Regexp() {
-                Iframe = "(<iframe.*?src=\")(.*?iframe)(.*?\")",
                 Translations = "(translations:\\s*)(\\[\\[.*?\\]\\])",
                 Translation = "(\\[)(\")(.*?)(\")(,\")(.*?)(\"\\])",
                 Seasons = "(seasons:\\s\\[)(.*?)(\\])",
                 Episodes = "(episodes:\\s\\[)(.*?)(\\])",
-
-                MetaTitle = "(<meta property=\"og:title\" content=\")(.*?)([\"\\s\\/]*?>)",
-                MetaImage = "(<meta property=\"og:image\" content=\")(.*?)([\"\\s\\/]*?>)",
-                MiniDescription = "(<div class=\"b-post__description_text\">\\s*)(.*?)(<\\s*\\/div>)",
-
-                Categories = "(<div class=\"b-content__inline_item\" data-id=\"\\d+\")([\\s\\S]*?)(<\\/div><\\/div>)",
-                FilmUrl = "(<a href=\")(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&\\/=]*))(\"><span class=\"b-navigation__next i-sprt\">(&nbsp;)?<\\/span><\\/a>)",
-                FullDescription = "(data-url=\")(.*?)(\">.*?<img src=\")(.*?)(\".*?<i class=\"entity\">)(.*?)(<\\/i>)((.*?<span class=\"info\">)(.*?)(<\\/span>))?(.*?.html\">)(.*?)(<\\/a>\\s*?<div>)(.*?)(<\\/div>)",
 
                 Script = "(<script src=\")(.*?)(\">)",
                 Host = "(host:\\s?\')(.*?)(\')",
@@ -121,8 +116,8 @@ namespace RemoteFork.Plugins.Settings {
 
     [Serializable]
     public class Links {
+        public string Api { get; set; }
         public string Site { get; set; }
-        public string Moonwalk { get; set; }
     }
 
     [Serializable]

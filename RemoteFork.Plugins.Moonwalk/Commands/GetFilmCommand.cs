@@ -33,23 +33,18 @@ namespace RemoteFork.Plugins {
 
             string url = WebUtility.UrlDecode(data[3]);
 
-            string response = HTTPUtility.GetRequest(url);
+            var header = new Dictionary<string, string>() {
+                {"Referer", url}
+            };
+            string moonwalkUrl = url;
+            string moonwalkResponse = HTTPUtility.GetRequest(moonwalkUrl, header);
 
-            var regex = new Regex(PluginSettings.Settings.Regexp.Iframe);
-            if (regex.IsMatch((response))) {
-                var header = new Dictionary<string, string>() {
-                    {"Referer", url}
-                };
-                string moonwalkUrl = regex.Match(response).Groups[2].Value;
-                string moonwalkResponse = HTTPUtility.GetRequest(moonwalkUrl, header);
-
-                items.AddRange(GetSerialTranslationsData(moonwalkUrl, data[3], response, moonwalkResponse));
-            }
+            items.AddRange(GetSerialTranslationsData(moonwalkUrl, data[3], moonwalkResponse));
 
             return items;
         }
 
-        private static IEnumerable<Item> GetSerialTranslationsData(string url, string referer, string response,
+        private static IEnumerable<Item> GetSerialTranslationsData(string url, string referer,
             string moonwalkResponse) {
             var items = new List<Item>();
 
@@ -58,11 +53,8 @@ namespace RemoteFork.Plugins {
             if (regex.IsMatch(moonwalkResponse)) {
                 string translations = regex.Match(moonwalkResponse).Groups[2].Value;
 
-                string description = GetDescription(response);
-
                 var baseItem = new Item() {
                     Type = ItemType.DIRECTORY,
-                    Description = description,
                     ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
 
@@ -90,7 +82,7 @@ namespace RemoteFork.Plugins {
             };
             string url = WebUtility.UrlDecode(data[3]);
             if (!url.Contains("://")) {
-                url = $"{PluginSettings.Settings.Links.Moonwalk}/serial/{data[3]}/iframe";
+                url = $"{PluginSettings.Settings.Links.Site}/serial/{data[3]}/iframe";
             }
 
             string response = HTTPUtility.GetRequest(url, header);
@@ -169,32 +161,6 @@ namespace RemoteFork.Plugins {
             }
 
             return GetEpisodeCommand.GetEpisodes(url, referer);
-        }
-
-        private static string GetDescription(string text) {
-            string title = string.Empty;
-            string image = string.Empty;
-            string description = string.Empty;
-
-            var regex = new Regex(PluginSettings.Settings.Regexp.MetaTitle);
-            if (regex.IsMatch(text)) {
-                title = regex.Match(text).Groups[2].Value;
-            }
-
-            regex = new Regex(PluginSettings.Settings.Regexp.MetaImage);
-            if (regex.IsMatch(text)) {
-                image = regex.Match(text).Groups[2].Value;
-            }
-
-            regex = new Regex(PluginSettings.Settings.Regexp.MiniDescription);
-            if (regex.IsMatch(text)) {
-                description = regex.Match(text).Groups[2].Value;
-            }
-
-            description =
-                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{description}";
-
-            return description;
         }
     }
 }
