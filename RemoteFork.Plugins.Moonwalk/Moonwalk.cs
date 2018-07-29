@@ -5,7 +5,7 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "moonwalk", Version = "0.0.1", Author = "fd_crash", Name = "Moonwalk",
+    [PluginAttribute(Id = "moonwalk", Version = "0.0.2", Author = "fd_crash", Name = "Moonwalk",
         Description = "Cмотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
         Github = "ShutovPS/RemoteFork.Plugins/Moonwalk")]
