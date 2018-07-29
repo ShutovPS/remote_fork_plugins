@@ -15,8 +15,10 @@ namespace RemoteFork.Plugins.Settings {
         
         public Regexp Regexp { get; set; }
 
+        public string SecretConst { get; set; }
+
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.4f,
+            SettingsVersion = 1.5f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -38,6 +40,8 @@ namespace RemoteFork.Plugins.Settings {
                 Moonwalk = "http://moonwalk.cc"
             },
 
+            SecretConst = "7316d0c4",
+
             Regexp = new Regexp() {
                 Iframe = "(<iframe.*?src=\")(.*?iframe)(.*?\")",
                 Translations = "(translations:\\s*)(\\[\\[.*?\\]\\])",
@@ -57,16 +61,20 @@ namespace RemoteFork.Plugins.Settings {
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
-                Password = "(e\\s*=\\s*\")(.*?)(\")",
-                IV = "(,\\s?{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
+
+                Password = "(var\\s+)(\\w)(\\s*=\\s*\")(.*?)(\")",
+                IV = "(\\s?\\b{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
                 IV0 = "iv\\s?:\\s?CryptoJS\\.(.*?\\()((r\\([\\\"x\\d]*?\\))|([\\w\\d]+))(\\)\\s*\\})",
+                Ncodes = "(\\w\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
+                Ncode = "(\"(.*?)\")",
+
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
                 WindowId = "(window\\[\'[\\d\\w]+\'\\]\\s?=\\s?\')(.*?)(\')",
-                Ncodes = "(n\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
-                Ncode = "(\"(.*?)\")",
 
+
+                SecretConst = "(\\(([\\d\\w]+)\\s*\\+\\s*{0}\\))",
                 SecretArray = "(var _[\\d\\w]+\\s?=\\s?\\[)(\".*?\")(\\];)",
                 SecretWindow = "(window\\[)([_\\+\\s\\w\\d\\(\\)\"]*?)(\\]\\s?=\\s?)(.*?)(;)",
                 SecretValue = "((_[\\d\\w]+\\(\"[\\w\\d]*?(\\d)\"\\))|(\"(.*?)\"))",
@@ -109,6 +117,7 @@ namespace RemoteFork.Plugins.Settings {
         public string Ncodes { get; set; }
         public string Ncode { get; set; }
 
+        public string SecretConst { get; set; }
         public string SecretArray { get; set; }
         public string SecretWindow { get; set; }
         public string SecretValue { get; set; }
