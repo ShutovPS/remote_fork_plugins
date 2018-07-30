@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins.Settings {
         public string SecretConst { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.5f,
+            SettingsVersion = 1.6f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -62,9 +62,9 @@ namespace RemoteFork.Plugins.Settings {
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
 
-                Password = "(var\\s+)(\\w)(\\s*=\\s*\")(.*?)(\")",
+                Password = "var(\\s+)(\\w)(\\s*=\\s*\")([\\d\\w]*?)(\")([^;\\.])",
                 IV = "(\\s?\\b{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
-                IV0 = "iv\\s?:\\s?CryptoJS\\.(.*?\\()((r\\([\\\"x\\d]*?\\))|([\\w\\d]+))(\\)\\s*\\})",
+                IV0 = "iv\\s?:\\s?CryptoJS.*(\\[?\\(((\\\"[\\dx]*\\\")|([\\w\\d]*))\\)\\]?)(\\s*?\\}\\))",
                 Ncodes = "(\\w\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
                 Ncode = "(\"(.*?)\")",
 
@@ -72,8 +72,7 @@ namespace RemoteFork.Plugins.Settings {
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
                 WindowId = "(window\\[\'[\\d\\w]+\'\\]\\s?=\\s?\')(.*?)(\')",
-
-
+                
                 SecretConst = "(\\(([\\d\\w]+)\\s*\\+\\s*{0}\\))",
                 SecretArray = "(var _[\\d\\w]+\\s?=\\s?\\[)(\".*?\")(\\];)",
                 SecretWindow = "(window\\[)([_\\+\\s\\w\\d\\(\\)\"]*?)(\\]\\s?=\\s?)(.*?)(;)",

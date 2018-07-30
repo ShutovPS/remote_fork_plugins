@@ -50,8 +50,44 @@ namespace RemoteFork.Plugins {
                 if (regex.IsMatch(scriptResponse)) {
                     string script = regex.Match(scriptResponse).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.Password);
-                    string password = regex.Match(script).Groups[4].Value;
-                    string passwordVariable = regex.Match(script).Groups[2].Value;
+
+                    string password = string.Empty;
+                    string passwordVariable = string.Empty;
+                    string secretValue = string.Empty;
+                    if (regex.IsMatch(script)) {
+                        password = regex.Match(script).Groups[4].Value;
+                        passwordVariable = regex.Match(script).Groups[2].Value;
+
+                        regex = new Regex(string.Format(PluginSettings.Settings.Regexp.SecretConst, passwordVariable));
+                        if (regex.IsMatch((scriptResponse))) {
+                            secretValue = PluginSettings.Settings.SecretConst;
+                        } else {
+                            regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
+                            string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
+                            regex = new Regex(PluginSettings.Settings.Regexp.SecretArray);
+                            string secretArray = regex.Match(scriptResponse).Groups[2].Value;
+                            regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                            var secretNumbers = regex.Matches(secretArray).Select(i => i.Groups[2].Value).ToArray();
+                            regex = new Regex(PluginSettings.Settings.Regexp.SecretValue);
+                            foreach (Match match in regex.Matches(secretWindow)) {
+                                if (!string.IsNullOrEmpty(match.Groups[3].Value)) {
+                                    secretValue += Base64Decode(secretNumbers[int.Parse(match.Groups[3].Value)]);
+                                } else {
+                                    secretValue += match.Groups[5];
+                                }
+                            }
+                        }
+                    } else {
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
+                        password = regex.Match(script).Groups[2].Value;
+                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
+                        var matches = regex.Matches(password).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
+                        if (matches.Any()) {
+                            matches = matches.OrderByDescending(i => i.Length);
+                            password = matches.First();
+                            password = Base64Decode(password);
+                        }
+                    }
 
                     string iv = string.Empty;
                     regex = new Regex(PluginSettings.Settings.Regexp.IV0);
@@ -72,27 +108,6 @@ namespace RemoteFork.Plugins {
                             matches = matches.OrderByDescending(i => i.Length);
                             iv = matches.First();
                             iv = Base64Decode(iv);
-                        }
-                    }
-
-                    regex = new Regex(string.Format(PluginSettings.Settings.Regexp.SecretConst, passwordVariable));
-                    string secretValue = string.Empty;
-                    if (regex.IsMatch((scriptResponse))) {
-                        secretValue = PluginSettings.Settings.SecretConst;
-                    } else {
-                        regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
-                        string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
-                        regex = new Regex(PluginSettings.Settings.Regexp.SecretArray);
-                        string secretArray = regex.Match(scriptResponse).Groups[2].Value;
-                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                        var secretNumbers = regex.Matches(secretArray).Select(i => i.Groups[2].Value).ToArray();
-                        regex = new Regex(PluginSettings.Settings.Regexp.SecretValue);
-                        foreach (Match match in regex.Matches(secretWindow)) {
-                            if (!string.IsNullOrEmpty(match.Groups[3].Value)) {
-                                secretValue += Base64Decode(secretNumbers[int.Parse(match.Groups[3].Value)]);
-                            } else {
-                                secretValue += match.Groups[5];
-                            }
                         }
                     }
 
