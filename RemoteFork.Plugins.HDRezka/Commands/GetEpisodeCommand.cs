@@ -56,11 +56,22 @@ namespace RemoteFork.Plugins {
                     string secretValue = string.Empty;
                     if (regex.IsMatch(script)) {
                         password = regex.Match(script).Groups[4].Value;
-                        passwordVariable = regex.Match(script).Groups[2].Value;
+                        passwordVariable = string.Format("{0}\\[\"{1}\"\\]", regex.Match(script).Groups[3].Value,
+                            regex.Match(script).Groups[5].Value);
 
-                        regex = new Regex(string.Format(PluginSettings.Settings.Regexp.SecretConst, passwordVariable));
-                        if (regex.IsMatch((scriptResponse))) {
-                            secretValue = PluginSettings.Settings.SecretConst;
+                        regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Password2, passwordVariable));
+                        if (regex.IsMatch((script))) {
+                            secretValue = regex.Match(script).Value;
+                            regex = new Regex(PluginSettings.Settings.Regexp.Password3);
+                            var values = regex.Matches(secretValue);
+                            secretValue = string.Empty;
+
+                            foreach (Match value in values) {
+                                regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Password4, value.Groups[1].Value));
+                                secretValue += regex.Match(script).Groups[3].Value;
+                            }
+
+                            password = string.Empty;
                         } else {
                             regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
                             string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
