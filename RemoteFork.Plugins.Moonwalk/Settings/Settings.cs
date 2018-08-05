@@ -20,7 +20,7 @@ namespace RemoteFork.Plugins.Settings {
         public string SecretConst { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.2f,
+            SettingsVersion = 1.3f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -56,8 +56,12 @@ namespace RemoteFork.Plugins.Settings {
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
+                
+                Password = "(\\b\\w\\s*=\\s*)((\\w+)(\\[\"([\\w\\d]+)\"\\]))",
+                Password2 = "({0})(\\s*=\\s*)(\\w+\\.([\\w\\d]+(\\s*\\+\\s*)?))+",
+                Password3 = "(\\w+\\.([\\w\\d]+))(\\s*\\+\\s*)?",
+                Password4 = "({0})(\\s*=\\s*\")(.*?)(\")",
 
-                Password = "var(\\s+)(\\w)(\\s*=\\s*\")([\\d\\w]*?)(\")([^;\\.])",
                 IV = "(\\s?\\b{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
                 IV0 = "iv\\s?:\\s?CryptoJS.*(\\[?\\(((\\\"[\\dx]*\\\")|([\\w\\d]*))\\)\\]?)(\\s*?\\}\\))",
                 Ncodes = "(\\w\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
@@ -95,6 +99,9 @@ namespace RemoteFork.Plugins.Settings {
         public string Proto { get; set; }
         public string VideoManifest { get; set; }
         public string Password { get; set; }
+        public string Password2 { get; set; }
+        public string Password3 { get; set; }
+        public string Password4 { get; set; }
         public string IV0 { get; set; }
         public string IV { get; set; }
         public string VideoToken { get; set; }
