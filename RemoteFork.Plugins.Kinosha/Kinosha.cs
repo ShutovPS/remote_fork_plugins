@@ -5,7 +5,7 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "kinosha", Version = "0.0.1", Author = "fd_crash", Name = "Kinosha",
+    [PluginAttribute(Id = "kinosha", Version = "0.0.2", Author = "fd_crash", Name = "Kinosha",
         Description = "Лучший онлайн кинотеатр рунета. На сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
         Github = "ShutovPS/RemoteFork.Plugins/Kinosha")]

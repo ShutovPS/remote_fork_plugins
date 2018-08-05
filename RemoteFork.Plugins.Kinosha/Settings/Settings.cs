@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.2f,
+            SettingsVersion = 1.3f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -34,8 +34,8 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Links = new Links() {
-                Site = "http://kinosha.su",
-                ApiSite = "http://api.kinosha.su",
+                Site = "http://kinosha.se",
+                ApiSite = "http://api.kinosha.se",
             },
 
             Regexp = new Regexp() {
