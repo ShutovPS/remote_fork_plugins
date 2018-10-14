@@ -17,16 +17,20 @@ namespace RemoteFork.Plugins.Settings {
         
         public Regexp Regexp { get; set; }
 
-        public string SecretConst { get; set; }
+        public Encryption Encryption { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.3f,
+            SettingsVersion = 1.5f,
             PluginPath = "pluginPath",
             Separator = ';',
 
             Key = "997e626ac4d9ce453e6c920785db8f45",
 
-            SecretConst = "7316d0c4",
+            Encryption = new Encryption() {
+                IV = "fd5dee1b81bcb7fbdc03f5228de6a96b",
+                Key = "3e680ab05a87b0b66c9c3a3ddbd03d88e483c99fa969bf32d62d000883580e4b",
+                Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini"
+            },
 
             Icons = new Icons() {
                 IcoError = "http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolError.png",
@@ -56,34 +60,27 @@ namespace RemoteFork.Plugins.Settings {
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
                 VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
-                
-                Password = "(\\b\\w\\s*=\\s*)((\\w+)(\\[\"([\\w\\d]+)\"\\]))",
-                Password2 = "({0})(\\s*=\\s*)(\\w+\\.([\\w\\d]+(\\s*\\+\\s*)?))+",
-                Password3 = "(\\w+\\.([\\w\\d]+))(\\s*\\+\\s*)?",
-                Password4 = "({0})(\\s*=\\s*\")(.*?)(\")",
-
-                IV = "(\\s?\\b{0}\\s?=\\s?\")([\\w\\s]*?)(\")",
-                IV0 = "iv\\s?:\\s?CryptoJS.*(\\[?\\(((\\\"[\\dx]*\\\")|([\\w\\d]*))\\)\\]?)(\\s*?\\}\\))",
-                Ncodes = "(\\w\\s?=\\s?\\[)(\"(.*?)\")+(\\])",
-                Ncode = "(\"(.*?)\")",
 
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
                 WindowId = "(window\\[\'[\\d\\w]+\'\\]\\s?=\\s?\')(.*?)(\')",
 
-
-                SecretConst = "(\\(([\\d\\w]+)\\s*\\+\\s*{0}\\))",
-                SecretArray = "(var _[\\d\\w]+\\s?=\\s?\\[)(\".*?\")(\\];)",
-                SecretWindow = "(window\\[)([_\\+\\s\\w\\d\\(\\)\"]*?)(\\]\\s?=\\s?)(.*?)(;)",
-                SecretValue = "((_[\\d\\w]+\\(\"[\\w\\d]*?(\\d)\"\\))|(\"(.*?)\"))",
-
                 M3U8 = "(\"m3u8\":\\s*\")(.*?)(\")",
                 ExtList = "(#EXT-X.*?=)(\\d+x\\d+)([\\s\\S]*?)(http:.*)",
 
                 Redirect = "(<a href=\")(http.+?iframe)(.*?\">)",
+
+                Ini = "({0}\\s*\\=\\s*\\\")([\\d\\w]+)(\\\")",
             }
         };
+    }
+
+    [Serializable]
+    public class Encryption {
+        public string IV { get; set; }
+        public string Key { get; set; }
+        public string Url { get; set; }
     }
 
     [Serializable]
@@ -98,28 +95,17 @@ namespace RemoteFork.Plugins.Settings {
         public string Host { get; set; }
         public string Proto { get; set; }
         public string VideoManifest { get; set; }
-        public string Password { get; set; }
-        public string Password2 { get; set; }
-        public string Password3 { get; set; }
-        public string Password4 { get; set; }
-        public string IV0 { get; set; }
-        public string IV { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
         public string DomainId { get; set; }
         public string WindowId { get; set; }
-        public string Ncodes { get; set; }
-        public string Ncode { get; set; }
-
-        public string SecretConst { get; set; }
-        public string SecretArray { get; set; }
-        public string SecretWindow { get; set; }
-        public string SecretValue { get; set; }
 
         public string M3U8 { get; set; }
         public string ExtList { get; set; }
 
         public string Redirect { get; set; }
+
+        public string Ini { get; set; }
     }
 
     [Serializable]
