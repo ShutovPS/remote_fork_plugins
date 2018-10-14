@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,90 +37,17 @@ namespace RemoteFork.Plugins {
                 string scriptHost = regex.Match(response).Groups[2].Value;
                 regex = new Regex(PluginSettings.Settings.Regexp.Proto);
                 string scriptProto = regex.Match(response).Groups[2].Value;
-                string moonwalkUrl = PluginSettings.Settings.Links.Moonwalk;
+                string moonwalkUrl = PluginSettings.Settings.Links.Site;
                 if (!string.IsNullOrEmpty(scriptHost) && !string.IsNullOrEmpty(scriptProto)) {
                     moonwalkUrl = $"{scriptProto}{scriptHost}";
                 }
+
                 scriptUrl = $"{moonwalkUrl}{scriptUrl}";
 
                 string scriptResponse = HTTPUtility.GetRequest(scriptUrl);
 
                 regex = new Regex(PluginSettings.Settings.Regexp.VideoManifest);
                 if (regex.IsMatch(scriptResponse)) {
-                    string script = regex.Match(scriptResponse).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Password);
-
-                    string password = string.Empty;
-                    string passwordVariable = string.Empty;
-                    string secretValue = string.Empty;
-                    if (regex.IsMatch(script)) {
-                        password = regex.Match(script).Groups[4].Value;
-                        passwordVariable = string.Format("{0}\\[\"{1}\"\\]", regex.Match(script).Groups[3].Value,
-                            regex.Match(script).Groups[5].Value);
-
-                        regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Password2, passwordVariable));
-                        if (regex.IsMatch((script))) {
-                            secretValue = regex.Match(script).Value;
-                            regex = new Regex(PluginSettings.Settings.Regexp.Password3);
-                            var values = regex.Matches(secretValue);
-                            secretValue = string.Empty;
-
-                            foreach (Match value in values) {
-                                regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Password4, value.Groups[1].Value));
-                                secretValue += regex.Match(script).Groups[3].Value;
-                            }
-
-                            password = string.Empty;
-                        } else {
-                            regex = new Regex(PluginSettings.Settings.Regexp.SecretWindow);
-                            string secretWindow = regex.Match(scriptResponse).Groups[4].Value;
-                            regex = new Regex(PluginSettings.Settings.Regexp.SecretArray);
-                            string secretArray = regex.Match(scriptResponse).Groups[2].Value;
-                            regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                            var secretNumbers = regex.Matches(secretArray).Select(i => i.Groups[2].Value).ToArray();
-                            regex = new Regex(PluginSettings.Settings.Regexp.SecretValue);
-                            foreach (Match match in regex.Matches(secretWindow)) {
-                                if (!string.IsNullOrEmpty(match.Groups[3].Value)) {
-                                    secretValue += Base64Decode(secretNumbers[int.Parse(match.Groups[3].Value)]);
-                                } else {
-                                    secretValue += match.Groups[5];
-                                }
-                            }
-                        }
-                    } else {
-                        regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
-                        password = regex.Match(script).Groups[2].Value;
-                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                        var matches = regex.Matches(password).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
-                        if (matches.Any()) {
-                            matches = matches.OrderByDescending(i => i.Length);
-                            password = matches.First();
-                            password = Base64Decode(password);
-                        }
-                    }
-
-                    string iv = string.Empty;
-                    regex = new Regex(PluginSettings.Settings.Regexp.IV0);
-                    if (regex.IsMatch(script)) {
-                        iv = regex.Match(script).Groups[4].Value;
-                        if (!string.IsNullOrEmpty(iv)) {
-                            regex = new Regex(string.Format(PluginSettings.Settings.Regexp.IV, iv));
-                            iv = regex.Match(script).Groups[2].Value;
-                        }
-                    }
-
-                    if (string.IsNullOrEmpty(iv) || iv.Length == 0) {
-                        regex = new Regex(PluginSettings.Settings.Regexp.Ncodes);
-                        iv = regex.Match(script).Groups[2].Value;
-                        regex = new Regex(PluginSettings.Settings.Regexp.Ncode);
-                        var matches = regex.Matches(iv).Select(i => i.Groups[2].Value).Where(i => i.EndsWith('='));
-                        if (matches.Any()) {
-                            matches = matches.OrderByDescending(i => i.Length);
-                            iv = matches.First();
-                            iv = Base64Decode(iv);
-                        }
-                    }
-
                     regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
                     string videoToken = regex.Match(response).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.PartnerId);
@@ -134,37 +60,22 @@ namespace RemoteFork.Plugins {
                     var o = new {
                         a = int.Parse(partnerId),
                         b = int.Parse(domainId),
-                        c = true,
-                        d = windowId,
+                        c = false,
+                        //                      d = windowId,
                         e = videoToken,
                         f = ProgramSettings.Settings.UserAgent
                     };
                     string q = JsonConvert.SerializeObject(o);
-                    q = CryptoManager.Encrypt(q, secretValue + password, iv);
-                    q = WebUtility.UrlEncode(q);
-                    q = $"q={q}";
 
-                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", q);
+                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", EncryptQ(q));
 
-                    if (!string.IsNullOrEmpty(response)) {
-                        regex = new Regex(PluginSettings.Settings.Regexp.M3U8);
-                        if (regex.IsMatch(response)) {
-                            response = HTTPUtility.GetRequest(regex.Match(response).Groups[2].Value);
+                    items = ParseEpisodesData(response);
 
-                            regex = new Regex(PluginSettings.Settings.Regexp.ExtList);
+                    if (items.Count == 0) {
+                        if (UpdateMoonwalkKeys()) {
+                            response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", EncryptQ(q));
 
-                            var baseItem = new Item() {
-                                Type = ItemType.FILE,
-                                ImageLink = PluginSettings.Settings.Icons.IcoVideo
-                            };
-
-                            foreach (Match match in regex.Matches(response)) {
-                                var item = new Item(baseItem) {
-                                    Name = match.Groups[2].Value,
-                                    Link = match.Groups[4].Value
-                                };
-                                items.Add(item);
-                            }
+                            items = ParseEpisodesData(response);
                         }
                     }
                 }
@@ -173,9 +84,73 @@ namespace RemoteFork.Plugins {
             return items;
         }
 
-        private static string Base64Decode(string text) {
-            byte[] data = Convert.FromBase64String(text);
-            return Encoding.UTF8.GetString(data);
+        private static string EncryptQ(string q) {
+            string eq = CryptoManager.Encrypt(q, PluginSettings.Settings.Encryption.Key,
+                PluginSettings.Settings.Encryption.IV);
+
+            eq = WebUtility.UrlEncode(eq);
+            eq = $"q={eq}";
+
+            return eq;
+        }
+
+        private static List<Item> ParseEpisodesData(string response) {
+            var items = new List<Item>();
+
+            if (!string.IsNullOrEmpty(response)) {
+                var regex = new Regex(PluginSettings.Settings.Regexp.M3U8);
+                if (regex.IsMatch(response)) {
+                    response = HTTPUtility.GetRequest(regex.Match(response).Groups[2].Value);
+
+                    regex = new Regex(PluginSettings.Settings.Regexp.ExtList);
+
+                    var baseItem = new Item() {
+                        Type = ItemType.FILE,
+                        ImageLink = PluginSettings.Settings.Icons.IcoVideo
+                    };
+
+                    foreach (Match match in regex.Matches(response)) {
+                        var item = new Item(baseItem) {
+                            Name = match.Groups[2].Value,
+                            Link = match.Groups[4].Value
+                        };
+                        items.Add(item);
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        private static bool UpdateMoonwalkKeys() {
+            bool result = false;
+            string response = HTTPUtility.GetRequest(PluginSettings.Settings.Encryption.Url);
+
+            try {
+                var regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Ini, "iv"));
+                string iv = regex.Match(response).Groups[2].Value;
+                if (!string.IsNullOrEmpty(iv)) {
+                    PluginSettings.Settings.Encryption.IV = iv;
+                    result = true;
+                }
+            } catch (Exception) {
+            }
+
+            try {
+                var regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Ini, "key"));
+                string key = regex.Match(response).Groups[2].Value;
+                if (!string.IsNullOrEmpty(key)) {
+                    PluginSettings.Settings.Encryption.Key = key;
+                    result = true;
+                }
+            } catch (Exception) {
+            }
+
+            if (result) {
+                PluginSettings.Instance.Save();
+            }
+
+            return result;
         }
     }
 }
