@@ -56,6 +56,8 @@ namespace RemoteFork.Plugins {
                     string domainId = regex.Match(response).Groups[2].Value;
                     regex = new Regex(PluginSettings.Settings.Regexp.WindowId);
                     string windowId = regex.Match(response).Groups[2].Value;
+                    regex = new Regex(PluginSettings.Settings.Regexp.Ref);
+                    string scriptRef = regex.Match(response).Groups[2].Value;
 
                     var o = new {
                         a = int.Parse(partnerId),
@@ -67,13 +69,15 @@ namespace RemoteFork.Plugins {
                     };
                     string q = JsonConvert.SerializeObject(o);
 
-                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", EncryptQ(q));
+                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                        string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
                     items = ParseEpisodesData(response);
 
                     if (items.Count == 0) {
                         if (UpdateMoonwalkKeys()) {
-                            response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs", EncryptQ(q));
+                            response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                                string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
                             items = ParseEpisodesData(response);
                         }
@@ -89,7 +93,6 @@ namespace RemoteFork.Plugins {
                 PluginSettings.Settings.Encryption.IV);
 
             eq = WebUtility.UrlEncode(eq);
-            eq = $"q={eq}";
 
             return eq;
         }
