@@ -20,7 +20,7 @@ namespace RemoteFork.Plugins.Settings {
         public Encryption Encryption { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.5f,
+            SettingsVersion = 1.6f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -65,6 +65,7 @@ namespace RemoteFork.Plugins.Settings {
                 PartnerId = "(partner_id:\\s*)(\\d+)",
                 DomainId = "(domain_id:\\s*)(\\d+)",
                 WindowId = "(window\\[\'[\\d\\w]+\'\\]\\s?=\\s?\')(.*?)(\')",
+                Ref = "(ref:\\s*\\\')(.*?)(\\\')",
 
                 M3U8 = "(\"m3u8\":\\s*\")(.*?)(\")",
                 ExtList = "(#EXT-X.*?=)(\\d+x\\d+)([\\s\\S]*?)(http:.*)",
@@ -99,6 +100,7 @@ namespace RemoteFork.Plugins.Settings {
         public string PartnerId { get; set; }
         public string DomainId { get; set; }
         public string WindowId { get; set; }
+        public string Ref { get; set; }
 
         public string M3U8 { get; set; }
         public string ExtList { get; set; }
