@@ -5,7 +5,7 @@ using RemoteFork.Settings;
 namespace RemoteFork.Plugins.Settings { 
     public class PluginSettings : AbstractSettings<PluginSettings, Settings> {
         static PluginSettings() {
-            fileName = Path.Combine("Plugins", typeof(Kinosha).GetCustomAttribute<PluginAttribute>().Id + ".json");
+            fileName = Path.Combine("Plugins", typeof(Filmix).GetCustomAttribute<PluginAttribute>().Id + ".json");
             defaultSettings = Settings.DefaultSettings;
         }
 

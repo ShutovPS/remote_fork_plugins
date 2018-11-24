@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace RemoteFork.Plugins.Settings {
     [Serializable]
@@ -8,6 +9,8 @@ namespace RemoteFork.Plugins.Settings {
         public float SettingsVersion { get; set; }
         
         public string PluginPath { get; set; }
+
+        public List<string> IgnoreQualities { get; set; }
         
         public Icons Icons { get; set; }
         
@@ -16,7 +19,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.3f,
+            SettingsVersion = 0.1f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -34,51 +37,47 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Links = new Links() {
-                Site = "http://kinosha.se",
-                ApiSite = "http://api.kinosha.se",
+                Site = "http://filmix.cc"
             },
 
+            IgnoreQualities = new List<string>() { },
+
             Regexp = new Regexp() {
-                NextUrl = "(<div class=\"next\"><a href=\")(.*?)(\"\\s?class=\"next\">)",
-                Categories = "(<div class=\"col-xs-3-line item\")([\\s\\S]*?)(<div class=\"clearfix\">)",
-                MiniDescription = "(<a href=\")(.*?)(\">)(.*?<img src=\")(.*?)(\")(.*?title=\')(.*?)(\'>)",
-                SerialDescription = "(<em class=\'se\'>)(.*?)(<)(.*?<em class=\'ep\'>)(.*?)(<)",
-                IdAndType = "(<div id=\"pl.*?data-type=\")(\\w+)(\".*?data-key=\")(\\d+)(\")",
-
-                Quality = "(<span class=\"li link-cat\">)(.+?)(<\\/span>)",
-                Description = "(<div class=\"discription\">)(.*?)(<\\/div>)",
-                Title = "(class=\"title\">[\\s]*?<span>[\\s]*?)(\\S[\\s\\S]*?\\S)([\\s]*?<\\/span>)",
-
-                Poster = "(<a href=\")(.*?)(\"\\s?class=\"hs\">)",
-                DescriptionNs = "(<div class=\"film-disciption ns\">\\s*)(.*?)(\\s?<\\/div>)",
-                QualitynNs = "(class=\"quality\">)(.*?)(<)",
-                TitleNs = "(<h1 class=\"title\">[\\s]*?)(\\S[\\s\\S]*?\\S)([\\s]*?<\\/h1>)",
+                FullDescription = "(<div class=\"short\">)([\\s\\S]*?)(<div class=\"panel-wrap\">)",
+                Title = "(itemprop=\"name\" content=\")(.*?)(\")",
+                Quality = "(<div class=\"quality\">\\s*)(.*?)(\\s*<\\/div>)",
+                Translation = "(<div class=\"item translate\">.*?class=\"item-content\">\\s*)(.*?)(\\s*<\\/)",
+                Description = "(itemprop=\"description\">\\s*)(.*?)(\\s*<\\/)",
+                Link = "(itemprop=\"url\" href=\"\\s*.*?\\/)(\\d+)(-.*?\\s*\")",
+                Poster = "(<img src=\"\\s*)(.*?)(\\s*\")",
+                Category = "(<div class=\"item category\">.*?class=\"item-content\">\\s*)(.*?)(\\s*<\\/)",
+                AddInfo = "(<span class=\"added-info\">\\s*)(.*?)(\\s*<)",
+                NextPage = "(<a data-number=\")(\\d+)(\"\\s*href=\")(.*?)(\"\\s*class=\"next icon-arowRight)",
+                FileQualityArray = "(.*?)(\\[.*?\\])(.*)",
+                FileQuality = "[\\d\\w]+",
             }
         };
     }
 
     [Serializable]
     public class Regexp {
-        public string Categories { get; set; }
-        public string NextUrl { get; set; }
-        public string MiniDescription { get; set; }
-        public string SerialDescription { get; set; }
-        public string IdAndType { get; set; }
-
-        public string Quality { get; set; }
-        public string Description { get; set; }
+        public string FullDescription { get; set; }
         public string Title { get; set; }
-
+        public string Quality { get; set; }
+        public string Translation { get; set; }
+        public string Description { get; set; }
+        public string Link { get; set; }
         public string Poster { get; set; }
-        public string DescriptionNs { get; set; }
-        public string QualitynNs { get; set; }
-        public string TitleNs { get; set; }
+        public string Category { get; set; }
+        public string AddInfo { get; set; }
+        public string NextPage { get; set; }
+        public string FileQualityArray { get; set; }
+        public string FileQuality { get; set; }
     }
 
     [Serializable]
     public class Links {
         public string Site { get; set; }
-        public string ApiSite { get; set; }
     }
 
     [Serializable]

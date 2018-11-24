@@ -5,12 +5,12 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "kinosha", Version = "0.0.2", Author = "fd_crash", Name = "Kinosha",
-        Description = "Лучший онлайн кинотеатр рунета. На сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра.",
-        ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
-        Github = "ShutovPS/RemoteFork.Plugins/Kinosha")]
-    public class Kinosha : IPlugin {
-        public static readonly Logger Logger = new Logger(typeof(Kinosha));
+    [PluginAttribute(Id = "filmix", Version = "0.0.1", Author = "fd_crash", Name = "Filmix",
+        Description = "Смотреть онлайн фильмы и сериалы бесплатно.",
+        ImageLink = "http://filmix.cc/templates/Filmix/media/img/filmix.png",
+        Github = "ShutovPS/RemoteFork.Plugins/Filmix")]
+    public class Filmix : IPlugin {
+        public static readonly Logger Logger = new Logger(typeof(Filmix));
 
         public static string NextPageUrl = null;
         
@@ -39,6 +39,9 @@ namespace RemoteFork.Plugins {
                             break;
                         case GetFilmCommand.KEY:
                             command = new GetFilmCommand();
+                            break;
+                        case GetEpisodeCommand.KEY:
+                            command = new GetEpisodeCommand();
                             break;
                     }
 
