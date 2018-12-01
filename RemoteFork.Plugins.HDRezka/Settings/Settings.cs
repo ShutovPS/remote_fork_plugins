@@ -41,8 +41,8 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Encryption = new Encryption() {
-                IV = "fd5dee1b81bcb7fbdc03f5228de6a96b",
-                Key = "3e680ab05a87b0b66c9c3a3ddbd03d88e483c99fa969bf32d62d000883580e4b",
+                IV = "cdadf0b5b6373f1356240a050b885954",
+                Key = "93deaf2d247d62b47376beb209f6128d03a60768198a2f4f7bd8e903ac5df65f",
                 Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini"
             },
 
@@ -64,7 +64,6 @@ namespace RemoteFork.Plugins.Settings {
                 Script = "(<script src=\")(.*?)(\">)",
                 Host = "(host:\\s?\')(.*?)(\')",
                 Proto = "(proto:\\s?\')(.*?)(\')",
-                VideoManifest = "(getVideoManifests:\\s*function)([\\s\\S]*?)(onGetManifestError)",
 
                 VideoToken = "(video_token:\\s*\')(.*?)(\')",
                 PartnerId = "(partner_id:\\s*)(\\d+)",
@@ -108,7 +107,6 @@ namespace RemoteFork.Plugins.Settings {
         public string Script { get; set; }
         public string Host { get; set; }
         public string Proto { get; set; }
-        public string VideoManifest { get; set; }
         public string VideoToken { get; set; }
         public string PartnerId { get; set; }
         public string DomainId { get; set; }
