@@ -27,8 +27,8 @@ namespace RemoteFork.Plugins.Settings {
             Key = "997e626ac4d9ce453e6c920785db8f45",
 
             Encryption = new Encryption() {
-                IV = "fd5dee1b81bcb7fbdc03f5228de6a96b",
-                Key = "3e680ab05a87b0b66c9c3a3ddbd03d88e483c99fa969bf32d62d000883580e4b",
+                IV = "cdadf0b5b6373f1356240a050b885954",
+                Key = "93deaf2d247d62b47376beb209f6128d03a60768198a2f4f7bd8e903ac5df65f",
                 Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini"
             },
 

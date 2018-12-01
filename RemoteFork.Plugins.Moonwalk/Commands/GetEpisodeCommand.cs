@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RemoteFork.Network;
@@ -32,7 +31,6 @@ namespace RemoteFork.Plugins {
             var regex = new Regex(PluginSettings.Settings.Regexp.Script);
 
             if (regex.IsMatch(response)) {
-                string scriptUrl = regex.Match(response).Groups[2].Value;
                 regex = new Regex(PluginSettings.Settings.Regexp.Host);
                 string scriptHost = regex.Match(response).Groups[2].Value;
                 regex = new Regex(PluginSettings.Settings.Regexp.Proto);
@@ -42,45 +40,38 @@ namespace RemoteFork.Plugins {
                     moonwalkUrl = $"{scriptProto}{scriptHost}";
                 }
 
-                scriptUrl = $"{moonwalkUrl}{scriptUrl}";
+                regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
+                string videoToken = regex.Match(response).Groups[2].Value;
+                regex = new Regex(PluginSettings.Settings.Regexp.PartnerId);
+                string partnerId = regex.Match(response).Groups[2].Value;
+                regex = new Regex(PluginSettings.Settings.Regexp.DomainId);
+                string domainId = regex.Match(response).Groups[2].Value;
+                regex = new Regex(PluginSettings.Settings.Regexp.WindowId);
+                string windowId = regex.Match(response).Groups[2].Value;
+                regex = new Regex(PluginSettings.Settings.Regexp.Ref);
+                string scriptRef = regex.Match(response).Groups[2].Value;
 
-                string scriptResponse = HTTPUtility.GetRequest(scriptUrl);
+                var o = new {
+                    a = int.Parse(partnerId),
+                    b = int.Parse(domainId),
+                    c = false,
+                    //                      d = windowId,
+                    e = videoToken,
+                    f = ProgramSettings.Settings.UserAgent
+                };
+                string q = JsonConvert.SerializeObject(o);
 
-                regex = new Regex(PluginSettings.Settings.Regexp.VideoManifest);
-                if (regex.IsMatch(scriptResponse)) {
-                    regex = new Regex(PluginSettings.Settings.Regexp.VideoToken);
-                    string videoToken = regex.Match(response).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.PartnerId);
-                    string partnerId = regex.Match(response).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.DomainId);
-                    string domainId = regex.Match(response).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.WindowId);
-                    string windowId = regex.Match(response).Groups[2].Value;
-                    regex = new Regex(PluginSettings.Settings.Regexp.Ref);
-                    string scriptRef = regex.Match(response).Groups[2].Value;
+                response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                    string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
-                    var o = new {
-                        a = int.Parse(partnerId),
-                        b = int.Parse(domainId),
-                        c = false,
-                        //                      d = windowId,
-                        e = videoToken,
-                        f = ProgramSettings.Settings.UserAgent
-                    };
-                    string q = JsonConvert.SerializeObject(o);
+                items = ParseEpisodesData(response);
 
-                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
-                        string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
+                if (items.Count == 0) {
+                    if (UpdateMoonwalkKeys()) {
+                        response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                            string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
-                    items = ParseEpisodesData(response);
-
-                    if (items.Count == 0) {
-                        if (UpdateMoonwalkKeys()) {
-                            response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
-                                string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
-
-                            items = ParseEpisodesData(response);
-                        }
+                        items = ParseEpisodesData(response);
                     }
                 }
             }
