@@ -65,24 +65,19 @@ namespace RemoteFork.Plugins {
             if (filmModel != null) {
                 var video = filmModel.Message.Translations.Video;
                 if (video != null && video.Count > 0) {
-                    if (video.Count > 1) {
-                        foreach (var translation in video) {
-                            var item = new Item(baseItem) {
-                                Name = translation.Key
-                            };
-                            if (filmModel.Message.Translations.Pl == "yes") {
-                                item.Link =
-                                    $"{KEY}{PluginSettings.Settings.Separator}playlist{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
-                            } else {
-                                item.Link =
-                                    $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
-                            }
-
-                            items.Add(item);
+                    foreach (var translation in video) {
+                        var item = new Item(baseItem) {
+                            Name = translation.Key
+                        };
+                        if (filmModel.Message.Translations.Pl == "yes") {
+                            item.Link =
+                                $"{KEY}{PluginSettings.Settings.Separator}playlist{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
+                        } else {
+                            item.Link =
+                                $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
                         }
-                    } else {
-                        items.AddRange(
-                            GetEpisodeCommand.GetEpisodes(LinkDecode(video.First().Value)));
+
+                        items.Add(item);
                     }
                 }
             }
@@ -103,10 +98,10 @@ namespace RemoteFork.Plugins {
         private static IEnumerable<Item> GetSerialSeriesData(string response) {
             var items = new List<Item>();
 
-            SerialModel filmModel = null;
+            SerialModel[] filmModel = null;
 
             try {
-                filmModel = JsonConvert.DeserializeObject<SerialModel>(response);
+                filmModel = JsonConvert.DeserializeObject<SerialModel[]>(response);
             } catch (Exception exception) {
                 Filmix.Logger.LogError(exception);
             }
@@ -117,10 +112,10 @@ namespace RemoteFork.Plugins {
                     ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
 
-                foreach (var seasons in filmModel.Playlist) {
-                    foreach (var episode in seasons.Playlist) {
+                foreach (var season in filmModel) {
+                    foreach (var episode in season.Folder) {
                         var item = new Item(baseItem) {
-                            Name = string.Format("Сезон {0} Серия {1}", episode.Season, episode.SerieId),
+                            Name = episode.Title,
                             Link =
                                 $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(episode.File)}"
                         };

@@ -21,7 +21,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 0.2f,
+            SettingsVersion = 0.3f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -60,7 +60,7 @@ namespace RemoteFork.Plugins.Settings {
                 Category = "(<div class=\"item category\">.*?class=\"item-content\">\\s*)(.*?)(\\s*<\\/)",
                 AddInfo = "(<span class=\"added-info\">\\s*)(.*?)(\\s*<)",
                 NextPage = "(<a data-number=\")(\\d+)(\"\\s*href=\")(.*?)(\"\\s*class=\"next icon-arowRight)",
-                FileQualityArray = "(.*?)(\\[.*?\\])(.*)",
+                FileQualityArray = "(\\[(.*?)\\])(.*)",
                 FileQuality = "[\\d\\w]+",
             }
         };

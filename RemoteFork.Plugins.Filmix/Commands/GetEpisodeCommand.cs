@@ -14,25 +14,23 @@ namespace RemoteFork.Plugins {
         public static List<Item> GetEpisodes(string url) {
             var items = new List<Item>();
 
-            var regex = new Regex(PluginSettings.Settings.Regexp.FileQualityArray);
-            if (regex.IsMatch(url)) {
-                string qualities = regex.Match(url).Groups[2].Value;
-                var regex2 = new Regex(PluginSettings.Settings.Regexp.FileQuality);
-                var baseItem = new Item() {
-                    Type = ItemType.FILE,
-                    ImageLink = PluginSettings.Settings.Icons.IcoVideo
-                };
+            var episodes = url.Split(",");
 
-                foreach (Match match in regex2.Matches(qualities)) {
-                    if (PluginSettings.Settings.IgnoreQualities != null &&
-                        !PluginSettings.Settings.IgnoreQualities.Contains(match.Value)) {
-                        var item = new Item(baseItem) {
-                            Name = match.Value,
-                            Link = string.Concat(regex.Match(url).Groups[1].Value, match.Value,
-                                regex.Match(url).Groups[3].Value)
-                        };
-                        items.Add(item);
-                    }
+            var baseItem = new Item() {
+                Type = ItemType.FILE,
+                ImageLink = PluginSettings.Settings.Icons.IcoVideo
+            };
+
+            foreach (string episode in episodes) {
+                var match = new Regex(PluginSettings.Settings.Regexp.FileQualityArray).Match(episode);
+
+                if (PluginSettings.Settings.IgnoreQualities != null &&
+                    !PluginSettings.Settings.IgnoreQualities.Contains(match.Groups[2].Value)) {
+                    var item = new Item(baseItem) {
+                        Name = match.Groups[2].Value,
+                        Link = match.Groups[3].Value
+                    };
+                    items.Add(item);
                 }
             }
 

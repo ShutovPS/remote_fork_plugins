@@ -5,7 +5,7 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "filmix", Version = "0.0.2", Author = "fd_crash", Name = "Filmix",
+    [PluginAttribute(Id = "filmix", Version = "0.0.3", Author = "fd_crash", Name = "Filmix",
         Description = "Смотреть онлайн фильмы и сериалы бесплатно.",
         ImageLink = "http://filmix.cc/templates/Filmix/media/img/filmix.png",
         Github = "ShutovPS/RemoteFork.Plugins/Filmix")]
