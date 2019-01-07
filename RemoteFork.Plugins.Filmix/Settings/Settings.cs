@@ -11,6 +11,8 @@ namespace RemoteFork.Plugins.Settings {
         public string PluginPath { get; set; }
 
         public List<string> IgnoreQualities { get; set; }
+
+        public Encryption Encryption { get; set; }
         
         public Icons Icons { get; set; }
         
@@ -19,7 +21,7 @@ namespace RemoteFork.Plugins.Settings {
         public Regexp Regexp { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 0.1f,
+            SettingsVersion = 0.2f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -41,6 +43,11 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             IgnoreQualities = new List<string>() { },
+
+            Encryption = new Encryption() {
+                Tokens = new List<string>() { "\\", "//Y2VyY2EudHJvdmEuc2FnZ2V6emE=", "//a2lub2NvdmVyLnc5OC5uamJo", "//c2ljYXJpby4yMi5tb3ZpZXM=" },
+                Url = "https://gist.githubusercontent.com/ShutovPS/79f88cfb66f96edc81970ebec74206cc/raw/filmix.tokens",
+            },
 
             Regexp = new Regexp() {
                 FullDescription = "(<div class=\"short\">)([\\s\\S]*?)(<div class=\"panel-wrap\">)",
@@ -78,6 +85,12 @@ namespace RemoteFork.Plugins.Settings {
     [Serializable]
     public class Links {
         public string Site { get; set; }
+    }
+
+    [Serializable]
+    public class Encryption {
+        public string Url { get; set; }
+        public List<string> Tokens { get; set; }
     }
 
     [Serializable]

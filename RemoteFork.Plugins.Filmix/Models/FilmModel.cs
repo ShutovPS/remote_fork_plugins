@@ -16,8 +16,8 @@ namespace RemoteFork.Plugins {
     }
 
     public class TranslationsModel {
-        [JsonProperty("html5", NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, string> Html5 { get; set; }
+        [JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, string> Video { get; set; }
 
         [JsonProperty("pl")]
         public string Pl { get; set; }

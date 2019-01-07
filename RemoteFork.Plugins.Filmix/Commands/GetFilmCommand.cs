@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RemoteFork.Network;
@@ -62,25 +63,26 @@ namespace RemoteFork.Plugins {
             };
 
             if (filmModel != null) {
-                var html5 = filmModel.Message.Translations.Html5;
-                if (html5 != null && html5.Count > 0) {
-                    if (html5.Count > 1) {
-                        foreach (var translation in html5) {
+                var video = filmModel.Message.Translations.Video;
+                if (video != null && video.Count > 0) {
+                    if (video.Count > 1) {
+                        foreach (var translation in video) {
                             var item = new Item(baseItem) {
                                 Name = translation.Key
                             };
                             if (filmModel.Message.Translations.Pl == "yes") {
                                 item.Link =
-                                    $"{KEY}{PluginSettings.Settings.Separator}playlist{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(Html5Decode(translation.Value))}";
+                                    $"{KEY}{PluginSettings.Settings.Separator}playlist{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
                             } else {
                                 item.Link =
-                                    $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(Html5Decode(translation.Value))}";
+                                    $"{GetEpisodeCommand.KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(LinkDecode(translation.Value))}";
                             }
+
                             items.Add(item);
                         }
                     } else {
                         items.AddRange(
-                            GetEpisodeCommand.GetEpisodes(Html5Decode(html5.First().Value)));
+                            GetEpisodeCommand.GetEpisodes(LinkDecode(video.First().Value)));
                     }
                 }
             }
@@ -95,14 +97,14 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url);
 
-            return GetSerialSeriesData(Html5Decode(response));
+            return GetSerialSeriesData(LinkDecode(response));
         }
 
         private static IEnumerable<Item> GetSerialSeriesData(string response) {
             var items = new List<Item>();
 
             SerialModel filmModel = null;
-            
+
             try {
                 filmModel = JsonConvert.DeserializeObject<SerialModel>(response);
             } catch (Exception exception) {
@@ -130,20 +132,75 @@ namespace RemoteFork.Plugins {
             return items;
         }
 
-        private static string Html5Decode(string data) {
+        private static string LinkDecode(string data) {
+            if (!BaseDecode(ref data)) {
+                if (!Html5Decode(ref data)) {
+
+                }
+            }
+
+            return data;
+        }
+
+        private static bool Html5Decode(ref string data) {
             if (!data.StartsWith(".")) {
                 data = data.Substring(1);
                 string tempString = string.Empty;
                 for (int j = 0; j < data.Length; j += 3) {
                     tempString += "\\u0" + data.Substring(j, 3);
                 }
-                data = ReplaceUnicodeSymbols(tempString);
+
+                data = Tools.Tools.ReplaceUnicodeSymbols(tempString);
+
+                return true;
             }
-            return data;
+
+            return false;
         }
 
-        private static string ReplaceUnicodeSymbols(string text) {
-            return Regex.Replace(text, @"\\u([\dA-Fa-f]{4})", v => ((char)Convert.ToInt32(v.Groups[1].Value, 16)).ToString());
+        private static bool BaseDecode(ref string data) {
+            if (data.StartsWith("#2")) {
+                data = data.Substring(2);
+                for (int n = 0; n < 3; n++) {
+                    foreach (string t in PluginSettings.Settings.Encryption.Tokens) {
+                        data = data.Replace(t, string.Empty);
+                    }
+                }
+
+                try {
+                    data = Encoding.UTF8.GetString(Convert.FromBase64String(data));
+                } catch (Exception exception) {
+                    Filmix.Logger.LogError(exception);
+                    if (UpdateTokens()) {
+                        try {
+                            data = Encoding.UTF8.GetString(Convert.FromBase64String(data));
+                        } catch (Exception exception2) {
+                            Filmix.Logger.LogError(exception2);
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool UpdateTokens() {
+            bool result = false;
+            string response = HTTPUtility.GetRequest(PluginSettings.Settings.Encryption.Url);
+
+            try {
+                PluginSettings.Settings.Encryption.Tokens = response.Split(",").ToList();
+                result = true;
+            } catch (Exception) {
+            }
+
+            if (result) {
+                PluginSettings.Instance.Save();
+            }
+
+            return result;
         }
     }
 }
