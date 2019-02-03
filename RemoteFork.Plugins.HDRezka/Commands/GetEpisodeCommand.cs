@@ -67,7 +67,7 @@ namespace RemoteFork.Plugins {
                 items = ParseEpisodesData(response);
 
                 if (items.Count == 0) {
-                    if (UpdateMoonwalkKeys()) {
+                    if (new GetNewKeysCommand().GetItems() != null) {
                         response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
                             string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
@@ -114,37 +114,6 @@ namespace RemoteFork.Plugins {
             }
 
             return items;
-        }
-
-        private static bool UpdateMoonwalkKeys() {
-            bool result = false;
-            string response = HTTPUtility.GetRequest(PluginSettings.Settings.Encryption.Url);
-
-            try {
-                var regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Ini, "iv"));
-                string iv = regex.Match(response).Groups[2].Value;
-                if (!string.IsNullOrEmpty(iv)) {
-                    PluginSettings.Settings.Encryption.IV = iv;
-                    result = true;
-                }
-            } catch (Exception) {
-            }
-
-            try {
-                var regex = new Regex(string.Format(PluginSettings.Settings.Regexp.Ini, "key"));
-                string key = regex.Match(response).Groups[2].Value;
-                if (!string.IsNullOrEmpty(key)) {
-                    PluginSettings.Settings.Encryption.Key = key;
-                    result = true;
-                }
-            } catch (Exception) {
-            }
-
-            if (result) {
-                PluginSettings.Instance.Save();
-            }
-
-            return result;
         }
     }
 }

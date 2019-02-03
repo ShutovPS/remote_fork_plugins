@@ -5,7 +5,7 @@ using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "hdrezka", Version = "0.0.10", Author = "fd_crash", Name = "HDRezka",
+    [PluginAttribute(Id = "hdrezka", Version = "0.0.11", Author = "fd_crash", Name = "HDRezka",
         Description = "Cмотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.",
         ImageLink = "http://s1.iconbird.com/ico/2013/6/353/w256h2561372333145videoicon.png",
         Github = "ShutovPS/RemoteFork.Plugins/HDRezka")]
@@ -43,6 +43,9 @@ namespace RemoteFork.Plugins {
                         case GetEpisodeCommand.KEY:
                             command = new GetEpisodeCommand();
                             break;
+                        case GetNewKeysCommand.KEY:
+                            command = new GetNewKeysCommand();
+                            break;
                     }
 
                     break;
@@ -55,7 +58,7 @@ namespace RemoteFork.Plugins {
                 for (int i = 0; i < arg.Length; i++) {
                     data[i] = arg[i];
                 }
-
+                
                 items.AddRange(command.GetItems(context, data));
             }
 

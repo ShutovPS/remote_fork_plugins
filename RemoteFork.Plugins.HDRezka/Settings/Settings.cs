@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins.Settings {
         public Encryption Encryption { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.9f,
+            SettingsVersion = 1.11f,
             PluginPath = "pluginPath",
             Separator = ';',
 
@@ -32,6 +32,7 @@ namespace RemoteFork.Plugins.Settings {
                 IcoVideo = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291videofile.png",
                 IcoImage = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597278jpgfile.png",
                 IcoOther = "http://s1.iconbird.com/ico/2013/6/364/w256h2561372348486helpfile256.png",
+                IcoUpdate = "http://s1.iconbird.com/ico/1112/Onebit4/w48h481351852735006.png",
                 NewVersion = "http://png.icons8.com/office/160/new.png",
             },
 
@@ -41,8 +42,8 @@ namespace RemoteFork.Plugins.Settings {
             },
 
             Encryption = new Encryption() {
-                IV = "cdadf0b5b6373f1356240a050b885954",
-                Key = "93deaf2d247d62b47376beb209f6128d03a60768198a2f4f7bd8e903ac5df65f",
+                IV = "1a9a34757212240599c4af9972dee1d2",
+                Key = "bcc848bd839f9b8c2e8bbb333992f086805bf66a547bb401ab1a326a5db40ab4",
                 Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini"
             },
 
@@ -138,6 +139,7 @@ namespace RemoteFork.Plugins.Settings {
         public string IcoVideo { get; set; }
         public string IcoImage { get; set; }
         public string IcoOther { get; set; }
+        public string IcoUpdate { get; set; }
         public string NewVersion { get; set; }
     }
 }

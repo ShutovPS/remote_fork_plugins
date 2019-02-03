@@ -58,6 +58,14 @@ namespace RemoteFork.Plugins {
             };
             items.Add(item);
 
+            item = new Item() {
+                Name = "Обновить ключи",
+                Type = ItemType.DIRECTORY,
+                Link = $"{GetNewKeysCommand.KEY}{PluginSettings.Settings.Separator}",
+                ImageLink = PluginSettings.Settings.Icons.IcoUpdate
+            };
+            items.Add(item);
+
             return items;
         }
 
