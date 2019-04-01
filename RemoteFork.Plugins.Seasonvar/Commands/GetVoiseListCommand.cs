@@ -13,6 +13,7 @@ namespace RemoteFork.Plugins {
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
+                {"Cookie", Seasonvar.Cookie},
                 //{"Content-Type", "text/html; charset=UTF-8"}
             };
 
@@ -49,6 +50,7 @@ namespace RemoteFork.Plugins {
                         header = new Dictionary<string, string>() {
                             {"X-Requested-With", "XMLHttpRequest"},
                             {"Accept-Encoding", "gzip, deflate, lzma"},
+                            {"Cookie", Seasonvar.Cookie},
                             //{"Content-Type", "text/html; charset=UTF-8"}
                         };
                         string datastring = "";

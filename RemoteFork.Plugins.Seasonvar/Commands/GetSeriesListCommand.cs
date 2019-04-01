@@ -13,13 +13,14 @@ namespace RemoteFork.Plugins {
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
+                {"Cookie", Seasonvar.Cookie},
                 //{"Content-Type", "text/html; charset=UTF-8"}
             };
             //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL,
             //                       url.Replace("transСтандартный", "trans")));
-            string response =
-                HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL,
-                    url.Replace("transСтандартный", "trans")), header);
+
+
+            string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, url.Replace("transСтандартный", "trans")), header);
 
             var matches = Regex.Matches(response,
                 "({)(\"title\"\\s*:\\s*\")(\\d+)(\\s+?)(.+?)(\")(.*?)(\"file\"\\s*:\\s*\")(.+?)(\")(.+?)(\"galabel\"\\s*:\\s*\")(.+?)(\")(.+?)(})",
@@ -36,7 +37,9 @@ namespace RemoteFork.Plugins {
                     fileLink = regex.Replace(fileLink, string.Empty);
                     byte[] linkData = Convert.FromBase64String(fileLink.Substring(2));
                     fileLink = Encoding.UTF8.GetString(linkData);
+                    fileLink = fileLink.Split(" ")[0];
                 }
+
                 var itemR = new Item() {
                     Name = string.Format("{0} Серия", matches[i].Groups[3].Value, matches[i].Groups[19].Value),
                     Link = fileLink,

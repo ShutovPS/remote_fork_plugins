@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
@@ -9,6 +10,9 @@ namespace RemoteFork.Plugins {
     public class Seasonvar : IPlugin {
         public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
         public static readonly Dictionary<string, Item> SERIAL_ITEMS = new Dictionary<string, Item>();
+
+        public static string Cookie { get; private set; } = File.Exists("Plugins/seasonvar.cookie.txt") ? File.ReadAllText("Plugins/seasonvar.cookie.txt").Trim() : string.Empty;
+
 
         // SEPARATOR служит для разделения команд при парсинге
         public const char SEPARATOR = ';';
