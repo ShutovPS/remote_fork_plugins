@@ -18,15 +18,16 @@ namespace RemoteFork.Plugins.AceStream.Commands {
             };
             items.Add(item);
 
-            item = new Item {
-                Name = "Torrent TV",
-                Type = ItemType.DIRECTORY,
-                Link = $"{GetAsCategoriesCommand.KEY}{PluginSettings.Settings.Separator}ttv.json",
-                ImageLink = "https://cs5-2.4pda.to/7342878.png",
-                Description = "<html><img src=\" http://torrent-tv.ru/images/logo.png\"></html><p>"
-            };
+            // **** ВДРУГ ОЖИВЕТ  ****
+            //item = new Item {
+            //    Name = "Torrent TV",
+            //    Type = ItemType.DIRECTORY,
+            //    Link = $"{GetAsCategoriesCommand.KEY}{PluginSettings.Settings.Separator}ttv.json",
+            //    ImageLink = "https://cs5-2.4pda.to/7342878.png",
+            //    Description = "<html><img src=\" http://torrent-tv.ru/images/logo.png\"></html><p>"
+            //};
 
-            items.Add(item);
+            //items.Add(item);
 
             item = new Item {
                 Name = "AceStream.Net TV",
