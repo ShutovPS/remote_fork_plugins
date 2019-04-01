@@ -1,6 +1,9 @@
+using RemoteFork.Plugins.Settings;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace RemoteFork.Plugins {
@@ -10,9 +13,7 @@ namespace RemoteFork.Plugins {
     public class Seasonvar : IPlugin {
         public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
         public static readonly Dictionary<string, Item> SERIAL_ITEMS = new Dictionary<string, Item>();
-
-        public static string Cookie { get; private set; } = File.Exists("Plugins/seasonvar.cookie.txt") ? File.ReadAllText("Plugins/seasonvar.cookie.txt").Trim() : string.Empty;
-
+        public static readonly string Cookie = GetCookie();
 
         // SEPARATOR служит для разделения команд при парсинге
         public const char SEPARATOR = ';';
@@ -112,5 +113,49 @@ namespace RemoteFork.Plugins {
         private static void ClearList() {
             SERIAL_MATCHES.Clear();
         }
+
+        #region GetCookie
+        static string GetCookie()
+        {
+            if (string.IsNullOrWhiteSpace(PluginSettings.Settings.Cookie) || DateTime.Now > PluginSettings.Settings.CookieExpires)
+            {
+                if (!string.IsNullOrWhiteSpace(PluginSettings.Settings.login) && !string.IsNullOrWhiteSpace(PluginSettings.Settings.password))
+                {
+                    try
+                    {
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var postParams = new Dictionary<string, string>();
+                            postParams.Add("login", PluginSettings.Settings.login);
+                            postParams.Add("password", PluginSettings.Settings.password);
+
+                            using (var postContent = new FormUrlEncodedContent(postParams))
+                            {
+                                using (HttpResponseMessage response = client.PostAsync("http://seasonvar.ru/?mod=login", postContent).Result)
+                                {
+                                    if (response.Headers.TryGetValues("Set-Cookie", out var cook))
+                                    {
+                                        if (cook.FirstOrDefault() is string line)
+                                        {
+                                            string svid1 = new Regex("svid1=([^;]+)(;|$)").Match(line).Groups[1].Value;
+                                            if (!string.IsNullOrWhiteSpace(svid1))
+                                            {
+                                                PluginSettings.Settings.Cookie = $"svid1={svid1}; premAll=1";
+                                                PluginSettings.Settings.CookieExpires = DateTime.Today.AddDays(28);
+                                                PluginSettings.Instance.Save();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            return string.IsNullOrWhiteSpace(PluginSettings.Settings.Cookie) ? string.Empty : PluginSettings.Settings.Cookie;
+        }
+        #endregion
     }
 }
