@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url + searchData);
 
-            items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(response));
+            GetCategoryCommand.GetFilmsItemsFromHtml(items, response);
 
             return items;
         }

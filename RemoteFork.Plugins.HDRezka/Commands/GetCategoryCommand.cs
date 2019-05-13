@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
@@ -11,24 +12,18 @@ namespace RemoteFork.Plugins {
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
             var items = new List<Item>();
 
-            items.AddRange(GetFilmsItems(WebUtility.UrlDecode(data[2])));
+            GetFilmsItems(items, WebUtility.UrlDecode(data[2]));
 
             return items;
         }
 
-        public static IEnumerable<Item> GetFilmsItems(string url) {
-            var items = new List<Item>();
-
+        public static void GetFilmsItems(List<Item> items, string url) {
             string response = HTTPUtility.GetRequest(url);
 
-            items.AddRange(GetFilmsItemsFromHtml(response));
-
-            return items;
+            GetFilmsItemsFromHtml(items, response);
         }
 
-        public static IEnumerable<Item> GetFilmsItemsFromHtml(string htmlText, bool search = false) {
-            var items = new List<Item>();
-
+        public static void GetFilmsItemsFromHtml(List<Item> items, string htmlText, bool search = false) {
             var regex = new Regex(PluginSettings.Settings.Regexp.Categories);
 
             foreach (Match match in regex.Matches(htmlText)) {
@@ -43,8 +38,6 @@ namespace RemoteFork.Plugins {
                         $"{KEY}{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(navigation)}";
                 }
             }
-
-            return items;
         }
 
         private static Item GetItem(string text) {
@@ -66,17 +59,35 @@ namespace RemoteFork.Plugins {
                 info = match.Groups[15].Value;
 
                 series = match.Groups[10].Value;
-                if (!string.IsNullOrEmpty(series)) {
-                    title = $"{title} ({series})";
-                }
             }
 
-            string description =
-                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{category}<br>{info}<br>{series}";
+            var sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(image)) {
+                sb.AppendLine(
+                    $"<div id=\"poster\" style=\"float: left; padding: 4px; background-color: #eeeeee; margin: 0px 13px 1px 0px;\"><img style=\"width: 180px; float: left;\" src=\"{image}\" /></div>");
+            }
+
+            sb.AppendLine($"<span style=\"color: #3366ff;\"><strong>{title}</strong></span><br>");
+
+            if (!string.IsNullOrEmpty(info) && info.Length > 3) {
+                sb.AppendLine(
+                    $"<span style=\"color: #999999;\">{info}</span><br>");
+            }
+
+            if (!string.IsNullOrEmpty(series) && series.Length != 0) {
+                sb.AppendLine($"<strong><span style=\"color: #ff9900;\">Серии:</span></strong> {series}<br />");
+            }
+
+            if (!string.IsNullOrEmpty(category) && category.Length > 3) {
+                sb.AppendLine($"<strong><span style=\"color: #ff9900;\">Категория:</span></strong> {category}<br />");
+            }
+
+            string description = sb.ToString();
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
-                Name = $"{title}",
+                Name = $"{title} ({info})",
                 Link =
                     $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
                 Description = description

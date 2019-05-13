@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
@@ -15,22 +16,20 @@ namespace RemoteFork.Plugins {
 
             switch (type) {
                 case "translations":
-                    items.AddRange(GetSerialTranslations(data));
+                    GetSerialTranslations(items, data);
                     break;
                 case "seasons":
-                    items.AddRange(GetSerialSeasons(data));
+                    GetSerialSeasons(items, data);
                     break;
                 case "series":
-                    items.AddRange(GetSerialSeries(data));
+                    GetSerialSeries(items, data);
                     break;
             }
 
             return items;
         }
 
-        private static IEnumerable<Item> GetSerialTranslations(params string[] data) {
-            var items = new List<Item>();
-
+        private static void GetSerialTranslations(List<Item> items, params string[] data) {
             string url = WebUtility.UrlDecode(data[3]);
 
             string response = HTTPUtility.GetRequest(url);
@@ -43,16 +42,12 @@ namespace RemoteFork.Plugins {
                 string moonwalkUrl = regex.Match(response).Groups[2].Value;
                 string moonwalkResponse = HTTPUtility.GetRequest(moonwalkUrl, header);
 
-                items.AddRange(GetSerialTranslationsData(moonwalkUrl, data[3], response, moonwalkResponse));
+                GetSerialTranslationsData(items, moonwalkUrl, data[3], response, moonwalkResponse);
             }
-
-            return items;
         }
 
-        private static IEnumerable<Item> GetSerialTranslationsData(string url, string referer, string response,
+        private static void GetSerialTranslationsData(List<Item> items, string url, string referer, string response,
             string moonwalkResponse) {
-            var items = new List<Item>();
-
             var regex = new Regex(PluginSettings.Settings.Regexp.Translations);
 
             if (regex.IsMatch(moonwalkResponse)) {
@@ -77,14 +72,14 @@ namespace RemoteFork.Plugins {
                         items.Add(item);
                     }
 
-                    return items;
+                    return;
                 }
             }
 
-            return GetSerialSeasonsData(url, referer, moonwalkResponse);
+            GetSerialSeasonsData(items, url, referer, moonwalkResponse);
         }
 
-        private static IEnumerable<Item> GetSerialSeasons(params string[] data) {
+        private static void GetSerialSeasons(List<Item> items, params string[] data) {
             var header = new Dictionary<string, string>() {
                 {"Referer", WebUtility.UrlDecode(data[4])}
             };
@@ -95,12 +90,10 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            return GetSerialSeasonsData(url, data[4], response);
+            GetSerialSeasonsData(items, url, data[4], response);
         }
 
-        private static IEnumerable<Item> GetSerialSeasonsData(string url, string referer, string moonwalkResponse) {
-            var items = new List<Item>();
-
+        private static void GetSerialSeasonsData(List<Item> items, string url, string referer, string moonwalkResponse) {
             var regex = new Regex(PluginSettings.Settings.Regexp.Seasons);
 
             if (regex.IsMatch(moonwalkResponse)) {
@@ -122,14 +115,14 @@ namespace RemoteFork.Plugins {
                         items.Add(item);
                     }
 
-                    return items;
+                    return;
                 }
             }
 
-            return GetSerialSeriesData(url, referer, moonwalkResponse);
+            GetSerialSeriesData(items, url, referer, moonwalkResponse);
         }
 
-        private static IEnumerable<Item> GetSerialSeries(params string[] data) {
+        private static void GetSerialSeries(List<Item> items, params string[] data) {
             var header = new Dictionary<string, string>() {
                 {"Referer", WebUtility.UrlDecode(data[4])}
             };
@@ -137,12 +130,10 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            return GetSerialSeriesData(url, data[4], response);
+            GetSerialSeriesData(items, url, data[4], response);
         }
 
-        private static IEnumerable<Item> GetSerialSeriesData(string url, string referer, string moonwalkResponse) {
-            var items = new List<Item>();
-
+        private static void GetSerialSeriesData(List<Item> items, string url, string referer, string moonwalkResponse) {
             var regex = new Regex(PluginSettings.Settings.Regexp.Episodes);
 
             if (regex.IsMatch(moonwalkResponse)) {
@@ -164,11 +155,11 @@ namespace RemoteFork.Plugins {
                         items.Add(item);
                     }
 
-                    return items;
+                    return;
                 }
             }
 
-            return GetEpisodeCommand.GetEpisodes(url, referer);
+            GetEpisodeCommand.GetEpisodes(items, url, referer);
         }
 
         private static string GetDescription(string text) {
@@ -191,10 +182,17 @@ namespace RemoteFork.Plugins {
                 description = regex.Match(text).Groups[2].Value;
             }
 
-            description =
-                $"<img src=\"{image}\" alt=\"\" align=\"left\" style=\"width:240px;float:left;\"/></div><span style=\"color:#3090F0\">{title}</span><br>{description}";
+            var sb = new StringBuilder();
 
-            return description;
+            if (!string.IsNullOrEmpty(image)) {
+                sb.AppendLine(
+                    $"<div id=\"poster\" style=\"float: left; padding: 4px; background-color: #eeeeee; margin: 0px 13px 1px 0px;\"><img style=\"width: 180px; float: left;\" src=\"{image}\" /></div>");
+            }
+
+            sb.AppendLine($"<span style=\"color: #3366ff;\"><strong>{title}</strong></span><br>");
+            sb.AppendLine(description);
+
+            return sb.ToString();
         }
     }
 }

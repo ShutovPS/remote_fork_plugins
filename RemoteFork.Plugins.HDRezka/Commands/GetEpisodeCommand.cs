@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
+using RemoteFork.Tools;
 
 namespace RemoteFork.Plugins {
     public class GetEpisodeCommand : ICommand {
         public const string KEY = "episode";
 
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            return GetEpisodes(WebUtility.UrlDecode(data[2]), data[3]);
+            var items = new List<Item>();
+            GetEpisodes(items, WebUtility.UrlDecode(data[2]), data[3]);
+            return items;
         }
 
-        public static List<Item> GetEpisodes(string url, string referer) {
+        public static void GetEpisodes(List<Item> items, string url, string referer) {
             var header = new Dictionary<string, string>() {
                 {"Referer", WebUtility.UrlDecode(referer)}
             };
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            return GetEpisodesData(url, response);
+            GetEpisodesData(items, url, response);
         }
 
-        private static List<Item> GetEpisodesData(string url, string response) {
-            var items = new List<Item>();
-
+        private static void GetEpisodesData(List<Item> items, string url, string response) {
             var regex = new Regex(PluginSettings.Settings.Regexp.Script);
 
             if (regex.IsMatch(response)) {
@@ -51,32 +51,92 @@ namespace RemoteFork.Plugins {
                 regex = new Regex(PluginSettings.Settings.Regexp.Ref);
                 string scriptRef = regex.Match(response).Groups[2].Value;
 
-                var o = new {
-                    a = int.Parse(partnerId),
-                    b = int.Parse(domainId),
-                    c = false,
-                    //                      d = windowId,
-                    e = videoToken,
-                    f = ProgramSettings.Settings.UserAgent
+                var o = new EncryptedData() {
+                    PartnerId = int.Parse(partnerId),
+                    DomainId = int.Parse(domainId),
+                    Protected = false,
+                    //                      WindowId = windowId,
+                    WindowId = null,
+                    VideoToken = videoToken,
+                    UserAgent = ProgramSettings.Settings.UserAgent
                 };
-                string q = JsonConvert.SerializeObject(o);
 
-                response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
-                    string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
+                ParseEpisodesData(items, moonwalkUrl, scriptRef, o);
+            }
 
-                items = ParseEpisodesData(response);
+            return;
+        }
 
-                if (items.Count == 0) {
-                    if (new GetNewKeysCommand().GetItems() != null) {
-                        response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
-                            string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
+        private static void ParseEpisodesData(List<Item> items, string moonwalkUrl, string scriptRef, EncryptedData o) {
+            string q = JsonConvert.SerializeObject(o);
 
-                        items = ParseEpisodesData(response);
+            string response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
+
+            ParseEpisodesData(items, response);
+
+            if (items.Count == 0) {
+                if (new GetNewKeysCommand().GetItems() != null) {
+                    response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
+                        string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
+
+                    ParseEpisodesData(items, response);
+                }
+            }
+        }
+
+        private static void ParseEpisodesData(List<Item> items, string response) {
+            if (!string.IsNullOrEmpty(response)) {
+                string url = ParseEpisodesLink(response, PluginSettings.Settings.UseMp4);
+
+                if (!string.IsNullOrEmpty(url)) {
+                    ParseEpisodesData(items, url, PluginSettings.Settings.UseMp4);
+                } else {
+                    url = ParseEpisodesLink(response, !PluginSettings.Settings.UseMp4);
+
+                    if (!string.IsNullOrEmpty(url)) {
+                        ParseEpisodesData(items, url, !PluginSettings.Settings.UseMp4);
                     }
                 }
             }
+        }
 
-            return items;
+        private static string ParseEpisodesLink(string response, bool useMp4) {
+            if (!string.IsNullOrEmpty(response)) {
+                var regex = new Regex(useMp4
+                    ? PluginSettings.Settings.Regexp.MP4
+                    : PluginSettings.Settings.Regexp.M3U8);
+
+                if (regex.IsMatch(response)) {
+                    return regex.Match(response).Groups[2].Value;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static void ParseEpisodesData(List<Item> items, string url, bool useMp4) {
+            if (!string.IsNullOrEmpty(url)) {
+                url = url.ReplaceUnicodeSymbols();
+                string response = HTTPUtility.GetRequest(url);
+
+                var regex = new Regex(useMp4
+                    ? PluginSettings.Settings.Regexp.Mp4List
+                    : PluginSettings.Settings.Regexp.ExtList);
+
+                var baseItem = new Item() {
+                    Type = ItemType.FILE,
+                    ImageLink = PluginSettings.Settings.Icons.IcoVideo
+                };
+
+                foreach (Match match in regex.Matches(response)) {
+                    var item = new Item(baseItem) {
+                        Name = match.Groups[2].Value,
+                        Link = match.Groups[4].Value
+                    };
+                    items.Add(item);
+                }
+            }
         }
 
         private static string EncryptQ(string q) {
@@ -88,32 +148,16 @@ namespace RemoteFork.Plugins {
             return eq;
         }
 
-        private static List<Item> ParseEpisodesData(string response) {
-            var items = new List<Item>();
+        private class EncryptedData {
+            [JsonProperty("a")] public int PartnerId;
+            [JsonProperty("b")] public int DomainId;
+            [JsonProperty("c")] public bool Protected;
 
-            if (!string.IsNullOrEmpty(response)) {
-                var regex = new Regex(PluginSettings.Settings.Regexp.M3U8);
-                if (regex.IsMatch(response)) {
-                    response = HTTPUtility.GetRequest(regex.Match(response).Groups[2].Value);
+            [JsonProperty("d", NullValueHandling = NullValueHandling.Ignore)]
+            public string WindowId;
 
-                    regex = new Regex(PluginSettings.Settings.Regexp.ExtList);
-
-                    var baseItem = new Item() {
-                        Type = ItemType.FILE,
-                        ImageLink = PluginSettings.Settings.Icons.IcoVideo
-                    };
-
-                    foreach (Match match in regex.Matches(response)) {
-                        var item = new Item(baseItem) {
-                            Name = match.Groups[2].Value,
-                            Link = match.Groups[4].Value
-                        };
-                        items.Add(item);
-                    }
-                }
-            }
-
-            return items;
+            [JsonProperty("e")] public string VideoToken;
+            [JsonProperty("f")] public string UserAgent;
         }
     }
 }
