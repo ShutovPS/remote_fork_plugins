@@ -18,7 +18,7 @@ namespace RemoteFork.Plugins {
         private static bool UpdateMoonwalkKeys() {
             bool result = false;
             string response = HTTPUtility.GetRequest(PluginSettings.Settings.Encryption.DomainUrl);
-            PluginSettings.Settings.Encryption.DomainId = response;
+            int.TryParse(response, out PluginSettings.Settings.Encryption.DomainId);
 
             response = HTTPUtility.GetRequest(PluginSettings.Settings.Encryption.Url);
 

@@ -6,7 +6,7 @@ namespace RemoteFork.Plugins.Settings {
     public class PluginSettings : AbstractSettings<PluginSettings, Settings> {
         static PluginSettings() {
             fileName = Path.Combine("Plugins", typeof(Moonwalk).GetCustomAttribute<PluginAttribute>().Id + ".json");
-            defaultSettings = Settings.DefaultSettings;
+            defaultSettings = new Settings();
         }
 
         public PluginSettings() {

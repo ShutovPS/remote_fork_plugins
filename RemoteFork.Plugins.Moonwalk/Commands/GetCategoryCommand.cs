@@ -39,6 +39,7 @@ namespace RemoteFork.Plugins {
                 if (items.Any(i => i.Link == item.Link)) {
                     continue;
                 }
+
                 items.Add(item);
             }
 
@@ -61,38 +62,14 @@ namespace RemoteFork.Plugins {
             if (film.Serial != null) {
                 film = film.Serial;
             }
-            string title = film.TitleRu;
-            if (!string.IsNullOrEmpty(film.TitleEn)) {
-                title += $" ({film.TitleEn})";
-            }
-
-            string translate = film.Translator;
-            string quality = film.SourceType;
-            if (string.IsNullOrEmpty(quality)) {
-                quality = string.Empty;
-            }
-            int year = film.Year;
-            string seasons = string.Empty;
-
-            string link = film.IframeUrl;
-            string token = film.Token;
-
-            if (film.SeasonEpisodesCount != null) {
-                seasons = $"Сезон: {film.SeasonEpisodesCount.Length}";
-            }
-
-            string category = film.Category;
-            string info = film.MaterialData?.Description;
-
-            string description =
-                $"<span style=\"color:#3090F0\">{title}</span><br>{year}<br>{category}<br>{quality} ({translate})<br>{info}<br>{seasons}";
 
             var item = new Item() {
                 Type = ItemType.DIRECTORY,
-                Name = $"{title}",
+                ImageLink = PluginSettings.Settings.Icons.IcoFolder,
+                Name = film.GetTitle(),
                 Link =
-                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(link)}",
-                Description = description
+                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(film.IframeUrl)}",
+                Description = film.ToString()
             };
 
             return item;
