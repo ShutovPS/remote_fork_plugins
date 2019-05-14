@@ -1,18 +1,35 @@
+
 # RemoteFork.Plugins
 Плагины-парсеры различных сайтов для [RemoteFork](https://github.com/ShutovPS/RemoteFork)
-# Плагины:
-- [Seasonvar](https://github.com/ShutovPS/RemoteFork.Plugins/tree/seasonvar) - на сайте собрание лучших сериалов и всех их сезонов.
-- [AceStream TV](https://github.com/ShutovPS/RemoteFork.Plugins/tree/acestreamtv) - сборка из 4х сайтов: TorrentTV, AceStream.NET TV, ALLFON-TV и TV-P2P.
-- [NNM-Club](https://github.com/ShutovPS/RemoteFork.Plugins/tree/nnmclub) - популярный российский торрент-трекер.
-- [Rutracker](https://github.com/ShutovPS/RemoteFork.Plugins/tree/rutracker) - крупнейший русскоязычный битторрент трекер.
-- [Stereo Tracker](https://github.com/ShutovPS/RemoteFork.Plugins/tree/stereotracker) - 3D торрент трекер специализирующиеся на 3D торрент фильмах.
-- [Rutor](https://github.com/ShutovPS/RemoteFork.Plugins/tree/rutor) - крупнейший торрент-трекер.
-- [YouTube](https://github.com/ShutovPS/RemoteFork.Plugins/tree/youtube) - видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео.
-- [HDRezka](https://github.com/ShutovPS/RemoteFork.Plugins/tree/hdrezka) - смотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.
-- [Kinosha](https://github.com/ShutovPS/RemoteFork.Plugins/tree/kinosha) - лучший онлайн кинотеатр рунета. На сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра.
-- [Filmix](https://github.com/ShutovPS/RemoteFork.Plugins/tree/filmix) - смотреть онлайн фильмы и сериалы бесплатно.
-### Больше не поддерживаются (работа не гарантируется)
-- [THVP](https://github.com/ShutovPS/RemoteFork.Plugins/tree/thvp) - THVP предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы.
-- [HD Serials](https://github.com/ShutovPS/RemoteFork.Plugins/tree/hdserials) - плагин для сайтов coldfilm.hdkino и lostfilm.hdkino.
-- [SensFilm](https://github.com/ShutovPS/RemoteFork.Plugins/tree/sensfilm) - самые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно.
-- [GodZfilm](https://github.com/ShutovPS/RemoteFork.Plugins/tree/godzfilm) - смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы.
+[Скачать плагины](https://github.com/ShutovPS/RemoteFork.Plugins/releases)
+Обсуждение на [форуме](http://forkplayer.tv/forums/topic/тест-кросс-платформенной-версии/page/11/#post-18062)
+Telegram-канал: https://t.me/remotefork
+
+### Как установить:
+- скачать выбранный плагин в формате **.dll** или **.cs** (скрипт);
+- поместить файл в папку **Plugins** в директории **RemoteFork'a** (далее RF);
+- перезапустить RF и активировать плагин в его [настройках](http://localhost:8027/Home/Plugins);
+- в **ForkPlayer'e** в каталоге *Dlna & Plugins* появится установленный плагин.
+
+## Плагины:
+| Название | Описание | Скачать |
+|--|--|--|
+| *AceStream* | сборка из 4х сайтов: TorrentTV, AceStreamNET TV, ALLFON-TV и TV-P2P | [acestreamtv.0.1.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/acestreamtv.0.1.3) |
+| *NNM-Club*| популярный российский торрент-трекер | [nnmclub.0.1.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/nnmclub.0.1.3) |
+| *Rutracker* | крупнейший русскоязычный битторрент трекер | [rutracker.0.1.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/rutracker.0.1.3) |
+| *Rutor* | крупнейший торрент-трекер | [rutor.0.1.0](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/rutor.0.1.0) |
+| *Stereo Tracker* | 3D торрент трекер специализирующиеся на 3D торрент фильмах | [stereotracker.0.1.0](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/stereotracker.0.1.0) |
+| *Seasonvar* | на сайте собрание лучших сериалов и всех их сезонов | [seasonvar.0.4.8](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/seasonvar.0.4.8) |
+| *HDRezka* | смотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно | [hdrezka.0.0.12](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/hdrezka.0.0.12) |
+| *Moonwalk* | видеобалансер, предосавляющий доступ к огрмной базе фильмов и сериалов | [moonwalk.0.0.9](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/moonwalk.0.0.9) |
+| *Filmix* | смотреть онлайн фильмы и сериалы бесплатно | [filmix.0.0.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/filmix.0.0.3) |
+
+##### Заморожены (работа не гарантируется)
+| Название | Описание | Скачать |
+|--|--|--|
+| *YouTube* | видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео | [youtube.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/youtube.0.1.1) |
+| *Kinosha* | на сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра | [kinosha.0.0.2](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/kinosha.0.0.2) |
+| *THVP* | предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы | [thvp.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/thvp.0.1.1) |
+| *HD Serials* | плагин для сайтов coldfilm.hdkino и lostfilm.hdkino | [hdserials.0.0.4](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/hdserials.0.0.4) |
+| *SensFilm* | самые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно | [sensfilm.0.0.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/sensfilm.0.0.3) |
+| *GodZfilm* | смотреть онлайн бесплатно фильмы, сериалы, аниме, мультфильмы | [godzfilm.0.0.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/godzfilm.0.0.1) |
