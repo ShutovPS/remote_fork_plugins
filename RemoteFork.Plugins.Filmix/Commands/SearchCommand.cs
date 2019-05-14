@@ -30,7 +30,7 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.PostRequest(url, Tools.Tools.QueryParametersToString(searchData), header);
 
-            items.AddRange(GetCategoryCommand.GetFilmsItemsFromHtml(response));
+            GetCategoryCommand.GetFilmsItemsFromHtml(items, response);
 
             return items;
         }

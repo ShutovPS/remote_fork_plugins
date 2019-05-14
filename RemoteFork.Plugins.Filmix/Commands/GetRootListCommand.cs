@@ -19,6 +19,16 @@ namespace RemoteFork.Plugins {
             };
             items.Add(item);
 
+            if (!AuthCommand.CheckLogin()) {
+                item = new Item() {
+                    Name = "Авторизация",
+                    Type = ItemType.DIRECTORY,
+                    Link = $"{AuthCommand.KEY}",
+                    ImageLink = PluginSettings.Settings.Icons.User
+                };
+                items.Add(item);
+            }
+
             item = new Item() {
                 Name = "Зарубежные фильмы",
                 Type = ItemType.DIRECTORY,

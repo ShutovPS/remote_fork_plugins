@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
@@ -19,19 +18,17 @@ namespace RemoteFork.Plugins {
 
             switch (type) {
                 case "translations":
-                    items.AddRange(GetSerialTranslations(data));
+                    GetSerialTranslations(items, data);
                     break;
                 case "playlist":
-                    items.AddRange(GetSerialSeries(data));
+                    GetSerialSeries(items, data);
                     break;
             }
 
             return items;
         }
 
-        private static IEnumerable<Item> GetSerialTranslations(params string[] data) {
-            var items = new List<Item>();
-
+        private static void GetSerialTranslations(List<Item> items, params string[] data) {
             string url = string.Concat(PluginSettings.Settings.Links.Site, "/api/movies/player_data");
             string requestData = $"post_id={WebUtility.UrlDecode(data[3])}&showfull=true";
 
@@ -41,14 +38,10 @@ namespace RemoteFork.Plugins {
 
             string response = HTTPUtility.PostRequest(url, requestData, header);
 
-            items.AddRange(GetSerialTranslationsData(response));
-
-            return items;
+            GetSerialTranslationsData(items, response);
         }
 
-        private static IEnumerable<Item> GetSerialTranslationsData(string response) {
-            var items = new List<Item>();
-
+        private static void GetSerialTranslationsData(List<Item> items, string response) {
             FilmModel filmModel = null;
 
             try {
@@ -81,23 +74,19 @@ namespace RemoteFork.Plugins {
                     }
                 }
             }
-
-            return items;
         }
 
-        private static IEnumerable<Item> GetSerialSeries(params string[] data) {
+        private static void GetSerialSeries(List<Item> items, params string[] data) {
             string url = WebUtility.UrlDecode(data[3]);
 
             url = url.Substring(url.IndexOf("http", StringComparison.Ordinal));
 
             string response = HTTPUtility.GetRequest(url);
 
-            return GetSerialSeriesData(LinkDecode(response));
+            GetSerialSeriesData(items, LinkDecode(response));
         }
 
-        private static IEnumerable<Item> GetSerialSeriesData(string response) {
-            var items = new List<Item>();
-
+        private static void GetSerialSeriesData(List<Item> items, string response) {
             SerialModel[] filmModel = null;
 
             try {
@@ -123,8 +112,6 @@ namespace RemoteFork.Plugins {
                     }
                 }
             }
-
-            return items;
         }
 
         private static string LinkDecode(string data) {

@@ -8,12 +8,12 @@ namespace RemoteFork.Plugins {
         public const string KEY = "episode";
 
         public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            return GetEpisodes(WebUtility.UrlDecode(data[2]));
+            var items = new List<Item>();
+            GetEpisodes(items, WebUtility.UrlDecode(data[2]));
+            return items;
         }
 
-        public static List<Item> GetEpisodes(string url) {
-            var items = new List<Item>();
-
+        public static void GetEpisodes(List<Item> items, string url) {
             var episodes = url.Split(",");
 
             var baseItem = new Item() {
@@ -33,8 +33,6 @@ namespace RemoteFork.Plugins {
                     items.Add(item);
                 }
             }
-
-            return items;
         }
     }
 }
