@@ -1,9 +1,9 @@
 
 # RemoteFork.Plugins
-Плагины-парсеры различных сайтов для [RemoteFork](https://github.com/ShutovPS/RemoteFork)
-[Скачать плагины](https://github.com/ShutovPS/RemoteFork.Plugins/releases)
-Обсуждение на [форуме](http://forkplayer.tv/forums/topic/тест-кросс-платформенной-версии/page/11/#post-18062)
-Telegram-канал: https://t.me/remotefork
+- Плагины-парсеры различных сайтов для [RemoteFork](https://github.com/ShutovPS/RemoteFork)
+- [Скачать плагины](https://github.com/ShutovPS/RemoteFork.Plugins/releases)
+- Обсуждение на [форуме](http://forkplayer.tv/forums/topic/тест-кросс-платформенной-версии/page/11/#post-18062)
+- Telegram-канал: https://t.me/remotefork
 
 ### Как установить:
 - скачать выбранный плагин в формате **.dll** или **.cs** (скрипт);
