@@ -23,12 +23,12 @@
 | *HDRezka* | смотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно | [hdrezka.0.0.12](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/hdrezka.0.0.12) |
 | *Moonwalk* | видеобалансер, предосавляющий доступ к огрмной базе фильмов и сериалов | [moonwalk.0.0.9](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/moonwalk.0.0.9) |
 | *Filmix* | смотреть онлайн фильмы и сериалы бесплатно | [filmix.0.0.4](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/filmix.0.0.4) |
+| *Kinosha* | на сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра | [kinosha.0.0.2](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/kinosha.0.0.2) |
 
 ##### Заморожены (работа не гарантируется)
 | Название | Описание | Скачать |
 |--|--|--|
 | *YouTube* | видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео | [youtube.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/youtube.0.1.1) |
-| *Kinosha* | на сайте собраны лучшие фильмы в хорошем качестве для бесплатного просмотра | [kinosha.0.0.2](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/kinosha.0.0.2) |
 | *THVP* | предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы | [thvp.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/thvp.0.1.1) |
 | *HD Serials* | плагин для сайтов coldfilm.hdkino и lostfilm.hdkino | [hdserials.0.0.4](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/hdserials.0.0.4) |
 | *SensFilm* | самые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно | [sensfilm.0.0.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/sensfilm.0.0.3) |
