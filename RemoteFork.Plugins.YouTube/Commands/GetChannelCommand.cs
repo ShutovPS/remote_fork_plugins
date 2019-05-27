@@ -13,7 +13,7 @@ namespace RemoteFork.Plugins.Commands {
 
             string response =
                 HTTPUtility.GetRequest(
-                    $"{PluginSettings.Settings.ApiServer}/search?part=snippet&channelId={data[2]}&order=date&maxResults=50{pageToken}&key={YouTube.API_KEY}");
+                    $"{PluginSettings.Settings.ApiServer}/search?part=snippet&channelId={data[2]}&order=date&maxResults=50{pageToken}&key={PluginSettings.Settings.ApiKey}");
             return GetSearchCommand.GetVideoList(response, $"channel{PluginSettings.Settings.Separator}{data[2]}");
         }
     }

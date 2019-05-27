@@ -16,7 +16,7 @@ namespace RemoteFork.Plugins.Commands {
 
             string response =
                 HTTPUtility.GetRequest(
-                    $"{PluginSettings.Settings.ApiServer}/playlistItems?part=snippet&playlistId={data[2]}&maxResults=50{pageToken}&key={YouTube.API_KEY}");
+                    $"{PluginSettings.Settings.ApiServer}/playlistItems?part=snippet&playlistId={data[2]}&maxResults=50{pageToken}&key={PluginSettings.Settings.ApiKey}");
 
             return GetVideoList(response, $"playlist{PluginSettings.Settings.Separator}{data[2]}");
         }
@@ -32,7 +32,8 @@ namespace RemoteFork.Plugins.Commands {
                     if (searchResult.snippet.thumbnails != null) {
                         var item = new Item() {
                             Name = searchResult.snippet.title,
-                            Description = "<img src=\"" + searchResult.snippet.thumbnails.Last().Value.url + "\" style=\"width:400px\"  / ><br>" +
+                            Description = "<img src=\"" + searchResult.snippet.thumbnails.Last().Value.url +
+                                          "\" style=\"width:400px\"  / ><br>" +
                                           searchResult.snippet.description + "<br>" + "Канал: " +
                                           searchResult.snippet.channelTitle
                         };

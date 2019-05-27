@@ -4,15 +4,15 @@ using RemoteFork.Plugins.Commands;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [Plugin(Id = "youtube", Version = "0.1.1", Author = "fd_crash", Name = "YouTube",
+    [Plugin(Id = "youtube", Version = "0.1.2", Author = "fd_crash", Name = "YouTube",
         Description = "Видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео. Пользователи могут загружать, просматривать, оценивать, комментировать, добавлять в избранное и делиться теми или иными видеозаписями",
-        ImageLink = "http://s1.iconbird.com/ico/1012/AmpolaIcons/w256h2561350597291utorrent2.png")]
+        ImageLink = "https://img.icons8.com/flat_round/384/youtube-play.png",
+        Github = "ShutovPS/RemoteFork.Plugins/YouTube")]
 
     public class YouTube : IPlugin {
         public static bool IsIptv = false;
         public static string NextPageUrl = null;
         public static string Source = null;
-        internal const string API_KEY = "AIzaSyD6nuSKJVzCG4KI9yJ_ecHqhQpg3yTbJQg";
 
         public Playlist GetList(IPluginContext context) {
             string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
@@ -85,7 +85,7 @@ namespace RemoteFork.Plugins {
             }
 
             playlist.source = Source;
-            playlist.IsIptv = IsIptv ? "True" : "False";
+            playlist.IptvPlaylist = IsIptv;
 
             return playlist;
         }
