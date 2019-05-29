@@ -28,7 +28,7 @@
 ##### Заморожены (работа не гарантируется)
 | Название | Описание | Скачать |
 |--|--|--|
-| *YouTube* | видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео | [youtube.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/youtube.0.1.1) |
+| *YouTube* | видеохостинговая компания, предоставляющая пользователям услуги хранения, доставки и показа видео | [youtube.0.1.2](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/youtube.0.1.2) |
 | *THVP* | предоставляет пользователю простой способ проигрывать любые торрент медиа-файлы | [thvp.0.1.1](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/thvp.0.1.1) |
 | *HD Serials* | плагин для сайтов coldfilm.hdkino и lostfilm.hdkino | [hdserials.0.0.4](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/hdserials.0.0.4) |
 | *SensFilm* | самые свежие сериалы онлайн новинки и топ мирового проката смотреть бесплатно | [sensfilm.0.0.3](https://github.com/ShutovPS/RemoteFork.Plugins/releases/tag/sensfilm.0.0.3) |
