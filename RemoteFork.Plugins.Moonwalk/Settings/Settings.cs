@@ -3,9 +3,7 @@ using System;
 namespace RemoteFork.Plugins.Settings {
     [Serializable]
     public class Settings {
-        public Version SettingsVersion = new Version(1, 10);
-
-        public string Key = "997e626ac4d9ce453e6c920785db8f45";
+        public string Version = "1.13";
 
         public bool UseMp4 = true;
 
@@ -13,24 +11,32 @@ namespace RemoteFork.Plugins.Settings {
 
         public Encryption Encryption = new Encryption();
 
+        public Api Api = new Api();
+
         public Regexp Regexp = new Regexp();
 
         public Icons Icons = new Icons();
 
-        public char Separator = ';';
+        public readonly char Separator = ';';
 
-        public string PluginPath = "pluginPath";
+        public readonly string PluginPath = "pluginPath";
+    }
+
+    [Serializable]
+    public class Api {
+        public string Key = "3df23da89b78aa32335efa233c2a18d0";
+
+        public int DomainId = 516746;
+
+        public readonly string DataUrl =
+            "https://gist.githubusercontent.com/ShutovPS/9f09d9e19b7280becf7798beff1c0fc5/raw/moonwalk.data";
     }
 
     [Serializable]
     public class Encryption {
         public string IV = "2ea2116c80fae4e90c1e2b2b765fcc45";
         public string Key = "9186a0bae4afec34c323aecb7754b7c848e016188eb8b5be677d54d3e70f9cbd";
-        public string Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini";
-        public int DomainId = 516746;
-
-        public string DomainUrl =
-            "https://gist.githubusercontent.com/ShutovPS/b2fa65ec20b5b5b180a89940979c3237/raw/moonwalk.domain";
+        public readonly string Url = "https://raw.githubusercontent.com/WendyH/PHP-Scripts/master/moon4crack.ini";
     }
 
     [Serializable]

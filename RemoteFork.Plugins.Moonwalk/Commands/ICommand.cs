@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using RemoteFork.Items;
 
 namespace RemoteFork.Plugins {
     public interface ICommand {
-        List<Item> GetItems(IPluginContext context = null, params string[] data);
+        void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data);
     }
 }

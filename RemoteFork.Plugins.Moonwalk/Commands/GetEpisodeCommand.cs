@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using RemoteFork.Items;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
 using RemoteFork.Settings;
@@ -11,23 +12,33 @@ namespace RemoteFork.Plugins {
     public class GetEpisodeCommand : ICommand {
         public const string KEY = "episode";
 
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            return GetEpisodes(WebUtility.UrlDecode(data[2]), data[3]);
+        public const string URL_KEY = "url";
+        public const string REFERER_KEY = "referer";
+
+        public void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data) {
+            string url;
+            string referer;
+
+            data.TryGetValue(URL_KEY, out url);
+            data.TryGetValue(REFERER_KEY, out referer);
+
+            url = WebUtility.UrlDecode(url);
+            referer = WebUtility.UrlDecode(referer);
+
+            GetEpisodes(playList, url, referer);
         }
 
-        public static List<Item> GetEpisodes(string url, string referer) {
+        public static void GetEpisodes(PlayList playList, string url, string referer) {
             var header = new Dictionary<string, string>() {
-                {"Referer", WebUtility.UrlDecode(referer)}
+                {"Referer", referer}
             };
 
             string response = HTTPUtility.GetRequest(url, header);
 
-            return GetEpisodesData(url, response);
+            GetEpisodesData(playList, url, response);
         }
 
-        private static List<Item> GetEpisodesData(string url, string response) {
-            var items = new List<Item>();
-
+        private static void GetEpisodesData(PlayList playList, string url, string response) {
             var regex = new Regex(PluginSettings.Settings.Regexp.Script);
 
             if (regex.IsMatch(response)) {
@@ -61,46 +72,48 @@ namespace RemoteFork.Plugins {
                     UserAgent = ProgramSettings.Settings.UserAgent
                 };
 
-                ParseEpisodesData(items, moonwalkUrl, scriptRef, o);
+                ParseEpisodesData(playList, moonwalkUrl, scriptRef, o);
 
-                if (items.Count == 0) {
-                    o.DomainId = PluginSettings.Settings.Encryption.DomainId;
-                    ParseEpisodesData(items, moonwalkUrl, scriptRef, o);
+                if (playList.Items.Count == 0) {
+                    o.DomainId = PluginSettings.Settings.Api.DomainId;
+                    ParseEpisodesData(playList, moonwalkUrl, scriptRef, o);
                 }
             }
-
-            return items;
         }
 
-        private static void ParseEpisodesData(List<Item> items, string moonwalkUrl, string scriptRef, EncryptedData o) {
+        private static void ParseEpisodesData(PlayList playList, string moonwalkUrl, string scriptRef,
+            EncryptedData o) {
             string q = JsonConvert.SerializeObject(o);
 
             string response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
                 string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
-            ParseEpisodesData(items, response);
+            ParseEpisodesData(playList, response);
 
-            if (items.Count == 0) {
-                if (new GetNewKeysCommand().GetItems() != null) {
+            if (playList.Items.Count == 0) {
+                new GetNewKeysCommand().GetItems(playList, null, null);
+                if (playList.IsIptv) {
+                    playList.IsIptv = false;
+
                     response = HTTPUtility.PostRequest($"{moonwalkUrl}/vs",
                         string.Format("q={0}&ref={1}", EncryptQ(q), scriptRef));
 
-                    ParseEpisodesData(items, response);
+                    ParseEpisodesData(playList, response);
                 }
             }
         }
 
-        private static void ParseEpisodesData(List<Item> items, string response) {
+        private static void ParseEpisodesData(PlayList playList, string response) {
             if (!string.IsNullOrEmpty(response)) {
                 string url = ParseEpisodesLink(response, PluginSettings.Settings.UseMp4);
 
                 if (!string.IsNullOrEmpty(url)) {
-                    ParseEpisodesData(items, url, PluginSettings.Settings.UseMp4);
+                    ParseEpisodesData(playList, url, PluginSettings.Settings.UseMp4);
                 } else {
                     url = ParseEpisodesLink(response, !PluginSettings.Settings.UseMp4);
 
                     if (!string.IsNullOrEmpty(url)) {
-                        ParseEpisodesData(items, url, !PluginSettings.Settings.UseMp4);
+                        ParseEpisodesData(playList, url, !PluginSettings.Settings.UseMp4);
                     }
                 }
             }
@@ -120,7 +133,7 @@ namespace RemoteFork.Plugins {
             return string.Empty;
         }
 
-        private static void ParseEpisodesData(List<Item> items, string url, bool useMp4) {
+        private static void ParseEpisodesData(PlayList playList, string url, bool useMp4) {
             if (!string.IsNullOrEmpty(url)) {
                 url = url.ReplaceUnicodeSymbols();
                 string response = HTTPUtility.GetRequest(url);
@@ -129,19 +142,28 @@ namespace RemoteFork.Plugins {
                     ? PluginSettings.Settings.Regexp.Mp4List
                     : PluginSettings.Settings.Regexp.ExtList);
 
-                var baseItem = new Item() {
-                    Type = ItemType.FILE,
+                var baseItem = new FileItem() {
                     ImageLink = PluginSettings.Settings.Icons.IcoVideo
                 };
 
                 foreach (Match match in regex.Matches(response)) {
-                    var item = new Item(baseItem) {
-                        Name = match.Groups[2].Value,
+                    var item = new FileItem(baseItem) {
+                        Title = match.Groups[2].Value,
                         Link = match.Groups[4].Value
                     };
-                    items.Add(item);
+                    playList.Items.Add(item);
                 }
             }
+        }
+
+        public static string CreateLink(string url, string referer) {
+            var data = new Dictionary<string, object>() {
+                {Moonwalk.KEY, KEY},
+                {URL_KEY, WebUtility.UrlEncode(url)},
+                {REFERER_KEY, WebUtility.UrlEncode(referer)},
+            };
+
+            return Moonwalk.CreateLink(data);
         }
 
         private static string EncryptQ(string q) {

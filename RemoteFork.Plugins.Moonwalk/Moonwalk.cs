@@ -1,93 +1,98 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Net;
+using RemoteFork.Items;
 using RemoteFork.Log;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    [PluginAttribute(Id = "moonwalk", Version = "0.0.9", Author = "fd_crash", Name = "Moonwalk",
+    [PluginAttribute(Id = "moonwalk", Version = "0.1.0", Author = "fd_crash", Name = "Moonwalk",
         Description = "Cмотреть лучшие новинки фильмов онлайн в хорошем качестве и бесплатно.",
         ImageLink = "https://img.icons8.com/dusk/384/night-camera.png",
         Github = "ShutovPS/RemoteFork.Plugins/Moonwalk")]
-    public class Moonwalk : IPlugin {
+    public class Moonwalk : IRemotePlugin {
+        public const string KEY = "KEY";
+
         public static readonly Logger Logger = new Logger(typeof(Moonwalk));
 
-        public static string NextPageUrl = null;
-        
-        public Playlist GetList(IPluginContext context) {
+        private static readonly Dictionary<string, ICommand> _commands = new Dictionary<string, ICommand>() {
+            {GetRootListCommand.KEY, new GetRootListCommand()},
+            {SearchCommand.KEY, new SearchCommand()},
+            {GetCategoryCommand.KEY, new GetCategoryCommand()},
+            {GetFilmCommand.KEY, new GetFilmCommand()},
+            {GetEpisodeCommand.KEY, new GetEpisodeCommand()},
+            {GetNewKeysCommand.KEY, new GetNewKeysCommand()},
+        };
+
+        private static IPluginContext _context;
+
+        public PlayList GetPlayList(IPluginContext context) {
+            _context = context;
+
             string path = context.GetRequestParams().Get(PluginSettings.Settings.PluginPath);
 
-            path = path == null ? "plugin" : "plugin;" + path;
+            var playlist = new PlayList() {
+                Items = new List<IItem>()
+            };
 
-            var arg = path.Split(PluginSettings.Settings.Separator);
+            if (!string.IsNullOrEmpty(path)) {
+                path = WebUtility.UrlDecode(path);
+            }
 
-            var items = new List<Item>();
+            var data = ConvertToDictionary(path);
+
             ICommand command = null;
-            switch (arg.Length) {
-                case 0:
-                    break;
-                case 1:
-                    command = new GetRootListCommand();
-                    break;
-                default:
-                    switch (arg[1]) {
-                        case SearchCommand.KEY:
-                            command = new SearchCommand();
-                            break;
-                        case GetCategoryCommand.KEY:
-                            command = new GetCategoryCommand();
-                            break;
-                        case GetFilmCommand.KEY:
-                            command = new GetFilmCommand();
-                            break;
-                        case GetEpisodeCommand.KEY:
-                            command = new GetEpisodeCommand();
-                            break;
-                        case GetNewKeysCommand.KEY:
-                            command = new GetNewKeysCommand();
-                            break;
-                    }
 
-                    break;
+            if (data.Count == 0) {
+                data[KEY] = GetRootListCommand.KEY;
             }
 
-            NextPageUrl = null;
+            string key;
 
-            if (command != null) {
-                var data = new string[Math.Max(5, arg.Length)];
-                for (int i = 0; i < arg.Length; i++) {
-                    data[i] = arg[i];
+            if (data.TryGetValue(KEY, out key)) {
+                if (_commands.ContainsKey(key)) {
+                    command = _commands[key];
                 }
 
-                items.AddRange(command.GetItems(context, data));
-            }
-
-            return CreatePlaylist(items, context);
-        }
-
-        private static Playlist CreatePlaylist(List<Item> items, IPluginContext context) {
-            var playlist = new Playlist();
-
-            if (!string.IsNullOrEmpty(NextPageUrl)) {
-                var pluginParams = new NameValueCollection {[PluginSettings.Settings.PluginPath] = NextPageUrl};
-                playlist.NextPageUrl = context.CreatePluginUrl(pluginParams);
-            } else {
-                playlist.NextPageUrl = null;
-            }
-
-            foreach (var item in items) {
-                if (ItemType.DIRECTORY == item.Type) {
-                    var pluginParams = new NameValueCollection {
-                        [PluginSettings.Settings.PluginPath] = item.Link
-                    };
-
-                    item.Link = context.CreatePluginUrl(pluginParams);
+                if (command != null) {
+                    command.GetItems(playlist, context, data);
                 }
             }
-
-            playlist.Items = items.ToArray();
 
             return playlist;
+        }
+
+        public static string CreateLink(Dictionary<string, object> data) {
+            var url = ConvertToString(data);
+
+            var pluginParams = new NameValueCollection {
+                [PluginSettings.Settings.PluginPath] = WebUtility.UrlEncode(url)
+            };
+
+            url = _context.CreatePluginUrl(pluginParams);
+
+            return url;
+        }
+
+        public static Dictionary<string, string> ConvertToDictionary(string text) {
+            if (text == null) {
+                return new Dictionary<String,String>();
+            }
+            var dictionary = text
+                .Split(';')
+                .Select(part => part.Split('='))
+                .Where(part => part.Length == 2)
+                .ToDictionary(sp => sp[0], sp => sp[1]);
+
+            return dictionary;
+        }
+
+        public static string ConvertToString(Dictionary<string, object> dictionary) {
+            string text = string.Join(";", dictionary.Select(x => x.Key + "=" + x.Value).ToArray());
+
+            return text;
         }
     }
 }

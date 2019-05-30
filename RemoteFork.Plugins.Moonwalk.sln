@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteFork.Plugins.Moonwalk", "RemoteFork.Plugins.Moonwalk\RemoteFork.Plugins.Moonwalk.csproj", "{D191C12C-CA99-4940-9758-D7E435C5ECF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Plugins.Moonwalk", "RemoteFork.Plugins.Moonwalk\RemoteFork.Plugins.Moonwalk.csproj", "{D191C12C-CA99-4940-9758-D7E435C5ECF6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Log", "RemoteFork.Utility\RemoteFork.Log\RemoteFork.Log.csproj", "{13F3EA32-A850-4C6D-9666-89A9E12B6E1B}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Torrents", "RemoteFork.Utility\RemoteFork.Torrents\RemoteFork.Torrents.csproj", "{47E08A8D-5228-45B5-8F4C-085B837D13E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Utility", "RemoteFork.Utility\RemoteFork.Utility\RemoteFork.Utility.csproj", "{7C3AB137-6024-4C51-BDD5-3B47C98086AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteFork.Items", "RemoteFork.Utility\RemoteFork.Items\RemoteFork.Items.csproj", "{2E8A6878-C967-499E-BFC1-15426B5E8277}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{7C3AB137-6024-4C51-BDD5-3B47C98086AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C3AB137-6024-4C51-BDD5-3B47C98086AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3AB137-6024-4C51-BDD5-3B47C98086AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E8A6878-C967-499E-BFC1-15426B5E8277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8A6878-C967-499E-BFC1-15426B5E8277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8A6878-C967-499E-BFC1-15426B5E8277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8A6878-C967-499E-BFC1-15426B5E8277}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

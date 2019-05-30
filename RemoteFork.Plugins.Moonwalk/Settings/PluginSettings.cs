@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using RemoteFork.Settings;
 
@@ -10,7 +11,7 @@ namespace RemoteFork.Plugins.Settings {
         }
 
         public PluginSettings() {
-            if (defaultSettings.SettingsVersion > settingsManager.Settings.SettingsVersion) {
+            if (new Version(defaultSettings.Version) > new Version(settingsManager.Settings.Version)) {
                 settingsManager.Save(defaultSettings);
             }
         }

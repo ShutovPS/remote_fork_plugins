@@ -85,7 +85,7 @@ namespace RemoteFork.Plugins {
                     $"<div id=\"poster\" style=\"float: left; padding: 4px; background-color: #eeeeee; margin: 0px 13px 1px 0px;\"><img style=\"width: 180px; float: left;\" src=\"{MaterialData.Poster}\" /></div>");
             }
 
-            sb.AppendLine($"<span style=\"color: #3366ff;\"><strong>{GetTitle()}</strong></span>.<br>");
+            sb.AppendLine($"<span style=\"color: #3366ff;\"><strong>{GetTitle()}</strong></span><br>");
 
             if (!string.IsNullOrEmpty(MaterialData.Tagline) && MaterialData.Tagline.Length > 3) {
                 sb.AppendLine(

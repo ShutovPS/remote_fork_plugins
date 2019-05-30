@@ -3,44 +3,41 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using RemoteFork.Items;
 using RemoteFork.Network;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetCategoryCommand : ICommand {
         public const string KEY = "category";
+        public const string URL_KEY = "url";
 
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            var items = new List<Item>();
+        public void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data) {
+            string url;
+            data.TryGetValue(URL_KEY, out url);
+            url = WebUtility.UrlDecode(url);
 
-            items.AddRange(GetFilmsItems(WebUtility.UrlDecode(data[2])));
-
-            return items;
+            GetFilmsItems(playList, url);
         }
 
-        public static IEnumerable<Item> GetFilmsItems(string url) {
-            var items = new List<Item>();
-
+        public static void GetFilmsItems(PlayList playList, string url) {
             string response = HTTPUtility.GetRequest(url);
 
-            items.AddRange(GetFilmsItemsFromHtml(url, response));
-
-            return items;
+            GetFilmsItemsFromHtml(playList, url, response);
         }
 
-        public static IEnumerable<Item> GetFilmsItemsFromHtml(string url, string response, bool search = false) {
-            var items = new List<Item>();
-
+        public static void GetFilmsItemsFromHtml(PlayList playList, string url, string response, bool search = false) {
             response = Regex.Match(response, "\\[.*\\]").Value;
 
             var films = JsonConvert.DeserializeObject<FilmModel[]>(response);
+
             foreach (var film in films) {
                 var item = GetItem(film);
-                if (items.Any(i => i.Link == item.Link)) {
+                if (playList.Items.Any(i => i.GetLink() == item.GetLink())) {
                     continue;
                 }
 
-                items.Add(item);
+                playList.Items.Add(item);
             }
 
             if (!search) {
@@ -52,27 +49,32 @@ namespace RemoteFork.Plugins {
                     url += "&page=2";
                 }
 
-                Moonwalk.NextPageUrl = $"{KEY}{PluginSettings.Settings.Separator}{url}";
+                playList.NextPageUrl = CreateLink(url);
             }
-
-            return items;
         }
 
-        private static Item GetItem(FilmModel film) {
+        private static IItem GetItem(FilmModel film) {
             if (film.Serial != null) {
                 film = film.Serial;
             }
 
-            var item = new Item() {
-                Type = ItemType.DIRECTORY,
+            var item = new DirectoryItem() {
+                Title = film.GetTitle(),
                 ImageLink = PluginSettings.Settings.Icons.IcoFolder,
-                Name = film.GetTitle(),
-                Link =
-                    $"{GetFilmCommand.KEY}{PluginSettings.Settings.Separator}translations{PluginSettings.Settings.Separator}{WebUtility.UrlEncode(film.IframeUrl)}",
+                Link = GetFilmCommand.CreateLink(GetFilmCommand.TRANSLATIONS_KEY, film.IframeUrl, string.Empty),
                 Description = film.ToString()
             };
 
             return item;
+        }
+
+        public static string CreateLink(string url) {
+            var data = new Dictionary<string, object>() {
+                {Moonwalk.KEY, KEY},
+                {URL_KEY, WebUtility.UrlEncode(url)}
+            };
+
+            return Moonwalk.CreateLink(data);
         }
     }
 }

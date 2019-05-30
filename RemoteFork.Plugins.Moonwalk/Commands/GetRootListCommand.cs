@@ -1,93 +1,79 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using RemoteFork.Items;
 using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetRootListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            var items = new List<Item>();
+        public const string KEY = "root";
 
-            CheckUpdate(items, context);
+        private static readonly Dictionary<string, string> _directories = new Dictionary<string, string>() {
+            {
+                "Зарубежные фильмы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Api.Key}")
+            }, {
+                "Русские фильмы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Api.Key}&category=Russian")
+            }, {
+                "Зарубежные сериалы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Api.Key}")
+            }, {
+                "Русские сериалы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Api.Key}&category=Russian")
+            }, {
+                "Аниме фильмы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Api.Key}&category=Anime")
+            }, {
+                "Аниме сериалы",
+                GetCategoryCommand.CreateLink(
+                    $"{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Api.Key}&category=Anime")
+            },
+        };
 
-            var baseItem = new Item() {
-                Type = ItemType.DIRECTORY,
-                ImageLink = PluginSettings.Settings.Icons.IcoFolder
-            };
+        public void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data) {
+            CheckUpdate(playList, context);
 
-            var item = new Item() {
-                Name = "Поиск",
-                Type = ItemType.DIRECTORY,
-                Link = $"{SearchCommand.KEY}",
-                SearchOn = "Поиск",
+            IItem item = new SearchItem() {
+                Title = "Поиск",
+                Link = SearchCommand.CreateLink(),
                 ImageLink = PluginSettings.Settings.Icons.IcoSearch
             };
-            items.Add(item);
+            playList.Items.Add(item);
 
-            item = new Item(baseItem) {
-                Name = "Зарубежные фильмы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Key}"
-            };
-            items.Add(item);
+            foreach (var directory in _directories) {
+                item = new DirectoryItem() {
+                    Title = directory.Key,
+                    Link = directory.Value,
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                };
+                playList.Items.Add(item);
+            }
 
-            item = new Item(baseItem) {
-                Name = "Русские фильмы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Key}&category=Russian"
-            };
-            items.Add(item);
-
-            item = new Item(baseItem) {
-                Name = "Зарубежные сериалы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Key}"
-            };
-            items.Add(item);
-
-            item = new Item(baseItem) {
-                Name = "Русские сериалы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Key}&category=Russian"
-            };
-            items.Add(item);
-
-            item = new Item(baseItem) {
-                Name = "Аниме сериалы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/serials_updates.json?api_token={PluginSettings.Settings.Key}&category=Anime"
-            };
-            items.Add(item);
-
-            item = new Item(baseItem) {
-                Name = "Аниме фильмы",
-                Link =
-                    $"{GetCategoryCommand.KEY}{PluginSettings.Settings.Separator}{PluginSettings.Settings.Links.Api}/movies_updates.json?api_token={PluginSettings.Settings.Key}&category=Anime"
-            };
-            items.Add(item);
-
-            item = new Item() {
-                Name = "Обновить ключи",
-                Type = ItemType.DIRECTORY,
-                Link = $"{GetNewKeysCommand.KEY}{PluginSettings.Settings.Separator}",
+            item = new DirectoryItem() {
+                Title = "Обновить ключи",
+                Link = GetNewKeysCommand.CreateLink(),
                 ImageLink = PluginSettings.Settings.Icons.IcoUpdate
             };
-            items.Add(item);
-
-            return items;
+            playList.Items.Add(item);
         }
 
-        private static void CheckUpdate(ICollection<Item> items, IPluginContext context) {
+        private static void CheckUpdate(PlayList playList, IPluginContext context) {
             if (context != null) {
                 string latestVersion =
                     context.GetLatestVersionNumber(typeof(Moonwalk).GetCustomAttribute<PluginAttribute>().Id);
                 if (!string.IsNullOrEmpty(latestVersion)) {
                     if (latestVersion != typeof(Moonwalk).GetCustomAttribute<PluginAttribute>().Version) {
-                        var updateItem = new Item() {
-                            Name = $"Доступна новая версия: {latestVersion}",
+                        var updateItem = new FileItem() {
+                            Title = $"Доступна новая версия: {latestVersion}",
                             Link = "http://newversion.m3u",
                             ImageLink = PluginSettings.Settings.Icons.NewVersion
                         };
-                        items.Add(updateItem);
+                        playList.Items.Add(updateItem);
                     }
                 }
             }
