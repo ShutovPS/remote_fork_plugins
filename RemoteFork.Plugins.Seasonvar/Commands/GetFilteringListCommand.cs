@@ -4,65 +4,65 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using RemoteFork.Items;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
-    class GetFilteringListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            List<Item> items = new List<Item>();
+    public class GetFilteringListCommand : ICommand {
+        public const string KEY = "filter";
 
-            string lang = data.Length > 1 ? data[1] : string.Empty;
-            string sort = data.Length > 2 ? data[2] : string.Empty;
-            string page = data.Length > 3 ? data[3] : string.Empty;
+        public const string LANG_KEY = "lang";
+        public const string PAGE_KEY = "page";
+        public const string SORT_KEY = "sort";
 
-            if (sort == "first") {
-                if (!Seasonvar.SERIAL_MATCHES.ContainsKey(lang + "name")) {
-                    data[2] = "name";
-                    new GetFilteringListCommand().GetItems(context, data);
-                }
-                if (Seasonvar.SERIAL_MATCHES.ContainsKey(lang + "name")) {
-                    items.AddRange(new FirstSymbolGroupCommand().GetItems(context, data));
+        private static readonly Dictionary<string, string> _filters = new Dictionary<string, string>() {
+            {"По популярности", "view"},
+            {"По названию", "name"},
+            {"По году", "god"},
+            {"По добавлению", "newest"}
+        };
 
-                    return items;
-                } else {
-                    sort = "name";
-                }
-            } else if (!string.IsNullOrEmpty(page)) {
+        public void GetItems(PlayList playList, IPluginContext context = null, Dictionary<string, string> data = null) {
+            string lang;
+            string page;
+            string sort;
+
+            data.TryGetValue(LANG_KEY, out lang);
+            data.TryGetValue(PAGE_KEY, out page);
+            data.TryGetValue(SORT_KEY, out sort);
+
+            if (!string.IsNullOrEmpty(page)) {
                 if (Seasonvar.SERIAL_MATCHES.ContainsKey(lang + sort)) {
-                    items.AddRange(new NextPageCommand().GetItems(context, data));
+                    new NextPageCommand().GetItems(playList, context, data);
 
-                    return items;
+                    return;
                 }
             }
 
             if (string.IsNullOrEmpty(sort)) {
                 sort = "view";
 
-                var item = new Item() {
-                    Name = "По популярности",
-                    Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, lang, "view")
+                var baseItem = new DirectoryItem() {
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
-                items.Add(item);
-                item = new Item() {
-                    Name = "По названию",
-                    Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, lang, "name")
+
+                foreach (var filter in _filters) {
+                    var item = new DirectoryItem(baseItem) {
+                        Title = filter.Key,
+                        Link = CreateLink(lang, filter.Value)
+                    };
+                    playList.Items.Add(item);
+                }
+
+                baseItem = new DirectoryItem() {
+                    Title = "По первому символу",
+                    Link = FirstSymbolGroupCommand.CreateLink(lang),
+
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
                 };
-                items.Add(item);
-                item = new Item() {
-                    Name = "По году",
-                    Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, lang, "god")
-                };
-                items.Add(item);
-                item = new Item() {
-                    Name = "По добавлению",
-                    Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, lang, "newest")
-                };
-                items.Add(item);
-                item = new Item() {
-                    Name = "По первому символу",
-                    Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, lang, "first")
-                };
-                items.Add(item);
+
+                playList.Items.Add(baseItem);
             }
 
             List<Match> tempSerials;
@@ -85,20 +85,19 @@ namespace RemoteFork.Plugins {
                     if (datastring.Length > 0) {
                         datastring.Append("&");
                     }
+
                     datastring.Append(WebUtility.UrlEncode(k.Key)).Append("=").Append(WebUtility.UrlEncode(k.Value));
                 }
+
                 string response = HTTPUtility
-                    .PostRequest(string.Format(Seasonvar.SITE_URL, "/index.php"), datastring.ToString(), header)
+                    .PostRequest(PluginSettings.Settings.Links.Site + "/index.php", datastring.ToString(), header)
                     .Replace("\n", " ");
-                //context.ConsoleLog(string.Format(Seasonvar.SITE_URL, "/index.php") + " datastring=" + datastring);
 
                 tempSerials = Regex.Matches(response,
                         "<a data-id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)<",
                         RegexOptions.Multiline)
                     .ToList();
 
-                //context.ConsoleLog("tempSerials.Count=" + tempSerials.Count);
-                //
                 if (tempSerials.Count > 0) {
                     Seasonvar.SERIAL_MATCHES.Add((lang + sort), tempSerials);
                 }
@@ -106,26 +105,28 @@ namespace RemoteFork.Plugins {
 
             if (tempSerials != null) {
                 for (int i = 0; i < Math.Min(50, tempSerials.Count); i++) {
-                    var item = new GetSerialInfoCommand().GetItem(context, tempSerials[i].Groups[1].Value);
-                    item.Name = tempSerials[i].Groups[3].Value.Trim();
-                    item.Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, "list", tempSerials[i].Groups[2]);
+                    var item = new GetSerialInfoCommand().GetItem(tempSerials[i].Groups[1].Value,
+                        tempSerials[i].Groups[3].Value);
 
-                    items.Add(item);
+                    item.Link = GetSerialListCommand.CreateLink(tempSerials[i].Groups[2].Value);
+
+                    playList.Items.Add(item);
                 }
 
                 if (tempSerials.Count > 50) {
-                    Seasonvar.NextPageUrl = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, 50);
-                    //var item = new Item() {
-                    //    Name = string.Format(Seasonvar.PAGE, 2),
-                    //    Link = string.Format("{1}{0}{2}{0}{3}", Seasonvar.SEPARATOR, lang, sort, 50),
-                    //    ImageLink = Seasonvar.NEXT_PAGE_IMAGE_URL
-                    //};
-
-                    //items.Add(item);
+                    playList.NextPageUrl = CreateLink(lang, sort, 50);
                 }
             }
+        }
 
-            return items;
+        public static string CreateLink(string lang = default, string sort = default, int page = default) {
+            var data = new Dictionary<string, object>() {
+                {Seasonvar.KEY, KEY},
+                {LANG_KEY, lang},
+                {PAGE_KEY, page},
+                {SORT_KEY, sort},
+            };
+            return Seasonvar.CreateLink(data);
         }
     }
 }

@@ -1,35 +1,44 @@
 ﻿using System.Collections.Generic;
+using RemoteFork.Items;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetRootListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            List<Item> items = new List<Item>();
+        public const string KEY = "root";
 
-            var item = new Item() {
-                Name = "Поиск",
-                Link = "search",
-                SearchOn = "Поиск",
-                ImageLink = "http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/256/Search-icon.png"
-            };
-            items.Add(item);
-            item = new Item() {
-                Name = "Зарубежные",
-                Link = "eng"
-            };
-            items.Add(item);
-            item = new Item() {
-                Name = "Отечественные",
-                Link = "rus"
-            };
-            items.Add(item);
+        private static readonly Dictionary<string, string> _directories = new Dictionary<string, string>() {
+            {"Зарубежные", GetFilteringListCommand.CreateLink("eng")},
+            {"Отечественные", GetFilteringListCommand.CreateLink("rus")}
+        };
 
-            item = new Item() {
-                Name = "Обновить список",
-                Link = "update"
-            };
-            items.Add(item);
+        public void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data) {
+            playList.Items = new List<IItem>();
 
-            return items;
+            IItem item = new SearchItem() {
+                Title = "Поиск",
+                Link = SearchSerialsCommand.CreateLink(),
+                Description = "Поиск",
+                ImageLink = PluginSettings.Settings.Icons.IcoSearch
+            };
+            playList.Items.Add(item);
+
+            foreach (var directory in _directories) {
+                item = new DirectoryItem() {
+                    Title = directory.Key,
+                    Link = directory.Value,
+
+                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                };
+                playList.Items.Add(item);
+            }
+
+            item = new DirectoryItem() {
+                Title = "Обновить список",
+                Link = ClearListCommand.CreateLink(),
+
+                ImageLink = PluginSettings.Settings.Icons.IcoUpdate
+            };
+            playList.Items.Add(item);
         }
     }
 }

@@ -1,38 +1,54 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
+using RemoteFork.Items;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     internal class GetSerialListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context, params string[] data) {
-            List<Item> items = new List<Item>();
+        public const string KEY = "list";
 
-            string url = data.Length > 2 ? data[2] : string.Empty;
+        public const string URL_KEY = "url";
+
+        public void GetItems(PlayList playList, IPluginContext context = null, Dictionary<string, string> data = null) {
+            string url;
+
+            data.TryGetValue(URL_KEY, out url);
+
+            url = WebUtility.UrlDecode(url);
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
                 //{"Content-Type", "text/html; charset=UTF-8"}
             };
 
-            string response = HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL, url), header);
+            string response = HTTPUtility.GetRequest(PluginSettings.Settings.Links.Site + url, header);
 
             var matches = Regex.Matches(response,
-                "(<h2>[.\\s^&]*?<a href=\")((\\S*?)(\\/serial-(\\d+))(\\S*?))(\">[\\s>]*?Сериал)(.+?)(\\s*?(<span>|<\\/a>))",
+                PluginSettings.Settings.Regexp.GetSerials,
                 RegexOptions.Multiline);
 
             if (matches.Count == 1) {
-                return new GetVoiseListCommand().GetItems(context, data);
+                new GetVoiceListCommand().GetItems(playList, context, data);
             } else {
                 for (int i = 0; i < matches.Count; i++) {
-                    Item item = new GetSerialInfoCommand().GetItem(context, matches[i].Groups[5].Value);
-                    item.Name = matches[i].Groups[8].Value.Trim();
-                    item.Link = string.Format("{1}{0}{2}", Seasonvar.SEPARATOR, "voise", matches[i].Groups[2].Value);
+                    var item = new GetSerialInfoCommand().GetItem(matches[i].Groups[5].Value,
+                        matches[i].Groups[8].Value);
 
-                    items.Add(item);
+                    item.Link = GetVoiceListCommand.CreateLink(matches[i].Groups[2].Value);
+
+                    playList.Items.Add(item);
                 }
             }
+        }
 
-            return items;
+        public static string CreateLink(string url = default) {
+            var data = new Dictionary<string, object>() {
+                {Seasonvar.KEY, KEY},
+                {URL_KEY, WebUtility.UrlEncode(url)}
+            };
+            return Seasonvar.CreateLink(data);
         }
     }
 }

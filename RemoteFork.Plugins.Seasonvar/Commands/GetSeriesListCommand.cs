@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using RemoteFork.Items;
 using RemoteFork.Network;
+using RemoteFork.Plugins.Settings;
 
 namespace RemoteFork.Plugins {
     public class GetSeriesListCommand : ICommand {
-        public List<Item> GetItems(IPluginContext context = null, params string[] data) {
-            var items = new List<Item>();
+        public const string KEY = "series";
 
-            string url = data.Length > 2 ? data[2] : string.Empty;
+        public const string URL_KEY = "url";
+
+        public void GetItems(PlayList playList, IPluginContext context, Dictionary<string, string> data) {
+            string url;
+
+            data.TryGetValue(URL_KEY, out url);
+
+            url = WebUtility.UrlDecode(url);
 
             var header = new Dictionary<string, string>() {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
@@ -18,37 +27,45 @@ namespace RemoteFork.Plugins {
             //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL,
             //                       url.Replace("transСтандартный", "trans")));
             string response =
-                HTTPUtility.GetRequest(string.Format(Seasonvar.SITE_URL,
-                    url.Replace("transСтандартный", "trans")), header);
+                HTTPUtility.GetRequest(PluginSettings.Settings.Links.Site +
+                                       url.Replace("transСтандартный", "trans"), header);
 
             var matches = Regex.Matches(response,
-                "({)(\"title\"\\s*:\\s*\")(\\d+)(\\s+?)(.+?)(\")(.*?)(\"file\"\\s*:\\s*\")(.+?)(\")(.+?)(\"galabel\"\\s*:\\s*\")(.+?)(\")(.+?)(})",
+                PluginSettings.Settings.Regexp.GetSeries,
                 RegexOptions.Multiline);
 
-            var match = Regex.Match(url, "(\\/)(\\d+)(\\/)");
+            var match = Regex.Match(url, PluginSettings.Settings.Regexp.SerialInfo);
 
-            var item = new GetSerialInfoCommand().GetItem(context, match.Groups[2].Value);
+            var item = new GetSerialInfoCommand().GetItem(match.Groups[2].Value, nameof(FileItem.Title));
 
             for (int i = 0; i < matches.Count; i++) {
                 string fileLink = matches[i].Groups[9].Value;
                 if (fileLink.StartsWith("#2")) {
-                    var regex = new Regex(@"(\\\/\\\/.*?=)");
+                    var regex = new Regex(PluginSettings.Settings.Regexp.FileLink);
                     fileLink = regex.Replace(fileLink, string.Empty);
                     byte[] linkData = Convert.FromBase64String(fileLink.Substring(2));
                     fileLink = Encoding.UTF8.GetString(linkData);
                 }
-                var itemR = new Item() {
-                    Name = string.Format("{0} Серия", matches[i].Groups[3].Value, matches[i].Groups[19].Value),
+
+                string title = string.Format("{0} Серия", matches[i].Groups[3].Value, matches[i].Groups[19].Value);
+
+                var itemR = new FileItem() {
+                    Title = title,
                     Link = fileLink,
-                    Type = ItemType.FILE,
                     ImageLink = item.ImageLink,
-                    Description = item.Description
+                    Description = item.Description.Replace(nameof(FileItem.Title), title)
                 };
 
-                items.Add(itemR);
+                playList.Items.Add(itemR);
             }
+        }
 
-            return items;
+        public static string CreateLink(string url) {
+            var data = new Dictionary<string, object>() {
+                {Seasonvar.KEY, KEY},
+                {URL_KEY, WebUtility.UrlEncode(url)}
+            };
+            return Seasonvar.CreateLink(data);
         }
     }
 }
