@@ -5,7 +5,8 @@ namespace RemoteFork.Plugins {
     public class ClearListCommand : ICommand {
         public const string KEY = "clear";
 
-        public void GetItems(PlayList playList, IPluginContext context = null, Dictionary<string, string> data = null) {
+        public void GetItems(PlayList playList = null, IPluginContext context = null,
+            Dictionary<string, string> data = null) {
             Seasonvar.SERIAL_MATCHES.Clear();
         }
 

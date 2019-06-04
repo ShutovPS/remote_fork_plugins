@@ -24,8 +24,7 @@ namespace RemoteFork.Plugins {
                 {"Accept-Encoding", "gzip, deflate, lzma"},
                 //{"Content-Type", "text/html; charset=UTF-8"}
             };
-            //context.ConsoleLog("url=" + string.Format(Seasonvar.SITE_URL,
-            //                       url.Replace("transСтандартный", "trans")));
+
             string response =
                 HTTPUtility.GetRequest(PluginSettings.Settings.Links.Site +
                                        url.Replace("transСтандартный", "trans"), header);
@@ -45,6 +44,7 @@ namespace RemoteFork.Plugins {
                     fileLink = regex.Replace(fileLink, string.Empty);
                     byte[] linkData = Convert.FromBase64String(fileLink.Substring(2));
                     fileLink = Encoding.UTF8.GetString(linkData);
+                    fileLink = fileLink.Split(" ")[0];
                 }
 
                 string title = string.Format("{0} Серия", matches[i].Groups[3].Value, matches[i].Groups[19].Value);
@@ -52,7 +52,7 @@ namespace RemoteFork.Plugins {
                 var itemR = new FileItem() {
                     Title = title,
                     Link = fileLink,
-                    ImageLink = item.ImageLink,
+                    ImageLink = PluginSettings.Settings.Icons.Video,
                     Description = item.Description.Replace(nameof(FileItem.Title), title)
                 };
 

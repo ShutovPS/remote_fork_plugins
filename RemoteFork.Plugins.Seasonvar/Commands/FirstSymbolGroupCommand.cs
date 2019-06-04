@@ -26,7 +26,7 @@ namespace RemoteFork.Plugins {
             }
 
             var tempSerials = Seasonvar.SERIAL_MATCHES[lang + "name"];
-            var groups = tempSerials.GroupBy(i => i.Groups[3].Value.Trim().Replace("\"", "#").First());
+            var groups = tempSerials.GroupBy(i => i.Title.Replace("\"", "#").First());
 
             if (string.IsNullOrEmpty(page)) {
                 foreach (var g in groups) {
@@ -34,7 +34,7 @@ namespace RemoteFork.Plugins {
                         Title = g.Key.ToString().Trim(),
                         Link = CreateLink(lang, page: g.Key.ToString()),
 
-                        ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                        ImageLink = PluginSettings.Settings.Icons.Folder
                     };
                     playList.Items.Add(item);
                 }
@@ -44,9 +44,9 @@ namespace RemoteFork.Plugins {
                 var group = groups.FirstOrDefault(i => i.Key == page.First());
                 if (group != null) {
                     foreach (var i in group) {
-                        var item = new GetSerialInfoCommand().GetItem(i.Groups[1].Value, i.Groups[3].Value);
+                        var item = new GetSerialInfoCommand().GetItem(i.Id, i.Title);
 
-                        item.Link = GetSerialListCommand.CreateLink(i.Groups[2].Value);
+                        item.Link = GetSerialListCommand.CreateLink(i.Url);
 
                         playList.Items.Add(item);
                     }

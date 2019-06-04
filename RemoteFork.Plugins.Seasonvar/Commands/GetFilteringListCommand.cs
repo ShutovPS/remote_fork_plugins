@@ -44,7 +44,7 @@ namespace RemoteFork.Plugins {
                 sort = "view";
 
                 var baseItem = new DirectoryItem() {
-                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                    ImageLink = PluginSettings.Settings.Icons.Folder
                 };
 
                 foreach (var filter in _filters) {
@@ -59,13 +59,13 @@ namespace RemoteFork.Plugins {
                     Title = "По первому символу",
                     Link = FirstSymbolGroupCommand.CreateLink(lang),
 
-                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                    ImageLink = PluginSettings.Settings.Icons.Folder
                 };
 
                 playList.Items.Add(baseItem);
             }
 
-            List<Match> tempSerials;
+            List<Seasonvar.SerialInfo> tempSerials;
 
             if (Seasonvar.SERIAL_MATCHES.ContainsKey(lang + sort)) {
                 tempSerials = Seasonvar.SERIAL_MATCHES[lang + sort];
@@ -78,6 +78,7 @@ namespace RemoteFork.Plugins {
                 };
                 var header = new Dictionary<string, string>() {
                     {"Accept-Encoding", "gzip, deflate, lzma"},
+                    {"Cookie", PluginSettings.Settings.Authorization.Cookie},
                     //{"Content-Type", "text/html; charset=UTF-8"}
                 };
                 var datastring = new StringBuilder();
@@ -93,22 +94,38 @@ namespace RemoteFork.Plugins {
                     .PostRequest(PluginSettings.Settings.Links.Site + "/index.php", datastring.ToString(), header)
                     .Replace("\n", " ");
 
-                tempSerials = Regex.Matches(response,
-                        "<a data-id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)<",
-                        RegexOptions.Multiline)
+                var regex = new Regex(PluginSettings.Settings.Regexp.GetAllSerials, RegexOptions.Multiline);
+
+                tempSerials = regex
+                    .Matches(response).Select(i =>
+                        new Seasonvar.SerialInfo(i.Groups[2].Value, i.Groups[3].Value, i.Groups[4].Value.Trim()))
                     .ToList();
 
                 if (tempSerials.Count > 0) {
+                    regex = new Regex(PluginSettings.Settings.Regexp.SerialWatched);
+
+                    for (var i = 0; i < tempSerials.Count; i++) {
+                        string title = tempSerials[i].Title;
+
+                        if (regex.IsMatch(title)) {
+                            title = regex.Match(title).Groups[2].Value;
+                        }
+
+                        tempSerials[i].Title = title.Trim();
+                    }
+
                     Seasonvar.SERIAL_MATCHES.Add((lang + sort), tempSerials);
+
+                    Seasonvar.UpdateTimeList();
                 }
             }
 
             if (tempSerials != null) {
                 for (int i = 0; i < Math.Min(50, tempSerials.Count); i++) {
-                    var item = new GetSerialInfoCommand().GetItem(tempSerials[i].Groups[1].Value,
-                        tempSerials[i].Groups[3].Value);
+                    var item = new GetSerialInfoCommand().GetItem(tempSerials[i].Id,
+                        tempSerials[i].Title);
 
-                    item.Link = GetSerialListCommand.CreateLink(tempSerials[i].Groups[2].Value);
+                    item.Link = GetSerialListCommand.CreateLink(tempSerials[i].Url);
 
                     playList.Items.Add(item);
                 }

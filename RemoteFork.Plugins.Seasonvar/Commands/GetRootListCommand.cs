@@ -18,16 +18,25 @@ namespace RemoteFork.Plugins {
                 Title = "Поиск",
                 Link = SearchSerialsCommand.CreateLink(),
                 Description = "Поиск",
-                ImageLink = PluginSettings.Settings.Icons.IcoSearch
+                ImageLink = PluginSettings.Settings.Icons.Search
             };
             playList.Items.Add(item);
+
+            if (!AuthorizationCommand.CheckLogin(true)) {
+                item = new DirectoryItem() {
+                    Title = "Авторизация",
+                    Link = AuthorizationCommand.CreateLink(),
+                    ImageLink = PluginSettings.Settings.Icons.User
+                };
+                playList.Items.Add(item);
+            }
 
             foreach (var directory in _directories) {
                 item = new DirectoryItem() {
                     Title = directory.Key,
                     Link = directory.Value,
 
-                    ImageLink = PluginSettings.Settings.Icons.IcoFolder
+                    ImageLink = PluginSettings.Settings.Icons.Folder
                 };
                 playList.Items.Add(item);
             }
@@ -36,7 +45,7 @@ namespace RemoteFork.Plugins {
                 Title = "Обновить список",
                 Link = ClearListCommand.CreateLink(),
 
-                ImageLink = PluginSettings.Settings.Icons.IcoUpdate
+                ImageLink = PluginSettings.Settings.Icons.Update
             };
             playList.Items.Add(item);
         }

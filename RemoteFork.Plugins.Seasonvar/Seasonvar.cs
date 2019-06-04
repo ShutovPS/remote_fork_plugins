@@ -1,10 +1,11 @@
+using RemoteFork.Plugins.Settings;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using RemoteFork.Items;
-using RemoteFork.Plugins.Settings;
+using RemoteFork.Log;
 
 namespace RemoteFork.Plugins {
 
@@ -19,8 +20,12 @@ namespace RemoteFork.Plugins {
     public class Seasonvar : IRemotePlugin {
         public const string KEY = "KEY";
 
-        public static readonly Dictionary<string, List<Match>> SERIAL_MATCHES = new Dictionary<string, List<Match>>();
+        public static readonly Logger Log = new Logger(typeof(Seasonvar));
+
+        public static readonly Dictionary<string, List<SerialInfo>> SERIAL_MATCHES =
+            new Dictionary<string, List<SerialInfo>>();
         public static readonly Dictionary<string, IItem> SERIAL_ITEMS = new Dictionary<string, IItem>();
+        private static DateTime _lastCacheTime;
 
         private static IPluginContext _context;
 
@@ -34,6 +39,7 @@ namespace RemoteFork.Plugins {
             {SearchSerialsCommand.KEY, new SearchSerialsCommand()},
             {ClearListCommand.KEY, new ClearListCommand()},
             {FirstSymbolGroupCommand.KEY, new FirstSymbolGroupCommand()},
+            {AuthorizationCommand.KEY, new AuthorizationCommand()},
         };
 
         // Item представляет собой класс, содержащащий следующие поля:
@@ -73,11 +79,23 @@ namespace RemoteFork.Plugins {
                 }
 
                 if (command != null) {
+                    CheckExpiresList();
+
                     command.GetItems(playlist, context, data);
                 }
             }
 
             return playlist;
+        }
+
+        private static void CheckExpiresList() {
+            if (DateTime.UtcNow > _lastCacheTime.AddHours(PluginSettings.Settings.CachingHours)) {
+                new ClearListCommand().GetItems();
+            }
+        }
+
+        public static void UpdateTimeList() {
+            _lastCacheTime = DateTime.UtcNow;
         }
 
         public static string CreateLink(Dictionary<string, object> data) {
@@ -96,6 +114,7 @@ namespace RemoteFork.Plugins {
             if (text == null) {
                 return new Dictionary<string, string>();
             }
+
             var dictionary = text
                 .Split(';')
                 .Select(part => part.Split('='))
@@ -109,6 +128,19 @@ namespace RemoteFork.Plugins {
             string text = string.Join(";", dictionary.Select(x => x.Key + "=" + x.Value).ToArray());
 
             return text;
+        }
+
+        [Serializable]
+        public class SerialInfo {
+            public readonly string Id;
+            public readonly string Url;
+            public string Title;
+
+            public SerialInfo(string id, string url, string title) {
+                Id = id;
+                Url = url;
+                Title = title;
+            }
         }
     }
 }

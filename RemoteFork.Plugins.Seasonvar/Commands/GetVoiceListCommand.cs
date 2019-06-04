@@ -65,10 +65,13 @@ namespace RemoteFork.Plugins {
                             .PostRequest(PluginSettings.Settings.Links.Site + "/player.php", datastring, header)
                             .Replace("\n", "");
 
-                        var matches0 = Regex.Matches(response, " pl = {'0': \"(.*?)\"");
+                        var regex = new Regex(PluginSettings.Settings.Regexp.PlayList);
 
-                        var matches = Regex.Matches(response,
-                            "data-translate=\"([^0].*?)\">(.*?)</li.{1,30}>pl\\[.*?\"(.*?)\"");
+                        var matches0 = regex.Matches(response);
+
+                        regex = new Regex(PluginSettings.Settings.Regexp.Translate);
+
+                        var matches = regex.Matches(response);
 
                         if (matches0.Count == 1 && matches.Count < 2) {
                             data[URL_KEY] = matches0[0].Groups[1].Value;

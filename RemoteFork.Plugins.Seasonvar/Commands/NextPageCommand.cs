@@ -24,10 +24,10 @@ namespace RemoteFork.Plugins {
 
             if (int.TryParse(page, out id)) {
                 for (int i = id; i < Math.Min(50 + id, Math.Min(tempSerials.Count, tempSerials.Count + id)); i++) {
-                    var item = new GetSerialInfoCommand().GetItem(tempSerials[i].Groups[1].Value,
-                        tempSerials[i].Groups[3].Value);
+                    var item = new GetSerialInfoCommand().GetItem(tempSerials[i].Id,
+                        tempSerials[i].Title);
 
-                    item.Link = GetSerialListCommand.CreateLink(tempSerials[i].Groups[2].Value);
+                    item.Link = GetSerialListCommand.CreateLink(tempSerials[i].Url);
 
                     playList.Items.Add(item);
                 }
