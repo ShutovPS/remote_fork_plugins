@@ -17,7 +17,7 @@ namespace RemoteFork.Plugins.Commands {
             } else
 			{
 				regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryMinitable);
-				categories = GetCategoriesFromIndex(response, regex, categories);
+				categories = GetCategoriesFromIndex(response, regex, categories, data[2]);
 			}
 			regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySubCategory);
             foreach (Match match in regex.Matches(categories)) {
@@ -66,11 +66,12 @@ namespace RemoteFork.Plugins.Commands {
             return items;
         }
 
-		private static string GetCategoriesFromIndex(string response, Regex regex, string categories)
+		private static string GetCategoriesFromIndex(string response, Regex regex, string categories, string link)
 		{
-			if (regex.IsMatch(response))
+			foreach (Match m in regex.Matches(response))
 			{
-				categories = regex.Match(response).Value;
+				if (link.EndsWith($@"?c={m.Groups[2].Value}"))
+					return m.Value;
 			}
 
 			return categories;
