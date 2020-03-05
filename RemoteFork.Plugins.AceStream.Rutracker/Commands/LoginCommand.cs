@@ -69,7 +69,7 @@ namespace RemoteFork.Plugins.Commands {
                         !string.IsNullOrWhiteSpace(PluginSettings.Settings.User.Password)) {
                         string response =
                             HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/login.php",
-                                $"redirect=tracker.php&login_username={PluginSettings.Settings.User.Login}&login_password={PluginSettings.Settings.User.Password}&login=&cap_sid={capSid}&cap_code_{capCode}={captcha}",
+                                $"redirect=tracker.php&login_username={PluginSettings.Settings.User.Login}&login_password={PluginSettings.Settings.User.Password}&cap_sid={capSid}&cap_code_{capCode}={captcha}&login==%C2%F5%EE%E4",
                                 header);
 
                         return CheckLogin(response);
@@ -88,7 +88,7 @@ namespace RemoteFork.Plugins.Commands {
                 !string.IsNullOrWhiteSpace(PluginSettings.Settings.User.Password)) {
                 string response =
                     HTTPUtility.PostRequest(PluginSettings.Settings.TrackerServer + "/forum/login.php",
-                        $"redirect=tracker.php&login_username={PluginSettings.Settings.User.Login}&login_password={PluginSettings.Settings.User.Password}&login=",
+                        $"redirect=tracker.php&login_username={PluginSettings.Settings.User.Login}&login_password={PluginSettings.Settings.User.Password}&login=%C2%F5%EE%E4",
                         header);
 
                 return CheckLogin(response);
@@ -104,7 +104,7 @@ namespace RemoteFork.Plugins.Commands {
                 PluginSettings.Instance.Save();
                 return new List<Item>() {
                     new Item {
-                        Link = string.Empty,
+                        Link = "root",
                         Name = "Успех",
                         ImageLink = PluginSettings.Settings.Icons.User
                     }
