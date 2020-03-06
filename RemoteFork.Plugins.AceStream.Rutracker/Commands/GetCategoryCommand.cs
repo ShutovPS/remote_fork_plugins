@@ -14,13 +14,12 @@ namespace RemoteFork.Plugins.Commands {
             string categories = string.Empty;
             if (regex.IsMatch(response)) {
                 categories = regex.Match(response).Value;
-            } else {
-                regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryMinitable);
-                if (regex.IsMatch(response)) {
-                    categories = regex.Match(response).Value;
-                }
-            }
-            regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySubCategory);
+            } else
+			{
+				regex = new Regex(PluginSettings.Settings.Regexp.GetCategoryMinitable);
+				categories = GetCategoriesFromIndex(response, regex, categories, data[2]);
+			}
+			regex = new Regex(PluginSettings.Settings.Regexp.GetCategorySubCategory);
             foreach (Match match in regex.Matches(categories)) {
                 var item = new Item() {
                     Type = ItemType.DIRECTORY,
@@ -67,7 +66,18 @@ namespace RemoteFork.Plugins.Commands {
             return items;
         }
 
-        private static string GetDescription(string text) {
+		private static string GetCategoriesFromIndex(string response, Regex regex, string categories, string link)
+		{
+			foreach (Match m in regex.Matches(response))
+			{
+				if (link.EndsWith($@"?c={m.Groups[2].Value}"))
+					return m.Value;
+			}
+
+			return categories;
+		}
+
+		private static string GetDescription(string text) {
             string sizeFile = string.Empty;
             string seeders = string.Empty;
             string leechers = string.Empty;

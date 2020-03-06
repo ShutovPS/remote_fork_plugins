@@ -30,7 +30,7 @@ namespace RemoteFork.Plugins.Settings {
         public User User { get; set; }
 
         public static Settings DefaultSettings { get; } = new Settings() {
-            SettingsVersion = 1.2f,
+            SettingsVersion = 1.3f,
             TrackerServer = "https://rutracker.org",
             PluginPath = "pluginPath",
             Separator = ';',
@@ -59,10 +59,10 @@ namespace RemoteFork.Plugins.Settings {
             Regexp = new Regexp() {
                 GetPageFilmMagnet = "(<a href=\")(magnet.*?)(\")",
 
-                GetRootCategories = "(<h3>Кино, Видео, ТВ<\\/h3>)([\\s\\S]*?)(<\\/div>)",
-                GetRootLink = "(<a href=\")(.*?)(\">)(.*?)(<\\/a>)",
+                GetRootCategories = "(<div id=\"forums_wrap\">)([\\s\\S]*?)(<\\/div><!--\\/forums_wrap-->)",
+                GetRootLink = "(<a href=\")(.*?)(\" rel=\"nofollow\">)(.*?)(<\\/a>)",
 
-                GetSearchCenter = "(<tr class=\"tCenter hl-tr\">)([\\s\\S]*?)(<\\/tr>)",
+                GetSearchCenter = "(<tr id=\"[-a-z0-9]+\" class=\"tCenter hl-tr\">)([\\s\\S]*?)(<\\/tr>)",
                 GetSearchDataTopic = "(<a data-topic_id=\")(.*?)(\")",
                 GetSearchLink = "({0}\">)(.*?)(</a>)",
                 GetSearchSeedmed = "(<b class=\"seedmed\">)(.*?)(<\\/b>)",
@@ -77,7 +77,7 @@ namespace RemoteFork.Plugins.Settings {
                 GetCategoryNextPage = "(href=\")((viewforum\\.php\\?f=\\d+&)(?:amp;)(start=\\d+))(\\\">([а-яА-Я]*?.?)<\\/a><\\/p>)",
                 GetCategorySubCategory = "(<h4 class=\"forumlink\"><a href=\")(.*?)(\">)(.*?)(<\\/a><\\/h4>)",
                 GetCategoryTopics = "(<td colspan=\"5\" class=\"row3 topicSep\">Темы<\\/td>)([\\s\\S]*?)(<\\/table>)",
-                GetCategoryMinitable = "(<div id=\"c-18\" class=\"category\">)([\\s\\S]*?)(<\\/table>)",
+                GetCategoryMinitable = "(<div id=\"c-(\\d+)\" class=\"category\">)([\\s\\S]*?)(<\\/div>)",
                 GetCategoryTopic = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)([\\s\\S]*?)(<\\/tr>)",
                 GetCategoryTopicFilm = "(<a id=\"tt-)(\\d+)(\" href=\")(.*?\\2)(\".*?tt-text\">)(.*?)(<\\/a>)([\\s\\S]*?)(text-decoration)([\\s\\S]*?)(<\\/tr>)",
                 GetCategorySize = "(text-decoration: none\">)(.*?)(<)",
