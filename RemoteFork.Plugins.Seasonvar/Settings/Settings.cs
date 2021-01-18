@@ -37,7 +37,7 @@ namespace RemoteFork.Plugins.Settings {
         public string GetSeries = "({)(\"title\"\\s*:\\s*\")(\\d+)(\\s+?)(.+?)(\")(.*?)(\"file\"\\s*:\\s*\")(.+?)(\")(.+?)(\"galabel\"\\s*:\\s*\")(.+?)(\")(.+?)(})";
         public string FileLink = @"(\\\/\\\/.*?=)";
         public string SerialInfo = "(\\/)(\\d+)(\\/)";
-        public string SecureMark = "'(secureMark)': '(.*?)'.*?'time': (\\d+)";
+        public string SecureMark = "'(secureMark)': '(.*?)'.*?'time': '(\\d+)'";
         public string UserLogout = "(<a href=\"\\/\\?mod=logout\">)";
     }
 
